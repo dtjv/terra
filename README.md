@@ -1,1 +1,1 @@
-# deliver-terra
+# terra-demo
