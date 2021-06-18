@@ -52,12 +52,23 @@ export default function B() {
 
   return (
     <Flex p={8} align="center" justify="center">
-      <Table variant="simple" {...getTableProps()}>
+      <Table
+        variant="simple"
+        {...getTableProps()}
+        sx={{ tableLayout: "fixed" }}
+      >
         <Thead>
           {headerGroups.map((headerGroup) => (
             <Tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <Th {...column.getHeaderProps()}>{column.render("Header")}</Th>
+              {headerGroup.headers.map((column, i) => (
+                <Th
+                  {...column.getHeaderProps()}
+                  sx={{
+                    width: `${i === 0 ? "40px" : "100px"}`,
+                  }}
+                >
+                  {column.render("Header")}
+                </Th>
               ))}
             </Tr>
           ))}
@@ -76,9 +87,9 @@ export default function B() {
                         ps: `${i === 0 ? ".5rem" : "1.5rem"}`,
                         pe: `${i === 0 ? "1rem" : "1.5rem"}`,
                         textAlign: `${i === 0 ? "end" : "start"}`,
-                        width: `${i === 0 ? "65px" : ""}`,
+                        //width: `${i === 0 ? "65px" : "85px"}`,
                         fontWeight: `${i == 0 ? "bold" : "normal"}`,
-                        fontSize: `${i == 0 ? "xs" : ""}`,
+                        fontSize: `${i == 0 ? "xs" : "md"}`,
                         color: `${i === 0 ? "gray.400" : "whiteAlpha.900"}`,
                       }}
                       borderRightWidth={
