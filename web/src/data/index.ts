@@ -28,9 +28,7 @@ export const tickets = [
   { id: "G", slot: "8:00 AM", truck: "302", duration: 60 },
 ];
 
-// useGrid needs to do this work...
-
-export const coords = [
+const coords = [
   { x: 2, y: 2, span: 1 },
   { x: 2, y: 3, span: 1 },
   { x: 2, y: 6, span: 2 },
@@ -44,13 +42,3 @@ export const enhancedTickets = tickets.map((ticket, i) => ({
   ...ticket,
   ...coords[i],
 }));
-
-/*
-export const getTicket = (arr, keys) => {
-  let a = arr.slice();
-  for (const [k, v] of Object.entries(keys)) {
-    a = a.filter((o) => o[k] === v);
-  }
-  return a;
-};
-*/
