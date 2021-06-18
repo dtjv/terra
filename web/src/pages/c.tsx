@@ -81,51 +81,71 @@ export default function C() {
         )}
         {rows.map((row, rIdx) => {
           prepareRow(row);
-          return row.cells.map((cell, cIdx) => {
+          return row.cells.map((cell, cIdx, cells) => {
             return (
               <GridItem
                 key={cIdx * cIdx}
                 {...cell.getCellProps()}
                 position="relative"
-                sx={
-                  rIdx % 2 != 0 && rIdx != rows.length - 1
+                sx={{
+                  ...(rIdx % 2 != 0 && rIdx != rows.length - 1
                     ? {
                         borderBottomWidth: "1px",
                         borderBottomColor: "gray.600",
                       }
-                    : {}
-                }
+                    : {}),
+                  ...(cIdx < cells.length - 1
+                    ? {
+                        borderRightWidth: "1px",
+                        borderRightColor: "gray.600",
+                      }
+                    : {}),
+                }}
               >
-                <Box
-                  w="100%"
-                  h="1rem" // maybe take out?
-                  sx={
-                    cIdx === 0
-                      ? {
-                          position: "absolute",
-                          backgroundColor: "gray.800",
-                          top: "-.84rem",
-                          right: "1rem",
+                {cell.render((args) => {
+                  return (
+                    <Box
+                      sx={
+                        cIdx === 0
+                          ? {
+                              position: "absolute",
+                              backgroundColor: "gray.800",
+                              top: "-.84rem",
+                              right: "1rem",
+                              width: "100%",
+                            }
+                          : args.value
+                          ? {
+                              position: "absolute",
+                              backgroundColor: "papayawhip",
+                              height: "190%",
+                              width: "85%",
+                              color: "black",
+                              borderTopRightRadius: "3px",
+                              borderBottomRightRadius: "3px",
+                              borderBottomLeftRadius: "3px",
+                            }
+                          : {}
+                      }
+                    >
+                      <Flex
+                        sx={
+                          cIdx === 0
+                            ? {
+                                flexDirection: "column",
+                                alignItems: "flex-end",
+                                marginRight: "10px",
+                              }
+                            : {
+                                alignItems: "center",
+                              }
                         }
-                      : {}
-                  }
-                >
-                  <Flex
-                    sx={
-                      cIdx === 0
-                        ? {
-                            flexDirection: "column",
-                            alignItems: "flex-end",
-                            marginRight: "10px",
-                          }
-                        : {
-                            alignItems: "center",
-                          }
-                    }
-                  >
-                    {cell.render("Cell")}
-                  </Flex>
-                </Box>
+                      >
+                        <div>{args.value}</div>
+                      </Flex>
+                    </Box>
+                  );
+                })}
               </GridItem>
             );
           });
