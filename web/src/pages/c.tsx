@@ -2,68 +2,18 @@ import * as React from "react";
 import { useTable } from "react-table";
 import { Box, Flex, Grid, GridItem } from "@chakra-ui/react";
 
+import { tableCols, tableData } from "../data";
+
 export default function C() {
-  const data = React.useMemo(
-    () => [
-      {
-        col1: "8 AM",
-        col2: "A",
-        col3: "",
-      },
-      {
-        col1: "",
-        col2: "",
-        col3: "",
-      },
-      {
-        col1: "9 AM",
-        col2: "",
-        col3: "",
-      },
-      {
-        col1: "",
-        col2: "",
-        col3: "",
-      },
-      {
-        col1: "10 AM",
-        col2: "",
-        col3: "",
-      },
-      {
-        col1: "",
-        col2: "",
-        col3: "",
-      },
-    ],
-    []
-  );
-
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "",
-        accessor: "col1",
-      },
-      {
-        Header: "Truck 102",
-        accessor: "col2",
-      },
-      {
-        Header: "Truck 202",
-        accessor: "col3",
-      },
-    ],
-    []
-  );
-
+  const data = React.useMemo(() => tableData, []);
+  const columns = React.useMemo(() => tableCols, []);
   const { headerGroups, rows, prepareRow } = useTable({ columns, data });
 
   return (
     <Flex p={8} align="center" justify="center">
       <Grid
-        templateColumns={`repeat(3, minmax(100px, 1fr))`}
-        templateRows={`repeat(7, minmax(50px, 1fr))`}
+        templateColumns={`repeat(4, minmax(100px, 1fr))`}
+        templateRows={`repeat(21, minmax(50px, 1fr))`}
       >
         {headerGroups.map((headerGroup) =>
           headerGroup.headers.map((column, i) => (
