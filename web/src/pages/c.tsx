@@ -5,29 +5,34 @@ import { Flex, Grid, GridItem } from "@chakra-ui/react";
 import { RowHeader } from "@/components/row-header";
 import { Ticket } from "@/components/ticket";
 
-import { tableCols, tableData } from "../data";
+import { colHeaders, tableData } from "../data";
 
 export default function C() {
+  const grid = {
+    rowCount: tableData.length + 1,
+    colCount: colHeaders.length,
+    colWidth: "100px",
+    rowHeight: "50px",
+  };
   const data = React.useMemo(() => tableData, []);
-  const columns = React.useMemo(() => tableCols, []);
+  const columns = React.useMemo(() => colHeaders, []);
   const { headerGroups, rows, prepareRow } = useTable({ columns, data });
 
   return (
     <Flex p={8} align="center" justify="center">
       <Grid
-        templateColumns={`repeat(4, minmax(100px, 1fr))`}
-        templateRows={`repeat(21, minmax(50px, 1fr))`}
+        templateColumns={`repeat(${grid.colCount}, minmax(${grid.colWidth}, 1fr))`}
+        templateRows={`repeat(${grid.rowCount}, minmax(${grid.rowHeight}, 1fr))`}
       >
         {headerGroups.map((headerGroup) =>
-          headerGroup.headers.map((column, i) => (
+          headerGroup.headers.map((column) => (
             <GridItem
-              key={i}
               {...column.getHeaderProps()}
               borderBottomWidth="1px"
               borderBottomColor="gray.600"
             >
               <Flex align="center" justify="center">
-                {column.render("Header")}
+                {column.render("header")}
               </Flex>
             </GridItem>
           ))
@@ -37,10 +42,9 @@ export default function C() {
           return row.cells.map((cell, cIdx, cells) => {
             return (
               <GridItem
-                key={cIdx * cIdx}
                 {...cell.getCellProps()}
-                position="relative"
                 sx={{
+                  position: "relative",
                   ...(rIdx % 2 != 0 && rIdx != rows.length - 1
                     ? {
                         borderBottomWidth: "1px",
@@ -56,13 +60,20 @@ export default function C() {
                 }}
               >
                 {cell.render((args) => {
-                  return cIdx === 0 ? (
-                    <RowHeader>{args.value}</RowHeader>
-                  ) : args.value ? (
-                    <Ticket height="190">{args.value}</Ticket>
-                  ) : (
-                    <div />
-                  );
+                  if (cIdx === 0) {
+                    return <RowHeader>{args.value}</RowHeader>;
+                  }
+
+                  if (args.value["ticket"]) {
+                    return (
+                      <Ticket
+                        ticket={args.value["ticket"]}
+                        timeInterval={args.value["timeInterval"]}
+                      />
+                    );
+                  }
+
+                  return <div />;
                 })}
               </GridItem>
             );
