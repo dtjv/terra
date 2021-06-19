@@ -1,11 +1,9 @@
+import * as _ from "lodash";
 import { format, addMinutes } from "date-fns";
-import isFunction from "lodash.isfunction";
 
-//-----------------------------------------------------------------------------
-//
-// raw data
-//
-//-----------------------------------------------------------------------------
+const startTime = 8;
+const endTime = 18;
+const timeInterval = 30;
 
 const trucks = [
   { id: "102", name: "Truck 102" },
@@ -23,13 +21,24 @@ const tickets = [
   { id: "G", time: "8:00 AM", truck: "302", duration: 60 },
 ];
 
-//-----------------------------------------------------------------------------
-//
-// utils
-//
-//-----------------------------------------------------------------------------
-
-const generateTimeList = (sTime, eTime, iTime, formatter) => {
+/*
+ * Given start and end times, returns a list of date/time values every interval.
+ *
+ * Example::
+ *
+ *   sTime = 8  // 24 hr
+ *   eTime = 10 // 24 hr
+ *   iTime = 30 // minutes
+ *
+ * Result:
+ *   [
+ *     2021-01-01T16:00:00.000Z,
+ *     2021-01-01T16:30:00.000Z,
+ *     2021-01-01T17:00:00.000Z,
+ *     2021-01-01T17:30:00.000Z
+ *   ]
+ */
+const generateDateTimeList = (sTime, eTime, iTime = 30) => {
   const dates = [];
 
   let d = new Date(2021, 0, 1, sTime, 0, 0);
@@ -40,48 +49,17 @@ const generateTimeList = (sTime, eTime, iTime, formatter) => {
     sTime = d.getHours();
   }
 
-  return isFunction(formatter) ? dates.map(formatter) : dates;
+  return dates;
 };
-
-const aggregateData = () => {
-  const data = [];
-  const times = generateTimeList(8, 18, 30, (date) => format(date, "h:mm a"));
-
-  for (let i = 0; i < times.length; i += 1) {
-    const rowHeader = tableRows[i];
-    const row = {};
-
-    for (let j = 0; j < tableCols.length; j += 1) {
-      const col = tableCols[j];
-
-      if (j === 0) {
-        row[col.accessor] = rowHeader;
-      } else {
-        const [ticket] = tickets.filter(
-          (ticket) => ticket.time === times[i] && ticket.truck === col.id
-        );
-        row[col.accessor] = ticket ? ticket.id : "";
-      }
-    }
-
-    data.push(row);
-  }
-
-  return data;
-};
-
-//-----------------------------------------------------------------------------
-//
-// build data
-//
-//-----------------------------------------------------------------------------
 
 /*
  * ['8 AM', '', '9 AM', '', ... '5 PM', '']
  */
-export const tableRows = generateTimeList(8, 18, 30, (date, i) => {
-  return i % 2 !== 0 ? "" : format(date, "h a");
-});
+const rowHeaders = generateDateTimeList(startTime, endTime, timeInterval).map(
+  (date, i) => {
+    return i % 2 !== 0 ? "" : format(date, "h a");
+  }
+);
 
 /*
  * [
@@ -90,7 +68,7 @@ export const tableRows = generateTimeList(8, 18, 30, (date, i) => {
  *   ...
  * ]
  */
-export const tableCols = [
+export const colHeaders = [
   { id: "000", header: "", accessor: "col0" },
   ...trucks.map((truck, i) => ({
     id: truck.id,
@@ -100,11 +78,76 @@ export const tableCols = [
 ];
 
 /*
- * [
- *   { col0: '8 AM', col1: 'A', col2: 'D', col3: 'G' },
- *   { col0: '', col1: 'B', col2: '', col3: '' },
- *   { col0: '9 AM', col1: '', col2: '', col3: '' },
- *   ...
- * ]
+ * Groups tickets by time, then by truck - for faster lookups
+ */
+const groupTickets = () => {
+  const ticketsByTime = _.groupBy(tickets, (ticket) => ticket.time);
+  const ticketsByTimeAndTruck = Object.keys(ticketsByTime).reduce(
+    (result, time) => ({
+      ...result,
+      [time]: _.keyBy(ticketsByTime[time], "truck"),
+    }),
+    {}
+  );
+
+  return ticketsByTimeAndTruck;
+};
+
+/*
+ * Builds the data portion required by react-table's `useTable`.
+ */
+const aggregateData = () => {
+  const times = generateDateTimeList(
+    startTime,
+    endTime,
+    timeInterval
+  ).map((date) => format(date, "h:mm a"));
+  const ticketHash = groupTickets();
+  const data = [];
+
+  times.forEach((time, tIdx) => {
+    const row = {};
+
+    colHeaders.forEach((col, cIdx) => {
+      row[col.accessor] =
+        cIdx === 0
+          ? rowHeaders[tIdx]
+          : { ticket: _.get(ticketHash, [time, col.id]), timeInterval };
+    });
+
+    data.push(row);
+  });
+
+  return data;
+};
+
+/*
+ * Result:
+ *   [
+ *     {
+ *       col0: '8 AM',
+ *       col1: {
+ *         ticket: { id: 'A', time: '8:00 AM', truck: '102', duration: 30 },
+ *         timeInterval: 30
+ *       },
+ *       col2: {
+ *         ticket: { id: 'D', time: '8:00 AM', truck: '202', duration: 90 },
+ *         timeInterval: 30
+ *       },
+ *       col3: {
+ *         ticket: { id: 'G', time: '8:00 AM', truck: '302', duration: 60 },
+ *         timeInterval: 30
+ *       }
+ *     },
+ *     {
+ *       col0: '',
+ *       col1: {
+ *         ticket: { id: 'B', time: '8:30 AM', truck: '102', duration: 30 },
+ *         timeInterval: 30
+ *       },
+ *       col2: { ticket: undefined, timeInterval: 30 },
+ *       col3: { ticket: undefined, timeInterval: 30 }
+ *     },
+ *   ]
  */
 export const tableData = aggregateData();
