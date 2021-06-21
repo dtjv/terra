@@ -1,72 +1,37 @@
 import * as React from "react";
-import { useTable } from "react-table";
 import { Flex, Grid, GridItem } from "@chakra-ui/react";
 
-import { RowHeader } from "@/components/row-header";
-import { Ticket } from "@/components/ticket";
+import { Cell } from "@/components/cell";
+import { grid } from "../data";
 
-export const Schedule = ({ grid, headers, table }) => {
-  const data = React.useMemo(() => table, []);
-  const columns = React.useMemo(() => headers, []);
-  const { headerGroups, rows, prepareRow } = useTable({ columns, data });
+const COL_WIDTH = "100px";
+const ROW_HEIGHT = "50px";
+
+export const Schedule = () => {
+  const numRows = grid.grid.length;
+  const numCols = grid.grid[0].length;
+  const templateCols = `repeat(${numCols}, minmax(${COL_WIDTH}, 1fr))`;
+  const templateRows = `repeat(${numRows}, minmax(${ROW_HEIGHT}, 1fr))`;
 
   return (
     <Flex p={8} align="center" justify="center">
-      <Grid
-        templateRows={grid.templateRows}
-        templateColumns={grid.templateCols}
-      >
-        {headerGroups.map((headerGroup) =>
-          headerGroup.headers.map((column) => (
+      <Grid templateRows={templateRows} templateColumns={templateCols}>
+        {grid.grid[0].map((column) => {
+          return (
             <GridItem
-              {...column.getHeaderProps()}
+              key={`${column.rIdx}-${column.cIdx}`}
               borderBottomWidth="1px"
               borderBottomColor="gray.600"
             >
               <Flex align="center" justify="center">
-                {column.render("header")}
+                {column.data.display}
               </Flex>
             </GridItem>
-          ))
-        )}
-        {rows.map((row, rIdx) => {
-          prepareRow(row);
-          return row.cells.map((cell, cIdx, cells) => (
-            <GridItem
-              {...cell.getCellProps()}
-              sx={{
-                position: "relative",
-                ...(rIdx % 2 != 0 && rIdx != rows.length - 1
-                  ? {
-                      borderBottomWidth: "1px",
-                      borderBottomColor: "gray.600",
-                    }
-                  : {}),
-                ...(cIdx < cells.length - 1
-                  ? {
-                      borderRightWidth: "1px",
-                      borderRightColor: "gray.600",
-                    }
-                  : {}),
-              }}
-            >
-              {cell.render(({ value }) => {
-                if (cIdx === 0) {
-                  return <RowHeader>{value}</RowHeader>;
-                }
-
-                if (value["ticket"]) {
-                  return (
-                    <Ticket
-                      ticket={value["ticket"]}
-                      timeInterval={value["timeInterval"]}
-                    />
-                  );
-                }
-
-                return <div />;
-              })}
-            </GridItem>
+          );
+        })}
+        {grid.grid.slice(1).map((row) => {
+          return row.map((cell) => (
+            <Cell key={`${cell.rIdx}-${cell.cIdx}`} cell={cell} grid={grid} />
           ));
         })}
       </Grid>

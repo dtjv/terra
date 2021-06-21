@@ -2,7 +2,7 @@ import { useDrop } from "react-dnd";
 import { GridItem } from "@chakra-ui/react";
 
 import { RowHeader } from "@/components/row-header";
-import { Ticket } from "@/components/x-ticket";
+import { Ticket } from "@/components/ticket";
 
 interface DragItem {
   type: string;

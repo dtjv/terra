@@ -1,21 +1,14 @@
-import { colHeaders, tableData } from "../data";
-import { Schedule } from "components/schedule";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
-let grid = {
-  numRows: tableData.length + 1,
-  numCols: colHeaders.length,
-  wCol: "100px",
-  hRow: "50px",
-  templateRows: "",
-  templateCols: "",
-};
-const templateCols = `repeat(${grid.numCols}, minmax(${grid.wCol}, 1fr))`;
-const templateRows = `repeat(${grid.numRows}, minmax(${grid.hRow}, 1fr))`;
-
-grid = { ...grid, templateRows, templateCols };
+import { Schedule } from "@/components/schedule";
 
 const Delivery = () => {
-  return <Schedule grid={grid} headers={colHeaders} table={tableData} />;
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <Schedule />
+    </DndProvider>
+  );
 };
 
 export default Delivery;
