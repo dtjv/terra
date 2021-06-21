@@ -24,7 +24,7 @@ export const XSchedule = () => {
               borderBottomColor="gray.600"
             >
               <Flex align="center" justify="center">
-                {column.display}
+                {column.data.display}
               </Flex>
             </GridItem>
           );

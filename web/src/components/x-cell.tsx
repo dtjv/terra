@@ -85,7 +85,9 @@ export const Cell = ({ cell, grid }) => {
       }}
     >
       {cell.type === "HEADER" ? (
-        <RowHeader>{cell.data.display}</RowHeader>
+        <RowHeader height={cell.data.display ? "auto" : "4"}>
+          {cell.data.display}
+        </RowHeader>
       ) : cell.type === "DATA" && cell.data ? (
         <Ticket ticket={cell.data} timeInterval={grid.intervalInMinutes} />
       ) : (
