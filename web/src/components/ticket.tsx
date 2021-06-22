@@ -1,4 +1,5 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
+import { DragHandleIcon } from "@chakra-ui/icons";
 import { useDrag } from "react-dnd";
 
 export const Ticket = ({ ticket, timeInterval }) => {
@@ -12,7 +13,7 @@ export const Ticket = ({ ticket, timeInterval }) => {
     }),
     [ticket]
   );
-  const height = (ticket.duration / timeInterval) * 50 - 5;
+  const height = (ticket.duration / timeInterval) * 60 - 5;
 
   return (
     <Box
@@ -23,14 +24,18 @@ export const Ticket = ({ ticket, timeInterval }) => {
       h={`${height}px`}
       color="gray.900"
       borderRadius="4px"
-      zIndex="10"
-      cursor="move"
       opacity={isDragging ? 0.5 : 1}
     >
-      <Box pl={2} pt={1} lineHeight="1">
-        <Box fontSize="xs" fontWeight="bold">
+      <Box px={1} pt={1.5} lineHeight="1">
+        <Flex
+          align="start"
+          justify="space-between"
+          fontSize="xs"
+          fontWeight="bold"
+        >
           {ticket.id}
-        </Box>
+          <DragHandleIcon color="gray.900" cursor="grab" />
+        </Flex>
         <Box fontSize="xs" color="gray.700">
           {ticket.range}
         </Box>

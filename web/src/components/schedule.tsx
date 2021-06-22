@@ -5,7 +5,7 @@ import { Cell } from "@/components/cell";
 import { grid } from "../data";
 
 const COL_WIDTH = "100px";
-const ROW_HEIGHT = "50px";
+const ROW_HEIGHT = "60px";
 
 export const Schedule = () => {
   const numRows = grid.grid.length;
