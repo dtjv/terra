@@ -1,19 +1,19 @@
-import { Box, Flex } from "@chakra-ui/react";
-import { DragHandleIcon } from "@chakra-ui/icons";
-import { useDrag } from "react-dnd";
+import { Box, Flex } from '@chakra-ui/react'
+import { DragHandleIcon } from '@chakra-ui/icons'
+import { useDrag } from 'react-dnd'
 
 export const Ticket = ({ ticket, timeInterval }) => {
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
-      type: "TICKET",
+      type: 'TICKET',
       item: ticket,
       collect: (monitor) => ({
         isDragging: !!monitor.isDragging(),
       }),
     }),
     [ticket]
-  );
-  const height = (ticket.duration / timeInterval) * 60 - 5;
+  )
+  const height = (ticket.duration / timeInterval) * 60 - 5
 
   return (
     <Box
@@ -41,5 +41,5 @@ export const Ticket = ({ ticket, timeInterval }) => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}

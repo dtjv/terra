@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex } from '@chakra-ui/react'
 
 export const RowHeader = ({ children, ...props }) => {
   return (
@@ -7,5 +7,5 @@ export const RowHeader = ({ children, ...props }) => {
         {children}
       </Flex>
     </Box>
-  );
-};
+  )
+}

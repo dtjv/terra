@@ -1,17 +1,17 @@
-import * as React from "react";
-import { Flex, Grid, GridItem } from "@chakra-ui/react";
+import * as React from 'react'
+import { Flex, Grid, GridItem } from '@chakra-ui/react'
 
-import { Cell } from "@/components/cell";
-import { grid } from "../data";
+import { Cell } from '@/components/cell'
+import { grid } from '../data'
 
-const COL_WIDTH = "100px";
-const ROW_HEIGHT = "60px";
+const COL_WIDTH = '100px'
+const ROW_HEIGHT = '60px'
 
 export const Schedule = () => {
-  const numRows = grid.grid.length;
-  const numCols = grid.grid[0].length;
-  const templateCols = `repeat(${numCols}, minmax(${COL_WIDTH}, 1fr))`;
-  const templateRows = `repeat(${numRows}, minmax(${ROW_HEIGHT}, 1fr))`;
+  const numRows = grid.grid.length
+  const numCols = grid.grid[0].length
+  const templateCols = `repeat(${numCols}, minmax(${COL_WIDTH}, 1fr))`
+  const templateRows = `repeat(${numRows}, minmax(${ROW_HEIGHT}, 1fr))`
 
   return (
     <Flex p={8} align="center" justify="center">
@@ -27,14 +27,14 @@ export const Schedule = () => {
                 {column.data.display}
               </Flex>
             </GridItem>
-          );
+          )
         })}
         {grid.grid.slice(1).map((row) => {
           return row.map((cell) => (
             <Cell key={`${cell.rIdx}-${cell.cIdx}`} cell={cell} grid={grid} />
-          ));
+          ))
         })}
       </Grid>
     </Flex>
-  );
-};
+  )
+}
