@@ -3,6 +3,12 @@ import { GridItem } from "@chakra-ui/react";
 
 import { RowHeader } from "@/components/row-header";
 import { Ticket } from "@/components/ticket";
+import {
+  isTicketDragTicket,
+  getPreviousCellWithTicket,
+  isCellCovered,
+  checkForEmptyCells,
+} from "@/data/utils";
 
 interface DragItem {
   type: string;
@@ -10,48 +16,56 @@ interface DragItem {
   time: string;
   truck: string;
   duration: number;
+  range: string;
+  status: string;
 }
 
 export const Cell = ({ cell, grid }) => {
   const makeDndSpec = () => ({
     accept: "TICKET",
-    canDrop: (dragItem: DragItem, monitor) => {
-      // TODO:
-      // - cannot move a ticket that's being processed
-
-      // is ticket dragging over a cell with this ticket? if so, okay!
-      //if (monitor.isOver() && dragItem.id === cell.value.ticket?.id) {
-      //  return true;
-      //}
-
-      // is ticket, with minimum time duration, dragging over an empty cell?
-      //if (
-      //  monitor.isOver() &&
-      //  !cell.value.ticket &&
-      //  dragItem.duration === cell.value.timeInterval
-      //) {
-      //  return true;
-      //}
-
-      // can drop on N empty, consecutive cells that match item duration.
-      /*
-      if (monitor.isOver() && dragItem.duration > cell.value.timeInterval) {
-        const numFreeCellsNeeded = dragItem.duration / cell.value.timeInterval
-
-        // is cell at [cell.x, cell.y]     free? 
-        // is cell at [cell.x, cell.y + 1] free?
-        // is cell at [cell.x, cell.y + 2] free?
+    canDrop: (dragTicket: DragItem, monitor) => {
+      if (dragTicket.status === "PROCESSING") {
+        return false;
       }
-      */
+
+      if (!monitor.isOver()) {
+        return false;
+      }
+
+      const cellTicket = cell.data;
+
+      // if cell has a ticket, check if ticket is the one moving
+      if (cellTicket) {
+        return isTicketDragTicket(cellTicket, dragTicket);
+      }
+
+      // cell has no ticket. check if a previous cell has a ticket.
+      const prevCell = getPreviousCellWithTicket(cell, grid.grid);
+      if (!prevCell) {
+        return true;
+      }
+
+      // check if cell is covered by a previous cell's ticket.
+      if (isCellCovered(cell, prevCell, grid.intervalInMinutes)) {
+        const prevCellTicket = prevCell.data;
+
+        if (isTicketDragTicket(prevCellTicket, dragTicket)) {
+          return checkForEmptyCells(dragTicket, cell, grid);
+        }
+      } else {
+        return checkForEmptyCells(dragTicket, cell, grid);
+      }
+
       return false;
     },
-    drop: (dragItem: DragItem) => {
+    drop: (dragTicket: DragItem) => {
+      console.log(cell, "<-- dropped on!");
       // if ticket is dropped on original cell, noop
       // otherwise, update the ticket with this cell's data ( time, truck ).
       /*
       dispatch({
         type: "update",
-        payload: { ...dragItem, time: slot.slot, truck: truck.truck },
+        payload: { ...dragTicket, time: slot.slot, truck: truck.truck },
       }),
      */
     },

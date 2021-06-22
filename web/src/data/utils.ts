@@ -103,3 +103,53 @@ export const generateGrid = ({
     ...grid,
   ];
 };
+
+export const getPreviousCellWithTicket = (cell, grid) => {
+  let i = 1;
+
+  while (i < cell.rIdx) {
+    const prevCell = grid[cell.rIdx - i][cell.cIdx];
+
+    if (prevCell.data) {
+      return prevCell;
+    }
+
+    i += 1;
+  }
+
+  return undefined;
+};
+
+export const isCellCovered = (cell, prevCell, intervalInMinutes) => {
+  if (cell.data) {
+    throw new Error("Cell has a ticket. Cannot test for covereage.");
+  }
+
+  const i = cell.rIdx - prevCell.rIdx;
+  return prevCell.data.duration / intervalInMinutes >= i + 1;
+};
+
+export const isTicketDragTicket = (ticket, dragTicket) =>
+  ticket.id === dragTicket.id;
+
+export const checkForEmptyCells = (dragTicket, cell, grid) => {
+  // -1 for cell - we know its empty
+  let numEmptyCellsNeeded = dragTicket.duration / grid.intervalInMinutes - 1;
+
+  if (cell.rIdx + numEmptyCellsNeeded >= grid.grid.length) {
+    return false;
+  }
+
+  while (numEmptyCellsNeeded > 0) {
+    const nextCell = grid.grid[cell.rIdx + numEmptyCellsNeeded][cell.cIdx];
+    const nextCellTicket = nextCell.data;
+
+    if (nextCellTicket && !isTicketDragTicket(nextCellTicket, dragTicket)) {
+      return false;
+    }
+
+    numEmptyCellsNeeded -= 1;
+  }
+
+  return true;
+};
