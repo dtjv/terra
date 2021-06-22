@@ -58,21 +58,6 @@ export const Cell = ({ cell, grid }) => {
 
       return false;
     },
-    drop: (dragTicket: DragItem) => {
-      console.log(cell, "<-- dropped on!");
-      // if ticket is dropped on original cell, noop
-      // otherwise, update the ticket with this cell's data ( time, truck ).
-      /*
-      dispatch({
-        type: "update",
-        payload: { ...dragTicket, time: slot.slot, truck: truck.truck },
-      }),
-     */
-    },
-    //collect: (monitor) => ({
-    //  isOver: !!monitor.isOver(),
-    //  canDrop: !!monitor.canDrop(),
-    //}),
   });
 
   const [_, dropRef] = useDrop(makeDndSpec, [cell]);
