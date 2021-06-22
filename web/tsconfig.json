@@ -8,6 +8,7 @@
       "esnext"
     ],
     "paths": {
+      "@/data/*": ["data/*"],
       "@/components/*": ["components/*"]
     },
     "allowJs": true,
