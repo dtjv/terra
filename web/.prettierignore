@@ -1,0 +1,16 @@
+# dependencies
+node_modules
+
+# test output
+coverage
+.nyc_output
+
+# build output
+.next
+build
+
+# logs
+*.log
+
+# vercel
+.vercel
