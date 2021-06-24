@@ -1,13 +1,15 @@
 import * as _ from 'lodash'
 import { set, format, addMinutes } from 'date-fns'
 
-export const generateTimeRange = ({
+import { Vehicle, Time, Ticket, Cell, Grid } from '../types'
+
+export const makeDateRange = ({
   startTime = 8,
   endTime = 18,
   date = new Date(Date.now()),
-  intervalInMinutes = 30,
-}) => {
-  const range = []
+  timeIntervalInMintues = 30,
+} = {}): Date[] => {
+  const range: Date[] = []
 
   let day = set(date, {
     year: date.getFullYear(),
@@ -19,27 +21,30 @@ export const generateTimeRange = ({
 
   while (startTime < endTime) {
     range.push(day)
-    day = addMinutes(day, intervalInMinutes)
+    day = addMinutes(day, timeIntervalInMintues)
     startTime = day.getHours()
   }
 
   return range
 }
 
-export const generateTimeList = (dateRange = [], intervalInMinutes = 30) =>
+export const makeTimes = (
+  dateRange: Date[] = [],
+  timeIntervalInMintues = 30
+): Time[] =>
   dateRange.map((date, idx) => {
-    const factor = 60 / intervalInMinutes
+    const timeFactor = 60 / timeIntervalInMintues
     return {
       id: format(date, 'h:mm a'),
-      display: idx % factor !== 0 ? '' : format(date, 'h a'),
-      original: date,
+      displayValue: idx % timeFactor !== 0 ? '' : format(date, 'h a'),
+      originalDateTime: date,
     }
   })
 
-const groupTickets = (
-  tickets = [],
-  rowField = 'time',
-  colField = 'truckId'
+const groupTicketsBy = (
+  tickets: Ticket[] = [],
+  rowField: keyof Ticket,
+  colField: keyof Ticket
 ) => {
   const ticketsByRow = _.groupBy(tickets, (ticket) => ticket[rowField])
 
@@ -52,39 +57,24 @@ const groupTickets = (
   )
 }
 
-export const generateDataCells = (rows = [], cols = [], tickets = []) => {
-  const ticketHash = groupTickets(tickets, 'time', 'truckId')
+export const makeGrid = (
+  rowHeaders: Time[] = [],
+  colHeaders: Vehicle[] = [],
+  tickets: Ticket[] = []
+): Cell[][] => {
+  const ticketHash = groupTicketsBy(tickets, 'scheduledTime', 'vehicleId')
 
-  return rows.map((row) => {
-    return cols.map((col) => {
-      const ticket = _.get(ticketHash, [row.id, col.id])
+  const dataGrid: { data: Ticket | undefined }[][] = rowHeaders.map(
+    (rowHeader) =>
+      colHeaders.map((colHeader) => ({
+        data: _.get(ticketHash, [rowHeader.id, colHeader.id]),
+      }))
+  )
 
-      return {
-        type: 'DATA',
-        data: ticket
-          ? {
-              ...ticket,
-              range: `${format(row.original, 'h:mmaaa')} - ${format(
-                addMinutes(row.original, ticket.duration),
-                'h:mmaaa'
-              )}`,
-            }
-          : undefined,
-      }
-    })
-  })
-}
-
-export const generateGrid = ({
-  rowHeaders = [],
-  colHeaders = [],
-  data = [],
-}) => {
-  const grid = data.map((row, rIdx) => {
-    const cell = {
+  const grid: Cell[][] = dataGrid.map((row, rIdx) => {
+    const cell: Cell = {
       rIdx: rIdx + 1,
       cIdx: 0,
-      type: 'HEADER',
       data: rowHeaders[rIdx],
     }
     return [
@@ -94,10 +84,9 @@ export const generateGrid = ({
   })
 
   return [
-    colHeaders.map((column, cIdx) => ({
+    [undefined, ...colHeaders].map((column, cIdx) => ({
       rIdx: 0,
       cIdx,
-      type: 'HEADER',
       data: column,
     })),
     ...grid,
@@ -120,13 +109,13 @@ export const getPreviousCellWithTicket = (cell, grid) => {
   return undefined
 }
 
-export const isCellCovered = (cell, prevCell, intervalInMinutes) => {
+export const isCellCovered = (cell, prevCell, timeIntervalInMintues) => {
   if (cell.data) {
     throw new Error('Cell has a ticket. Cannot test for covereage.')
   }
 
   const i = cell.rIdx - prevCell.rIdx
-  return prevCell.data.duration / intervalInMinutes >= i + 1
+  return prevCell.data.duration / timeIntervalInMintues >= i + 1
 }
 
 export const isTicketDragTicket = (ticket, dragTicket) =>
@@ -134,7 +123,7 @@ export const isTicketDragTicket = (ticket, dragTicket) =>
 
 export const checkForEmptyCells = (dragTicket, cell, grid) => {
   // -1 for cell - we know its empty
-  let numEmptyCellsNeeded = dragTicket.duration / grid.intervalInMinutes - 1
+  let numEmptyCellsNeeded = dragTicket.duration / grid.timeIntervalInMintues - 1
 
   if (cell.rIdx + numEmptyCellsNeeded >= grid.grid.length) {
     return false
