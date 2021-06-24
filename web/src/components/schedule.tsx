@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Flex, Grid, GridItem } from '@chakra-ui/react'
 
 import { Cell } from '@/components/cell'
+import { ColHeader } from '@/components/headers'
 import { grid } from '../data'
 
 const COL_WIDTH = '100px'
@@ -23,9 +24,7 @@ export const Schedule = () => {
               borderBottomWidth="1px"
               borderBottomColor="gray.600"
             >
-              <Flex align="center" justify="center">
-                {column.data.display}
-              </Flex>
+              <ColHeader>{column.data.display}</ColHeader>
             </GridItem>
           )
         })}

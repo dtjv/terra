@@ -9,3 +9,11 @@ export const RowHeader = ({ children, ...props }) => {
     </Box>
   )
 }
+
+export const ColHeader = ({ children, ...props }) => {
+  return (
+    <Flex {...props} align="center" justify="center">
+      {children}
+    </Flex>
+  )
+}
