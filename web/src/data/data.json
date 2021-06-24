@@ -1,0 +1,56 @@
+{
+  "schedule": {
+    "startTime": 8,
+    "endTime": 18,
+    "intervalInMinutes": 30
+  },
+  "vehicles": [
+    { "id": "102", "display": "Truck 102" },
+    { "id": "202", "display": "Truck 202" },
+    { "id": "302", "display": "Truck 302" }
+  ],
+  "tickets": [
+    {
+      "id": "A",
+      "time": "8:00 AM",
+      "vehicleId": "102",
+      "duration": 30
+    },
+    {
+      "id": "B",
+      "time": "8:30 AM",
+      "vehicleId": "102",
+      "duration": 30
+    },
+    {
+      "id": "C",
+      "time": "10:00 AM",
+      "vehicleId": "102",
+      "duration": 60
+    },
+    {
+      "id": "d",
+      "time": "8:00 AM",
+      "vehicleId": "202",
+      "duration": 90
+    },
+    {
+      "id": "E",
+      "time": "11:00 AM",
+      "vehicleId": "202",
+      "duration": 30
+    },
+    {
+      "id": "F",
+      "time": "11:30 AM",
+      "vehicleId": "202",
+      "duration": 30
+    },
+    {
+      "id": "G",
+      "time": "8:00 AM",
+      "vehicleId": "302",
+      "duration": 60
+    }
+  ]
+}
