@@ -4,7 +4,9 @@
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "paths": {
+      "@/lib/*": ["lib/*"],
       "@/data/*": ["data/*"],
+      "@/types/*": ["types/*"],
       "@/components/*": ["components/*"]
     },
     "allowJs": true,
