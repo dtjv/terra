@@ -1,13 +1,26 @@
-import * as _ from 'lodash'
+import _ from 'lodash'
 import { set, format, addMinutes } from 'date-fns'
 
-import { Vehicle, Time, Ticket, Cell, Grid } from '../types'
+import type {
+  VehicleData,
+  TimeData,
+  TicketData,
+  Grid,
+  DataCell,
+  RowHeader,
+  ColHeader,
+} from './types'
 
-export const makeDateRange = ({
+/**
+ *
+ *
+ *
+ */
+export const makeTimeRangeListForDate = ({
   startTime = 8,
   endTime = 18,
   date = new Date(Date.now()),
-  timeIntervalInMintues = 30,
+  timeIntervalInMinutes = 30,
 } = {}): Date[] => {
   const range: Date[] = []
 
@@ -17,35 +30,91 @@ export const makeDateRange = ({
     date: date.getDay(),
     hours: startTime,
     minutes: 0,
+    seconds: 0,
+    milliseconds: 0,
   })
 
   while (startTime < endTime) {
     range.push(day)
-    day = addMinutes(day, timeIntervalInMintues)
+    day = addMinutes(day, timeIntervalInMinutes)
     startTime = day.getHours()
   }
 
   return range
 }
 
-export const makeTimes = (
+/**
+ *
+ *
+ *
+ */
+export const makeTimeDataList = (
   dateRange: Date[] = [],
-  timeIntervalInMintues = 30
-): Time[] =>
+  timeIntervalInMinutes = 30
+): TimeData[] =>
   dateRange.map((date, idx) => {
-    const timeFactor = 60 / timeIntervalInMintues
+    const timeFactor = 60 / timeIntervalInMinutes
     return {
       id: format(date, 'h:mm a'),
-      displayValue: idx % timeFactor !== 0 ? '' : format(date, 'h a'),
-      originalDateTime: date,
+      time: idx % timeFactor !== 0 ? '' : format(date, 'h a'),
     }
   })
 
-const groupTicketsBy = (
-  tickets: Ticket[] = [],
-  rowField: keyof Ticket,
-  colField: keyof Ticket
-) => {
+/**
+ *
+ *
+ *
+ */
+export const makeRowHeaders = (times: TimeData[] = []): RowHeader[] => {
+  return times.map((timeData) => ({
+    display: timeData.time,
+    data: timeData,
+  }))
+}
+
+/**
+ *
+ *
+ *
+ */
+export const makeColHeaders = (vehicles: VehicleData[] = []): ColHeader[] => {
+  return [
+    { display: '', data: undefined }, // tack on the empty first column
+    ...vehicles.map((vehicleData) => ({
+      display: vehicleData.vehicleName,
+      data: vehicleData,
+    })),
+  ]
+}
+
+/**
+ *
+ *
+ *
+ */
+export const computeTicketFields = (tickets: TicketData[]): TicketData[] => {
+  return tickets.map((ticket) => {
+    const scheduledDate = new Date(ticket.scheduledDateTimeISO)
+    const scheduledStartTime = format(scheduledDate, 'h:mm a')
+    const timeRange = `${format(scheduledDate, 'h:mmaaa')} - ${format(
+      addMinutes(scheduledDate, ticket.durationInMinutes),
+      'h:mmaaa'
+    )}`
+
+    return { ...ticket, timeRange, scheduledStartTime }
+  })
+}
+
+/**
+ *
+ *
+ *
+ */
+export const groupTicketsBy = (
+  tickets: TicketData[] = [],
+  rowField: keyof TicketData,
+  colField: keyof TicketData
+): { [key: string]: { [key: string]: TicketData } } => {
   const ticketsByRow = _.groupBy(tickets, (ticket) => ticket[rowField])
 
   return Object.keys(ticketsByRow).reduce(
@@ -57,87 +126,145 @@ const groupTicketsBy = (
   )
 }
 
-export const makeGrid = (
-  rowHeaders: Time[] = [],
-  colHeaders: Vehicle[] = [],
-  tickets: Ticket[] = []
-): Cell[][] => {
-  const ticketHash = groupTicketsBy(tickets, 'scheduledTime', 'vehicleId')
-
-  const dataGrid: { data: Ticket | undefined }[][] = rowHeaders.map(
-    (rowHeader) =>
-      colHeaders.map((colHeader) => ({
-        data: _.get(ticketHash, [rowHeader.id, colHeader.id]),
-      }))
-  )
-
-  const grid: Cell[][] = dataGrid.map((row, rIdx) => {
-    const cell: Cell = {
-      rIdx: rIdx + 1,
-      cIdx: 0,
-      data: rowHeaders[rIdx],
-    }
-    return [
-      cell,
-      ...row.map((cell, cIdx) => ({ rIdx: rIdx + 1, cIdx: cIdx + 1, ...cell })),
-    ]
-  })
-
-  return [
-    [undefined, ...colHeaders].map((column, cIdx) => ({
-      rIdx: 0,
-      cIdx,
-      data: column,
-    })),
-    ...grid,
-  ]
+/**
+ *
+ *
+ *
+ */
+interface MakeDataCellsProps {
+  tickets: TicketData[]
+  rowHeaders: RowHeader[]
+  colHeaders: ColHeader[]
 }
 
-export const getPreviousCellWithTicket = (cell, grid) => {
-  let i = 1
+export const makeDataCells = ({
+  tickets = [],
+  rowHeaders = [],
+  colHeaders = [],
+}: MakeDataCellsProps): DataCell[][] => {
+  if (!tickets.every((ticket) => 'scheduledStartTime' in ticket)) {
+    throw new Error(
+      `Missing ticket field: 'scheduledStartTime'. Call 'computeTicketFields'`
+    )
+  }
 
-  while (i < cell.rIdx) {
-    const prevCell = grid[cell.rIdx - i][cell.cIdx]
+  const ticketHash = groupTicketsBy(tickets, 'scheduledStartTime', 'vehicleId')
+  const columns = colHeaders.slice(1)
 
-    if (prevCell.data) {
+  return rowHeaders.map((row, rowIdx) =>
+    columns.map((col, colIdx) => {
+      const ticket = col.data
+        ? _.get(ticketHash, [row.data.id, col.data.id])
+        : undefined
+
+      return {
+        rowIdx,
+        colIdx,
+        data: ticket,
+      }
+    })
+  )
+}
+
+interface GridProps {
+  rows: RowHeader[]
+  cols: ColHeader[]
+  cells: DataCell[][]
+  timeIntervalInMinutes: number
+}
+
+/**
+ *
+ *
+ *
+ */
+export const makeGrid = ({
+  rows,
+  cols,
+  cells,
+  timeIntervalInMinutes,
+}: GridProps): Grid => {
+  return {
+    rows,
+    cols,
+    cells,
+    timeIntervalInMinutes,
+  }
+}
+
+/**
+ *
+ *
+ *
+ */
+export const getPreviousCellWithTicket = (
+  cell: DataCell,
+  grid: Grid
+): DataCell | undefined => {
+  let idx = 1
+
+  while (idx < cell.rowIdx) {
+    const prevCell = grid.cells[cell.rowIdx - idx][cell.colIdx]
+    const ticket = prevCell?.data
+
+    if (ticket) {
       return prevCell
     }
 
-    i += 1
+    idx += 1
   }
 
   return undefined
 }
 
-export const isCellCovered = (cell, prevCell, timeIntervalInMintues) => {
-  if (cell.data) {
-    throw new Error('Cell has a ticket. Cannot test for covereage.')
+/**
+ *
+ *
+ *
+ */
+export const isCellCoveredByTicket = (
+  cell: DataCell,
+  prevCell: DataCell,
+  timeIntervalInMinutes: number
+): boolean => {
+  const rowDiff = cell.rowIdx - prevCell.rowIdx
+  const ticket = cell.data
+  const prevTicket = prevCell.data
+
+  if (ticket) {
+    throw new Error('Cell has a ticket. Cannot test for coverage.')
   }
 
-  const i = cell.rIdx - prevCell.rIdx
-  return prevCell.data.duration / timeIntervalInMintues >= i + 1
+  if (!prevTicket) {
+    throw new Error('Previous cell must have a ticket. Coverage test failed.')
+  }
+
+  return prevTicket.durationInMinutes / timeIntervalInMinutes >= rowDiff + 1
 }
 
-export const isTicketDragTicket = (ticket, dragTicket) =>
-  ticket.id === dragTicket.id
+/**
+ *
+ *
+ *
+ */
+export const isSpaceForTicketAtCell = (
+  ticket: TicketData,
+  targetCell: DataCell,
+  grid: Grid
+): boolean => {
+  const numCellsNeeded = ticket.durationInMinutes / grid.timeIntervalInMinutes
 
-export const checkForEmptyCells = (dragTicket, cell, grid) => {
-  // -1 for cell - we know its empty
-  let numEmptyCellsNeeded = dragTicket.duration / grid.timeIntervalInMintues - 1
-
-  if (cell.rIdx + numEmptyCellsNeeded >= grid.grid.length) {
+  if (targetCell.rowIdx + numCellsNeeded >= grid.cells.length) {
     return false
   }
 
-  while (numEmptyCellsNeeded > 0) {
-    const nextCell = grid.grid[cell.rIdx + numEmptyCellsNeeded][cell.cIdx]
-    const nextCellTicket = nextCell.data
+  for (let offset = 0; offset < numCellsNeeded; offset += 1) {
+    const cell = grid.cells[targetCell.rowIdx + offset][targetCell.colIdx]
+    const cellTicket = cell.data
 
-    if (nextCellTicket && !isTicketDragTicket(nextCellTicket, dragTicket)) {
+    if (cellTicket && !(cellTicket.id === ticket.id)) {
       return false
     }
-
-    numEmptyCellsNeeded -= 1
   }
 
   return true
