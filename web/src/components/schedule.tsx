@@ -1,14 +1,20 @@
 import * as React from 'react'
+
+export const Schedule: React.FC = () => {
+  return <div>schedule</div>
+}
+/*
+import * as React from 'react'
 import { Flex, Grid, GridItem } from '@chakra-ui/react'
 
 import { Cell } from '@/components/cell'
 import { ColHeader } from '@/components/headers'
-import { grid } from '../data'
 
 const COL_WIDTH = '100px'
 const ROW_HEIGHT = '60px'
 
 export const Schedule = () => {
+  // TODO: needs to call api to get data.
   const numRows = grid.grid.length
   const numCols = grid.grid[0].length
   const templateCols = `repeat(${numCols}, minmax(${COL_WIDTH}, 1fr))`
@@ -37,3 +43,4 @@ export const Schedule = () => {
     </Flex>
   )
 }
+*/

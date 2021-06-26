@@ -1,9 +1,10 @@
+import * as React from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import { Schedule } from '@/components/schedule'
 
-const Home = () => {
+const Home: React.FC = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       <Schedule />

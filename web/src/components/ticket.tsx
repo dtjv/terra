@@ -1,8 +1,19 @@
+import * as React from 'react'
+import { useDrag } from 'react-dnd'
 import { Box, Flex } from '@chakra-ui/react'
 import { DragHandleIcon } from '@chakra-ui/icons'
-import { useDrag } from 'react-dnd'
 
-export const Ticket = ({ ticket, timeInterval }) => {
+import type { TicketData } from '@/types/types'
+
+export interface TicketProps {
+  ticket: TicketData
+  timeIntervalInMinutes: number
+}
+
+export const Ticket: React.FC<TicketProps> = ({
+  ticket,
+  timeIntervalInMinutes,
+}) => {
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: 'TICKET',
@@ -13,7 +24,8 @@ export const Ticket = ({ ticket, timeInterval }) => {
     }),
     [ticket]
   )
-  const height = (ticket.duration / timeInterval) * 60 - 5
+  // TODO: replace magic numbers
+  const height = (ticket.durationInMinutes / timeIntervalInMinutes) * 60 - 5
 
   return (
     <Box
@@ -37,7 +49,7 @@ export const Ticket = ({ ticket, timeInterval }) => {
           <DragHandleIcon color="gray.900" cursor="grab" />
         </Flex>
         <Box fontSize="xs" color="gray.700">
-          {ticket.range}
+          {ticket.timeRange}
         </Box>
       </Box>
     </Box>
