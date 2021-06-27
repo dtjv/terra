@@ -1,12 +1,11 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 
-import type { AppData, Grid } from '@/types/types'
+import type { AppData, ScheduleMatrix } from '@/types/types'
 import { getData } from '@/lib/db'
 import {
   makeTimeRangeListForDate,
   makeTimeDataList,
-  makeGrid,
-  makeDataCells,
+  makeCells,
   makeRowHeaders,
   makeColHeaders,
   computeTicketFields,
@@ -17,7 +16,7 @@ import {
 //------------------------------------------------------------------------------
 const handler: NextApiHandler = async (
   req: NextApiRequest,
-  res: NextApiResponse<Grid | string>
+  res: NextApiResponse<ScheduleMatrix | string>
 ) => {
   if (req.method === 'GET') {
     const data: AppData | undefined = await getData()
@@ -33,19 +32,19 @@ const handler: NextApiHandler = async (
     )
     const rowHeaders = makeRowHeaders(timeDataList)
     const colHeaders = makeColHeaders(data.vehicles)
-    const dataCells = makeDataCells({
+    const cells = makeCells({
       tickets: computeTicketFields(data.tickets),
       rowHeaders,
       colHeaders,
     })
-    const grid = makeGrid({
-      rows: rowHeaders,
-      cols: colHeaders,
-      cells: dataCells,
+    const scheduleMatrix = {
+      rowHeaders,
+      colHeaders,
+      cells,
       timeIntervalInMinutes: data.schedule.timeIntervalInMinutes,
-    })
+    }
 
-    return res.status(200).json(grid)
+    return res.status(200).json(scheduleMatrix)
   }
   return res.status(404).send(`Unsupported method: ${req.method}`)
 }

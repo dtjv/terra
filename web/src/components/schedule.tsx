@@ -1,9 +1,17 @@
 import * as React from 'react'
 import axios from 'axios'
 import { useQuery } from 'react-query'
+import { Flex, Grid, GridItem } from '@chakra-ui/react'
+
+import type { ScheduleMatrix, ColHeader } from '@/types/types'
+import { ScheduleColHeader } from '@/components/schedule-col-header'
+
+// TODO: where do i put these? should they be configurable?
+const COL_WIDTH = '100px'
+const ROW_HEIGHT = '60px'
 
 const useTickets = () => {
-  return useQuery(
+  return useQuery<ScheduleMatrix, Error>(
     ['tickets'],
     async () => {
       return (await axios.get('/api/schedule/')).data
@@ -16,16 +24,31 @@ const useTickets = () => {
 }
 
 export const Schedule: React.FC = () => {
-  const { data, isLoading, isFetching } = useTickets()
+  // TODO: do i need `isFetching`?
+  const { data, isLoading } = useTickets()
+  const rowHeaders = data ? data.rowHeaders : []
+  const colHeaders = data ? data.colHeaders : []
+  const templateCols = `repeat(${colHeaders.length}, minmax(${COL_WIDTH}, 1fr))`
+  const templateRows = `repeat(${rowHeaders.length}, minmax(${ROW_HEIGHT}, 1fr))`
 
   if (isLoading) return <div>loading...</div>
 
   return (
-    <div>
-      <h1> schedule</h1>
-      <p>{data ? 'got data! check console.' : 'no data'}</p>
-      <p>{isFetching ? 'fetching...' : ''}</p>
-    </div>
+    <Flex p={8} align="center" justify="center">
+      <Grid templateRows={templateRows} templateColumns={templateCols}>
+        {colHeaders.map((colHeader: ColHeader) => {
+          return (
+            <GridItem
+              key={colHeader.data?.id}
+              borderBottomWidth="1px"
+              borderBottomColor="gray.600"
+            >
+              <ScheduleColHeader>{colHeader.display}</ScheduleColHeader>
+            </GridItem>
+          )
+        })}
+      </Grid>
+    </Flex>
   )
 }
 /*

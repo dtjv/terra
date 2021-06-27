@@ -5,11 +5,11 @@ import type {
   VehicleData,
   TimeData,
   TicketData,
-  Grid,
-  DataCell,
   RowHeader,
   ColHeader,
-} from './types'
+  Cell,
+  ScheduleMatrix,
+} from '@/types/types'
 
 /**
  *
@@ -131,17 +131,17 @@ export const groupTicketsBy = (
  *
  *
  */
-interface MakeDataCellsProps {
+interface MakeCellsProps {
   tickets: TicketData[]
   rowHeaders: RowHeader[]
   colHeaders: ColHeader[]
 }
 
-export const makeDataCells = ({
+export const makeCells = ({
   tickets = [],
   rowHeaders = [],
   colHeaders = [],
-}: MakeDataCellsProps): DataCell[][] => {
+}: MakeCellsProps): Cell[][] => {
   if (!tickets.every((ticket) => 'scheduledStartTime' in ticket)) {
     throw new Error(
       `Missing ticket field: 'scheduledStartTime'. Call 'computeTicketFields'`
@@ -166,27 +166,20 @@ export const makeDataCells = ({
   )
 }
 
-interface GridProps {
-  rows: RowHeader[]
-  cols: ColHeader[]
-  cells: DataCell[][]
-  timeIntervalInMinutes: number
-}
-
 /**
  *
  *
  *
  */
-export const makeGrid = ({
-  rows,
-  cols,
+export const makeScheduleMatrix = ({
+  rowHeaders,
+  colHeaders,
   cells,
   timeIntervalInMinutes,
-}: GridProps): Grid => {
+}: ScheduleMatrix): ScheduleMatrix => {
   return {
-    rows,
-    cols,
+    rowHeaders,
+    colHeaders,
     cells,
     timeIntervalInMinutes,
   }
@@ -198,13 +191,13 @@ export const makeGrid = ({
  *
  */
 export const getPreviousCellWithTicket = (
-  cell: DataCell,
-  grid: Grid
-): DataCell | undefined => {
+  cell: Cell,
+  matrix: ScheduleMatrix
+): Cell | undefined => {
   let idx = 1
 
   while (idx < cell.rowIdx) {
-    const prevCell = grid.cells[cell.rowIdx - idx][cell.colIdx]
+    const prevCell = matrix.cells[cell.rowIdx - idx]?.[cell.colIdx]
     const ticket = prevCell?.data
 
     if (ticket) {
@@ -223,8 +216,8 @@ export const getPreviousCellWithTicket = (
  *
  */
 export const isCellCoveredByTicket = (
-  cell: DataCell,
-  prevCell: DataCell,
+  cell: Cell,
+  prevCell: Cell,
   timeIntervalInMinutes: number
 ): boolean => {
   const rowDiff = cell.rowIdx - prevCell.rowIdx
@@ -249,18 +242,18 @@ export const isCellCoveredByTicket = (
  */
 export const isSpaceForTicketAtCell = (
   ticket: TicketData,
-  targetCell: DataCell,
-  grid: Grid
+  targetCell: Cell,
+  matrix: ScheduleMatrix
 ): boolean => {
-  const numCellsNeeded = ticket.durationInMinutes / grid.timeIntervalInMinutes
+  const numCellsNeeded = ticket.durationInMinutes / matrix.timeIntervalInMinutes
 
-  if (targetCell.rowIdx + numCellsNeeded >= grid.cells.length) {
+  if (targetCell.rowIdx + numCellsNeeded >= matrix.cells.length) {
     return false
   }
 
   for (let offset = 0; offset < numCellsNeeded; offset += 1) {
-    const cell = grid.cells[targetCell.rowIdx + offset][targetCell.colIdx]
-    const cellTicket = cell.data
+    const cell = matrix.cells[targetCell.rowIdx + offset]?.[targetCell.colIdx]
+    const cellTicket = cell?.data
 
     if (cellTicket && !(cellTicket.id === ticket.id)) {
       return false

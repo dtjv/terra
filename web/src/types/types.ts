@@ -51,15 +51,15 @@ export interface ColHeader {
   data: VehicleData | undefined
 }
 
-export interface DataCell {
+export interface Cell {
   rowIdx: number
   colIdx: number
   data: TicketData | undefined
 }
 
-export interface Grid {
-  rows: RowHeader[]
-  cols: ColHeader[]
-  cells: DataCell[][]
+export interface ScheduleMatrix {
+  rowHeaders: RowHeader[]
+  colHeaders: ColHeader[]
+  cells: Cell[][]
   timeIntervalInMinutes: number
 }
