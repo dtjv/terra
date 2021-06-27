@@ -7,7 +7,8 @@
     "lint": "next lint --dir src",
     "build": "next build",
     "start": "next start",
-    "format": "prettier -w ."
+    "format": "prettier -w .",
+    "type-check": "tsc --pretty --noEmit"
   },
   "dependencies": {
     "@chakra-ui/icons": "1.0.13",
