@@ -2,21 +2,21 @@ import * as React from 'react'
 import { useDrop } from 'react-dnd'
 import { GridItem } from '@chakra-ui/react'
 
-import type { TicketData, DataCell, Grid } from '@/types/types'
-//import { RowHeader } from '@/components/headers'
-//import { Ticket } from '@/components/ticket'
+import { Ticket } from '@/components/ticket'
 import {
   getPreviousCellWithTicket,
   isCellCoveredByTicket,
   isSpaceForTicketAtCell,
 } from '@/lib/utils'
 
-export interface CellProps {
-  cell: DataCell
-  grid: Grid
+import type { TicketData, Cell, ScheduleMatrix } from '@/types/types'
+
+export interface ScheduleCellProps {
+  cell: Cell
+  matrix: ScheduleMatrix
 }
 
-export const Cell: React.FC<CellProps> = ({ cell, grid }) => {
+export const ScheduleCell: React.FC<ScheduleCellProps> = ({ cell, matrix }) => {
   const [, dropRef] = useDrop(
     () => ({
       accept: 'TICKET',
@@ -33,20 +33,22 @@ export const Cell: React.FC<CellProps> = ({ cell, grid }) => {
         }
 
         // cell has no ticket. check if a previous cell has a ticket.
-        const prevCell = getPreviousCellWithTicket(cell, grid)
+        const prevCell = getPreviousCellWithTicket(cell, matrix)
         if (!prevCell) {
           return true
         }
 
         // check if cell is covered by a previous cell's ticket.
-        if (isCellCoveredByTicket(cell, prevCell, grid.timeIntervalInMinutes)) {
+        if (
+          isCellCoveredByTicket(cell, prevCell, matrix.timeIntervalInMinutes)
+        ) {
           const prevCellTicket = prevCell.data
 
-          if (prevCellTicket.id === dragTicket.id) {
-            return isSpaceForTicketAtCell(dragTicket, cell, grid)
+          if (prevCellTicket?.id === dragTicket.id) {
+            return isSpaceForTicketAtCell(dragTicket, cell, matrix)
           }
         } else {
-          return isSpaceForTicketAtCell(dragTicket, cell, grid)
+          return isSpaceForTicketAtCell(dragTicket, cell, matrix)
         }
 
         return false
@@ -54,14 +56,8 @@ export const Cell: React.FC<CellProps> = ({ cell, grid }) => {
     }),
     [cell]
   )
-  return (
-    <GridItem ref={dropRef}>
-      <div>cell</div>
-    </GridItem>
-  )
-  /*
-  const numRows = grid.cells.length
-  const numCols = grid.cells[0]?.length ?? 0
+  const numRows = matrix.cells.length
+  const numCols = matrix.cells[0]?.length ?? 0
 
   return (
     <GridItem
@@ -82,16 +78,12 @@ export const Cell: React.FC<CellProps> = ({ cell, grid }) => {
           : {}),
       }}
     >
-      {cell.type === 'HEADER' ? (
-        <RowHeader height={cell.data. ? 'auto' : '4'}>
-          {cell.data.display}
-        </RowHeader>
-      ) : cell.type === 'DATA' && cell.data ? (
-        <Ticket ticket={cell.data} timeInterval={grid.intervalInMinutes} />
-      ) : (
-        <div />
-      )}
+      {cell.data ? (
+        <Ticket
+          ticket={cell.data}
+          timeIntervalInMinutes={matrix.timeIntervalInMinutes}
+        />
+      ) : null}
     </GridItem>
   )
-*/
 }
