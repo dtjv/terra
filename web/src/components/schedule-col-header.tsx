@@ -1,10 +1,20 @@
 import * as React from 'react'
-import { Flex } from '@chakra-ui/react'
+import { Flex, GridItem } from '@chakra-ui/react'
 
-export const ScheduleColHeader: React.FC = ({ children, ...props }) => {
+import type { ColHeader } from '@/types/types'
+
+export interface ScheduleColHeaderProps {
+  header: ColHeader
+}
+
+export const ScheduleColHeader: React.FC<ScheduleColHeaderProps> = ({
+  header,
+}) => {
   return (
-    <Flex {...props} align="center" justify="center">
-      {children}
-    </Flex>
+    <GridItem borderBottomWidth="1px" borderBottomColor="gray.600">
+      <Flex align="center" justify="center">
+        {header.display}
+      </Flex>
+    </GridItem>
   )
 }
