@@ -1,7 +1,32 @@
 import * as React from 'react'
+import axios from 'axios'
+import { useQuery } from 'react-query'
+
+const useTickets = () => {
+  return useQuery(
+    ['tickets'],
+    async () => {
+      return (await axios.get('/api/schedule/')).data
+    },
+    {
+      refetchInterval: 1000 * 60,
+      refetchIntervalInBackground: true,
+    }
+  )
+}
 
 export const Schedule: React.FC = () => {
-  return <div>schedule</div>
+  const { data, isLoading, isFetching } = useTickets()
+
+  if (isLoading) return <div>loading...</div>
+
+  return (
+    <div>
+      <h1> schedule</h1>
+      <p>{data ? 'got data! check console.' : 'no data'}</p>
+      <p>{isFetching ? 'fetching...' : ''}</p>
+    </div>
+  )
 }
 /*
 import * as React from 'react'
