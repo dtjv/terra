@@ -37,6 +37,7 @@ export const Ticket: React.FC<TicketProps> = ({
       color="gray.900"
       borderRadius="4px"
       opacity={isDragging ? 0.5 : 1}
+      zIndex="10"
     >
       <Box px={1} pt={1.5} lineHeight="1">
         <Flex
