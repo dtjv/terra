@@ -6,7 +6,7 @@ import { DragHandleIcon } from '@chakra-ui/icons'
 import type { TicketData } from '@/types/types'
 
 export interface TicketProps {
-  ticket: TicketData
+  ticket: TicketData | undefined
   timeIntervalInMinutes: number
 }
 
@@ -24,6 +24,9 @@ export const Ticket: React.FC<TicketProps> = ({
     }),
     [ticket]
   )
+
+  if (!ticket) return null
+
   // TODO: replace magic numbers
   const height = (ticket.durationInMinutes / timeIntervalInMinutes) * 60 - 5
 

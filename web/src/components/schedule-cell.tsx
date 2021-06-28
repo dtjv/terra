@@ -9,6 +9,7 @@ import {
   isSpaceForTicketAtCell,
 } from '@/lib/utils'
 
+import { CellKind } from '@/types/types'
 import type { TicketData, Cell, ScheduleMatrix } from '@/types/types'
 
 export interface ScheduleCellProps {
@@ -21,34 +22,51 @@ export const ScheduleCell: React.FC<ScheduleCellProps> = ({ cell, matrix }) => {
     () => ({
       accept: 'TICKET',
       canDrop: (dragTicket: TicketData, monitor) => {
+        if (cell.data.kind !== CellKind.DATA_CELL) {
+          return false
+        }
+
         if (!monitor.isOver()) {
           return false
         }
 
-        const cellTicket = cell.data
-
         // if cell has a ticket, check if ticket is the one moving
+        const cellTicket = cell.data.ticket
         if (cellTicket) {
           return cellTicket.id === dragTicket.id
         }
 
         // cell has no ticket. check if a previous cell has a ticket.
-        const prevCell = getPreviousCellWithTicket(cell, matrix)
-        if (!prevCell) {
+        const prevCellWithTicket = getPreviousCellWithTicket(cell, matrix)
+        if (!prevCellWithTicket) {
           return true
         }
 
         // check if cell is covered by a previous cell's ticket.
         if (
-          isCellCoveredByTicket(cell, prevCell, matrix.timeIntervalInMinutes)
+          prevCellWithTicket.data.kind === CellKind.DATA_CELL &&
+          isCellCoveredByTicket({
+            cell,
+            prevCell: prevCellWithTicket,
+            timeIntervalInMinutes: matrix.timeIntervalInMinutes,
+          })
         ) {
-          const prevCellTicket = prevCell.data
+          const prevTicket = prevCellWithTicket.data.ticket
 
-          if (prevCellTicket?.id === dragTicket.id) {
-            return isSpaceForTicketAtCell(dragTicket, cell, matrix)
+          // check if previous ticket is the one moving
+          if (prevTicket?.id === dragTicket.id) {
+            return isSpaceForTicketAtCell({
+              ticket: dragTicket,
+              targetCell: cell,
+              matrix,
+            })
           }
         } else {
-          return isSpaceForTicketAtCell(dragTicket, cell, matrix)
+          return isSpaceForTicketAtCell({
+            ticket: dragTicket,
+            targetCell: cell,
+            matrix,
+          })
         }
 
         return false
@@ -56,6 +74,11 @@ export const ScheduleCell: React.FC<ScheduleCellProps> = ({ cell, matrix }) => {
     }),
     [cell]
   )
+
+  if (cell.data.kind !== CellKind.DATA_CELL) {
+    return null
+  }
+
   const numRows = matrix.cells.length
   const numCols = matrix.cells[0]?.length ?? 0
 
@@ -64,7 +87,7 @@ export const ScheduleCell: React.FC<ScheduleCellProps> = ({ cell, matrix }) => {
       ref={dropRef}
       sx={{
         position: 'relative',
-        ...(cell.rowIdx % 2 !== 0 && cell.rowIdx < numRows - 1
+        ...(cell.rowIdx % 2 === 0 && cell.rowIdx < numRows - 1
           ? {
               borderBottomWidth: '1px',
               borderBottomColor: 'gray.600',
@@ -78,12 +101,10 @@ export const ScheduleCell: React.FC<ScheduleCellProps> = ({ cell, matrix }) => {
           : {}),
       }}
     >
-      {cell.data ? (
-        <Ticket
-          ticket={cell.data}
-          timeIntervalInMinutes={matrix.timeIntervalInMinutes}
-        />
-      ) : null}
+      <Ticket
+        ticket={cell.data.ticket}
+        timeIntervalInMinutes={matrix.timeIntervalInMinutes}
+      />
     </GridItem>
   )
 }

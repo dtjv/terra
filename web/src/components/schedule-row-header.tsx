@@ -1,24 +1,21 @@
 import * as React from 'react'
 import { Box, Flex, GridItem } from '@chakra-ui/react'
 
-import type { RowHeader } from '@/types/types'
+import { CellKind } from '@/types/types'
+import type { Cell } from '@/types/types'
 
 export interface ScheduleRowHeaderProps {
-  header: RowHeader
-  rowIdx: number
-  colIdx: number
+  cell: Cell
   numRows: number
   numCols: number
 }
 
 export const ScheduleRowHeader: React.FC<ScheduleRowHeaderProps> = ({
-  header,
-  rowIdx,
-  colIdx,
+  cell,
   numRows,
   numCols,
 }) => {
-  const height = header.display ? 'auto' : '4'
+  if (cell.data.kind !== CellKind.ROW_HEADER) return null
 
   return (
     <GridItem
@@ -26,14 +23,13 @@ export const ScheduleRowHeader: React.FC<ScheduleRowHeaderProps> = ({
       borderRightWidth="1px"
       borderRightColor="gray.600"
       sx={{
-        position: 'relative',
-        ...(rowIdx % 2 !== 0 && rowIdx < numRows - 2
+        ...(cell.rowIdx % 2 === 0 && cell.rowIdx < numRows - 1
           ? {
               borderBottomWidth: '1px',
               borderBottomColor: 'gray.600',
             }
           : {}),
-        ...(colIdx < numCols - 1
+        ...(cell.colIdx < numCols - 1
           ? {
               borderRightWidth: '1px',
               borderRightColor: 'gray.600',
@@ -48,8 +44,13 @@ export const ScheduleRowHeader: React.FC<ScheduleRowHeaderProps> = ({
         right="1rem"
         w="100%"
       >
-        <Flex height={height} direction="column" align="flex-end" mr="10px">
-          {header.display}
+        <Flex
+          height={cell.data.display ? 'auto' : '4'}
+          direction="column"
+          align="flex-end"
+          mr="10px"
+        >
+          {cell.data.display}
         </Flex>
       </Box>
     </GridItem>

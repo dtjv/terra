@@ -1,19 +1,22 @@
 import * as React from 'react'
 import { Flex, GridItem } from '@chakra-ui/react'
 
-import type { ColHeader } from '@/types/types'
+import { CellKind } from '@/types/types'
+import type { Cell } from '@/types/types'
 
 export interface ScheduleColHeaderProps {
-  header: ColHeader
+  cell: Cell
 }
 
 export const ScheduleColHeader: React.FC<ScheduleColHeaderProps> = ({
-  header,
+  cell,
 }) => {
+  if (cell.data.kind !== CellKind.COL_HEADER) return null
+
   return (
     <GridItem borderBottomWidth="1px" borderBottomColor="gray.600">
       <Flex align="center" justify="center">
-        {header.display}
+        {cell.data.display}
       </Flex>
     </GridItem>
   )

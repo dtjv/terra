@@ -41,25 +41,34 @@ export interface AppData {
 //
 // ----------------------------------------------------------------------------
 
-export interface RowHeader {
-  display: string
-  data: TimeData
+export enum CellKind {
+  ROW_HEADER = 'ROW_HEADER',
+  COL_HEADER = 'COL_HEADER',
+  DATA_CELL = 'DATA_CELL',
 }
 
-export interface ColHeader {
+export interface RowHeader extends TimeData {
+  kind: CellKind.ROW_HEADER
   display: string
-  data: VehicleData | undefined
+}
+
+export interface ColHeader extends VehicleData {
+  kind: CellKind.COL_HEADER
+  display: string
+}
+
+export interface DataCell {
+  kind: CellKind.DATA_CELL
+  ticket: TicketData | undefined
 }
 
 export interface Cell {
   rowIdx: number
   colIdx: number
-  data: TicketData | undefined
+  data: RowHeader | ColHeader | DataCell
 }
 
 export interface ScheduleMatrix {
-  rowHeaders: RowHeader[]
-  colHeaders: ColHeader[]
   cells: Cell[][]
   timeIntervalInMinutes: number
 }

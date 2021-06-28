@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { set, format, addMinutes } from 'date-fns'
 
+import { CellKind } from '@/types/types'
 import type {
   VehicleData,
   TimeData,
@@ -66,10 +67,17 @@ export const makeTimeDataList = (
  *
  */
 export const makeRowHeaders = (times: TimeData[] = []): RowHeader[] => {
-  return times.map((timeData) => ({
-    display: timeData.time,
-    data: timeData,
-  }))
+  return [
+    { kind: CellKind.ROW_HEADER, display: '', id: '', time: '' },
+    ...times.map(
+      (timeData) =>
+        ({
+          kind: CellKind.ROW_HEADER,
+          display: timeData.time,
+          ...timeData,
+        } as RowHeader)
+    ),
+  ]
 }
 
 /**
@@ -79,11 +87,15 @@ export const makeRowHeaders = (times: TimeData[] = []): RowHeader[] => {
  */
 export const makeColHeaders = (vehicles: VehicleData[] = []): ColHeader[] => {
   return [
-    { display: '', data: undefined }, // tack on the empty first column
-    ...vehicles.map((vehicleData) => ({
-      display: vehicleData.vehicleName,
-      data: vehicleData,
-    })),
+    { kind: CellKind.COL_HEADER, display: '', id: '', vehicleName: '' },
+    ...vehicles.map(
+      (vehicleData) =>
+        ({
+          kind: CellKind.COL_HEADER,
+          display: vehicleData.vehicleName,
+          ...vehicleData,
+        } as ColHeader)
+    ),
   ]
 }
 
@@ -149,40 +161,28 @@ export const makeCells = ({
   }
 
   const ticketHash = groupTicketsBy(tickets, 'scheduledStartTime', 'vehicleId')
-  const columns = colHeaders.slice(1)
 
-  return rowHeaders.map((row, rowIdx) =>
-    columns.map((col, colIdx) => {
-      const ticket = col.data
-        ? _.get(ticketHash, [row.data.id, col.data.id])
-        : undefined
+  return rowHeaders.map((rowHeader, rowIdx) => {
+    return colHeaders.map((colHeader, colIdx) => {
+      const cell = { rowIdx, colIdx }
+
+      if (rowIdx === 0) {
+        return { ...cell, data: colHeader }
+      }
+
+      if (colIdx === 0) {
+        return { ...cell, data: rowHeader }
+      }
 
       return {
-        rowIdx,
-        colIdx,
-        data: ticket,
+        ...cell,
+        data: {
+          kind: CellKind.DATA_CELL,
+          ticket: _.get(ticketHash, [rowHeader.id, colHeader.id]),
+        },
       }
     })
-  )
-}
-
-/**
- *
- *
- *
- */
-export const makeScheduleMatrix = ({
-  rowHeaders,
-  colHeaders,
-  cells,
-  timeIntervalInMinutes,
-}: ScheduleMatrix): ScheduleMatrix => {
-  return {
-    rowHeaders,
-    colHeaders,
-    cells,
-    timeIntervalInMinutes,
-  }
+  })
 }
 
 /**
@@ -215,21 +215,34 @@ export const getPreviousCellWithTicket = (
  *
  *
  */
-export const isCellCoveredByTicket = (
-  cell: Cell,
-  prevCell: Cell,
+export interface IsCellCoveredByTicketProps {
+  cell: Cell
+  prevCell: Cell
   timeIntervalInMinutes: number
-): boolean => {
+}
+
+export const isCellCoveredByTicket = ({
+  cell,
+  prevCell,
+  timeIntervalInMinutes,
+}: IsCellCoveredByTicketProps): boolean => {
+  if (
+    cell.data.kind !== CellKind.DATA_CELL ||
+    prevCell.data.kind !== CellKind.DATA_CELL
+  ) {
+    throw new Error('Both cells passed must be DATA_CELL kind.')
+  }
+
   const rowDiff = cell.rowIdx - prevCell.rowIdx
-  const ticket = cell.data
-  const prevTicket = prevCell.data
+  const ticket = cell.data.ticket
+  const prevTicket = prevCell.data.ticket
 
   if (ticket) {
-    throw new Error('Cell has a ticket. Cannot test for coverage.')
+    throw new Error('`cell` has a ticket - it cannot be covered.')
   }
 
   if (!prevTicket) {
-    throw new Error('Previous cell must have a ticket. Coverage test failed.')
+    throw new Error('`prevCell` must have a ticket.')
   }
 
   return prevTicket.durationInMinutes / timeIntervalInMinutes >= rowDiff + 1
@@ -240,11 +253,20 @@ export const isCellCoveredByTicket = (
  *
  *
  */
-export const isSpaceForTicketAtCell = (
-  ticket: TicketData,
-  targetCell: Cell,
+export interface IsSpaceForTicketAtCell {
+  ticket: TicketData
+  targetCell: Cell
   matrix: ScheduleMatrix
-): boolean => {
+}
+export const isSpaceForTicketAtCell = ({
+  ticket,
+  targetCell,
+  matrix,
+}: IsSpaceForTicketAtCell): boolean => {
+  if (targetCell.data.kind !== CellKind.DATA_CELL) {
+    throw new Error('`targetCell` must be DATA_CELL kind.')
+  }
+
   const numCellsNeeded = ticket.durationInMinutes / matrix.timeIntervalInMinutes
 
   if (targetCell.rowIdx + numCellsNeeded >= matrix.cells.length) {
@@ -253,7 +275,8 @@ export const isSpaceForTicketAtCell = (
 
   for (let offset = 0; offset < numCellsNeeded; offset += 1) {
     const cell = matrix.cells[targetCell.rowIdx + offset]?.[targetCell.colIdx]
-    const cellTicket = cell?.data
+    const cellTicket =
+      cell?.data.kind === CellKind.DATA_CELL ? cell.data.ticket : undefined
 
     if (cellTicket && !(cellTicket.id === ticket.id)) {
       return false
