@@ -192,15 +192,14 @@ export const makeCells = ({
  */
 export const getPreviousCellWithTicket = (
   cell: Cell,
-  matrix: ScheduleMatrix
+  cells: Cell[][]
 ): Cell | undefined => {
   let idx = 1
 
   while (idx < cell.rowIdx) {
-    const prevCell = matrix.cells[cell.rowIdx - idx]?.[cell.colIdx]
-    const ticket = prevCell?.data
+    const prevCell = cells[cell.rowIdx - idx]?.[cell.colIdx]
 
-    if (ticket) {
+    if (prevCell?.data.kind === CellKind.DATA_CELL && prevCell.data.ticket) {
       return prevCell
     }
 
@@ -269,11 +268,11 @@ export const isSpaceForTicketAtCell = ({
 
   const numCellsNeeded = ticket.durationInMinutes / matrix.timeIntervalInMinutes
 
-  if (targetCell.rowIdx + numCellsNeeded >= matrix.cells.length) {
+  if (targetCell.rowIdx + numCellsNeeded - 1 >= matrix.cells.length) {
     return false
   }
 
-  for (let offset = 0; offset < numCellsNeeded; offset += 1) {
+  for (let offset = 1; offset < numCellsNeeded; offset += 1) {
     const cell = matrix.cells[targetCell.rowIdx + offset]?.[targetCell.colIdx]
     const cellTicket =
       cell?.data.kind === CellKind.DATA_CELL ? cell.data.ticket : undefined

@@ -37,7 +37,7 @@ export const ScheduleCell: React.FC<ScheduleCellProps> = ({ cell, matrix }) => {
         }
 
         // cell has no ticket. check if a previous cell has a ticket.
-        const prevCellWithTicket = getPreviousCellWithTicket(cell, matrix)
+        const prevCellWithTicket = getPreviousCellWithTicket(cell, matrix.cells)
         if (!prevCellWithTicket) {
           return true
         }
@@ -71,8 +71,15 @@ export const ScheduleCell: React.FC<ScheduleCellProps> = ({ cell, matrix }) => {
 
         return false
       },
+      drop: () => {
+        console.log(`dropped on...`)
+        console.log(cell)
+      },
+      collect: (monitor) => ({
+        canDrop: !!monitor.canDrop(),
+      }),
     }),
-    [cell]
+    [cell, matrix]
   )
 
   if (cell.data.kind !== CellKind.DATA_CELL) {
