@@ -58,6 +58,7 @@ export const makeTimeDataList = (
     return {
       id: format(date, 'h:mm a'),
       time: idx % timeFactor !== 0 ? '' : format(date, 'h a'),
+      originalDateTimeISO: date.toISOString(),
     }
   })
 
@@ -68,7 +69,13 @@ export const makeTimeDataList = (
  */
 export const makeRowHeaders = (times: TimeData[] = []): RowHeader[] => {
   return [
-    { kind: CellKind.ROW_HEADER, display: '', id: '', time: '' },
+    {
+      kind: CellKind.ROW_HEADER,
+      display: '',
+      id: '',
+      time: '',
+      originalDateTimeISO: '',
+    },
     ...times.map(
       (timeData) =>
         ({

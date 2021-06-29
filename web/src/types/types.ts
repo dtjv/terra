@@ -18,6 +18,7 @@ export interface VehicleData {
 export interface TimeData {
   id: string
   time: string
+  originalDateTimeISO: string
 }
 
 export interface TicketData {
@@ -34,6 +35,8 @@ export interface AppData {
   tickets: TicketData[]
   vehicles: VehicleData[]
 }
+
+export type UpdatedTicketData = Pick<TicketData, 'id'> & Partial<TicketData>
 
 // ----------------------------------------------------------------------------
 //
@@ -69,6 +72,8 @@ export interface Cell {
 }
 
 export interface ScheduleMatrix {
+  rowHeaders: RowHeader[]
+  colHeaders: ColHeader[]
   cells: Cell[][]
   timeIntervalInMinutes: number
 }

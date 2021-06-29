@@ -2,7 +2,7 @@ import path from 'path'
 import process from 'process'
 import * as fs from 'fs/promises'
 
-import type { AppData, TicketData } from '@/types/types'
+import type { AppData, TicketData, UpdatedTicketData } from '@/types/types'
 
 export const getData = async (): Promise<AppData | undefined> => {
   try {
@@ -18,10 +18,8 @@ export const getData = async (): Promise<AppData | undefined> => {
   return undefined
 }
 
-type UpdatedTicket = Pick<TicketData, 'id'> & Partial<TicketData>
-
 export const updateTicket = async (
-  updatedTicket: UpdatedTicket
+  updatedTicket: UpdatedTicketData
 ): Promise<TicketData | undefined> => {
   const appData = await getData()
 
@@ -43,7 +41,7 @@ export const updateTicket = async (
   }
 
   await fs.writeFile(
-    path.resolve(__dirname, 'src/data/data.json'),
+    path.resolve(process.cwd(), 'src/data/data.json'),
     JSON.stringify(updatedAppData),
     'utf8'
   )

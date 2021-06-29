@@ -38,6 +38,8 @@ const handler: NextApiHandler = async (
       colHeaders,
     })
     const scheduleMatrix: ScheduleMatrix = {
+      rowHeaders,
+      colHeaders,
       cells,
       timeIntervalInMinutes: data.schedule.timeIntervalInMinutes,
     }
