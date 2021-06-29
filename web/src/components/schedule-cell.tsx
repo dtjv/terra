@@ -1,5 +1,7 @@
 import * as React from 'react'
 import { useDrop } from 'react-dnd'
+import { useMutation, useQueryClient } from 'react-query'
+import axios from 'axios'
 import { GridItem } from '@chakra-ui/react'
 
 import { Ticket } from '@/components/ticket'
@@ -10,7 +12,18 @@ import {
 } from '@/lib/utils'
 
 import { CellKind } from '@/types/types'
-import type { TicketData, Cell, ScheduleMatrix } from '@/types/types'
+import type {
+  TicketData,
+  Cell,
+  ScheduleMatrix,
+  UpdatedTicketData,
+} from '@/types/types'
+
+const updateTicket = (
+  updatedTicket: UpdatedTicketData
+): Promise<TicketData> => {
+  return axios.patch(`/api/tickets`, { updatedTicket })
+}
 
 export interface ScheduleCellProps {
   cell: Cell
@@ -18,6 +31,12 @@ export interface ScheduleCellProps {
 }
 
 export const ScheduleCell: React.FC<ScheduleCellProps> = ({ cell, matrix }) => {
+  const queryClient = useQueryClient()
+  const updateTicketMutation = useMutation(updateTicket, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('schedule')
+    },
+  })
   const [, dropRef] = useDrop(
     () => ({
       accept: 'TICKET',
@@ -71,9 +90,13 @@ export const ScheduleCell: React.FC<ScheduleCellProps> = ({ cell, matrix }) => {
 
         return false
       },
-      drop: () => {
-        console.log(`dropped on...`)
-        console.log(cell)
+      drop: (dragTicket: TicketData) => {
+        updateTicketMutation.mutate({
+          ...dragTicket,
+          scheduledDateTimeISO:
+            matrix.rowHeaders[cell.rowIdx]?.originalDateTimeISO,
+          vehicleId: matrix.colHeaders[cell.colIdx]?.id,
+        })
       },
       collect: (monitor) => ({
         canDrop: !!monitor.canDrop(),

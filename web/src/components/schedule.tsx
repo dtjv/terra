@@ -15,7 +15,7 @@ const ROW_HEIGHT = '60px'
 
 const useTickets = () => {
   return useQuery<ScheduleMatrix, Error>(
-    ['tickets'],
+    ['schedule'],
     async () => {
       return (await axios.get('/api/schedule/')).data
     },
