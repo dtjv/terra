@@ -1,50 +1,25 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 
-import type { AppData, ScheduleMatrix } from '@/types/types'
-import { getData } from '@/lib/db'
-import {
-  makeTimeRangeListForDate,
-  makeTimeDataList,
-  makeCells,
-  makeRowHeaders,
-  makeColHeaders,
-  computeTicketFields,
-} from '@/lib/utils'
+import type { ScheduleData } from '@/types/types'
+import { readData } from '@/lib/db'
 
 //------------------------------------------------------------------------------
 // Handler for api calls to `/api/schedule`
 //------------------------------------------------------------------------------
 const handler: NextApiHandler = async (
   req: NextApiRequest,
-  res: NextApiResponse<ScheduleMatrix | string>
+  res: NextApiResponse<ScheduleData | string>
 ) => {
   if (req.method === 'GET') {
-    const data: AppData | undefined = await getData()
-
-    if (!data) {
-      return res.status(500).send('Failed to read data')
-    }
-
-    const timeRangeList = makeTimeRangeListForDate()
-    const timeDataList = makeTimeDataList(
-      timeRangeList,
-      data?.schedule.timeIntervalInMinutes
+    const scheduleConfig = await readData<ScheduleData>(
+      'src/data/schedule-config.json'
     )
-    const rowHeaders = makeRowHeaders(timeDataList)
-    const colHeaders = makeColHeaders(data.vehicles)
-    const cells = makeCells({
-      tickets: computeTicketFields(data.tickets),
-      rowHeaders,
-      colHeaders,
-    })
-    const scheduleMatrix: ScheduleMatrix = {
-      rowHeaders,
-      colHeaders,
-      cells,
-      timeIntervalInMinutes: data.schedule.timeIntervalInMinutes,
+
+    if (!scheduleConfig) {
+      return res.status(500).send('Failed to read schedule configuration')
     }
 
-    return res.status(200).json(scheduleMatrix)
+    return res.status(200).json(scheduleConfig)
   }
   return res.status(404).send(`Unsupported method: ${req.method}`)
 }
