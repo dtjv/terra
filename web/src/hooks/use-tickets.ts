@@ -19,11 +19,11 @@ export type UseTicketsReturnType = {
   >
 }
 
-export const useTickets = (url = '/api/tickets'): UseTicketsReturnType => {
+export const useTickets = (baseUrl = '/api/tickets'): UseTicketsReturnType => {
   const queryClient = useQueryClient()
   const ticketsQuery = useQuery<TicketData[], Error>(
     ['tickets'],
-    async () => (await axios.get(url)).data,
+    async () => (await axios.get(baseUrl)).data,
     {
       refetchInterval: 1000 * 60,
       refetchIntervalInBackground: true,
@@ -36,7 +36,9 @@ export const useTickets = (url = '/api/tickets'): UseTicketsReturnType => {
     { previousTickets: TicketData[] | undefined }
   >(
     async (updatedTicket) => {
-      return (await axios.patch(url, { updatedTicket })).data
+      return (
+        await axios.patch(`${baseUrl}/${updatedTicket.id}`, { updatedTicket })
+      ).data
     },
     {
       onMutate: async (updatedTicket: TicketData) => {
