@@ -7,12 +7,12 @@ import type { TicketData } from '@/types/types'
 
 export interface TicketProps {
   ticket: TicketData | undefined
-  timeIntervalInMinutes: number
+  timeBlockInMinutes: number
 }
 
 export const Ticket: React.FC<TicketProps> = ({
   ticket,
-  timeIntervalInMinutes,
+  timeBlockInMinutes,
 }) => {
   const [{ isDragging }, dragRef, dragPreviewRef] = useDrag(
     () => ({
@@ -28,7 +28,7 @@ export const Ticket: React.FC<TicketProps> = ({
   if (!ticket) return null
 
   // TODO: replace magic numbers
-  const height = (ticket.durationInMinutes / timeIntervalInMinutes) * 60 - 5
+  const height = (ticket.durationInMinutes / timeBlockInMinutes) * 60 - 5
 
   return (
     <Box

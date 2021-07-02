@@ -15,7 +15,7 @@ export const ScheduleRowHeader: React.FC<ScheduleRowHeaderProps> = ({
   numRows,
   numCols,
 }) => {
-  if (cell.data.kind !== CellKind.ROW_HEADER) return null
+  if (cell.kind !== CellKind.ROW_HEADER) return null
 
   return (
     <GridItem
@@ -45,12 +45,12 @@ export const ScheduleRowHeader: React.FC<ScheduleRowHeaderProps> = ({
         w="100%"
       >
         <Flex
-          height={cell.data.display ? 'auto' : '4'}
+          height={cell.display ? 'auto' : '4'}
           direction="column"
           align="flex-end"
           mr="10px"
         >
-          {cell.data.display}
+          {cell.display}
         </Flex>
       </Box>
     </GridItem>

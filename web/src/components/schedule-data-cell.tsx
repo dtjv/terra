@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { useDrop } from 'react-dnd'
-import { useMutation, useQueryClient } from 'react-query'
-import axios from 'axios'
 import { GridItem } from '@chakra-ui/react'
+import type { UseMutationResult } from 'react-query'
 
 import { Ticket } from '@/components/ticket'
 import {
@@ -12,36 +11,31 @@ import {
 } from '@/lib/utils'
 
 import { CellKind } from '@/types/types'
-import type {
-  TicketData,
-  Cell,
-  ScheduleMatrix,
-  UpdatedTicketData,
-} from '@/types/types'
+import type { Cell, Row, TicketData } from '@/types/types'
 
-const updateTicket = (
-  updatedTicket: UpdatedTicketData
-): Promise<TicketData> => {
-  return axios.patch(`/api/tickets`, { updatedTicket })
-}
-
-export interface ScheduleCellProps {
+export interface ScheduleDataCellProps {
   cell: Cell
-  matrix: ScheduleMatrix
+  rows: Row[]
+  timeBlockInMinutes: number
+  updateTicket: UseMutationResult<
+    TicketData,
+    Error,
+    TicketData,
+    { previousTickets: TicketData[] | undefined }
+  >
 }
 
-export const ScheduleCell: React.FC<ScheduleCellProps> = ({ cell, matrix }) => {
-  const queryClient = useQueryClient()
-  const updateTicketMutation = useMutation(updateTicket, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('schedule')
-    },
-  })
+export const ScheduleDataCell: React.FC<ScheduleDataCellProps> = ({
+  cell,
+  rows,
+  updateTicket,
+  timeBlockInMinutes,
+}) => {
   const [, dropRef] = useDrop(
     () => ({
       accept: 'TICKET',
       canDrop: (dragTicket: TicketData, monitor) => {
-        if (cell.data.kind !== CellKind.DATA_CELL) {
+        if (cell.kind !== CellKind.DATA_CELL) {
           return false
         }
 
@@ -50,67 +44,70 @@ export const ScheduleCell: React.FC<ScheduleCellProps> = ({ cell, matrix }) => {
         }
 
         // if cell has a ticket, check if ticket is the one moving
-        const cellTicket = cell.data.ticket
+        const cellTicket = cell.ticket
         if (cellTicket) {
           return cellTicket.id === dragTicket.id
         }
 
         // cell has no ticket. check if a previous cell has a ticket.
-        const prevCellWithTicket = getPreviousCellWithTicket(cell, matrix.cells)
+        const prevCellWithTicket = getPreviousCellWithTicket(cell, rows)
         if (!prevCellWithTicket) {
           return true
         }
 
         // check if cell is covered by a previous cell's ticket.
         if (
-          prevCellWithTicket.data.kind === CellKind.DATA_CELL &&
+          prevCellWithTicket.kind === CellKind.DATA_CELL &&
           isCellCoveredByTicket({
             cell,
             prevCell: prevCellWithTicket,
-            timeIntervalInMinutes: matrix.timeIntervalInMinutes,
+            timeBlockInMinutes,
           })
         ) {
-          const prevTicket = prevCellWithTicket.data.ticket
+          const prevTicket = prevCellWithTicket.ticket
 
           // check if previous ticket is the one moving
           if (prevTicket?.id === dragTicket.id) {
             return isSpaceForTicketAtCell({
               ticket: dragTicket,
               targetCell: cell,
-              matrix,
+              rows,
+              timeBlockInMinutes,
             })
           }
         } else {
           return isSpaceForTicketAtCell({
             ticket: dragTicket,
             targetCell: cell,
-            matrix,
+            rows,
+            timeBlockInMinutes,
           })
         }
 
         return false
       },
       drop: (dragTicket: TicketData) => {
-        updateTicketMutation.mutate({
-          ...dragTicket,
-          scheduledDateTimeISO:
-            matrix.rowHeaders[cell.rowIdx]?.originalDateTimeISO,
-          vehicleId: matrix.colHeaders[cell.colIdx]?.id,
-        })
+        if (cell.kind === CellKind.DATA_CELL) {
+          updateTicket.mutate({
+            ...dragTicket,
+            vehicleId: cell.colHeader.vehicleId,
+            scheduledDateTimeISO: cell.rowHeader.scheduleTimeISO,
+          })
+        }
       },
       collect: (monitor) => ({
         canDrop: !!monitor.canDrop(),
       }),
     }),
-    [cell, matrix]
+    [cell, rows, timeBlockInMinutes]
   )
 
-  if (cell.data.kind !== CellKind.DATA_CELL) {
+  if (cell.kind !== CellKind.DATA_CELL) {
     return null
   }
 
-  const numRows = matrix.cells.length
-  const numCols = matrix.cells[0]?.length ?? 0
+  const numRows = rows.length
+  const numCols = rows[0]?.cells.length ?? 0
 
   return (
     <GridItem
@@ -131,10 +128,7 @@ export const ScheduleCell: React.FC<ScheduleCellProps> = ({ cell, matrix }) => {
           : {}),
       }}
     >
-      <Ticket
-        ticket={cell.data.ticket}
-        timeIntervalInMinutes={matrix.timeIntervalInMinutes}
-      />
+      <Ticket ticket={cell.ticket} timeBlockInMinutes={timeBlockInMinutes} />
     </GridItem>
   )
 }

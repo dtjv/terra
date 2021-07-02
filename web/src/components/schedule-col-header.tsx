@@ -11,12 +11,12 @@ export interface ScheduleColHeaderProps {
 export const ScheduleColHeader: React.FC<ScheduleColHeaderProps> = ({
   cell,
 }) => {
-  if (cell.data.kind !== CellKind.COL_HEADER) return null
+  if (cell.kind !== CellKind.COL_HEADER) return null
 
   return (
     <GridItem borderBottomWidth="1px" borderBottomColor="gray.600">
       <Flex align="center" justify="center">
-        {cell.data.display}
+        {cell.display}
       </Flex>
     </GridItem>
   )
