@@ -1,24 +1,20 @@
-// ----------------------------------------------------------------------------
-//
-// data interfaces
-//
-// ----------------------------------------------------------------------------
-
 export interface ScheduleData {
-  scheduleStartTime: number
-  scheduleEndTime: number
-  timeIntervalInMinutes: number
+  id: string
+  startHour: number
+  endHour: number
+  timeBlockInMinutes: number
 }
 
 export interface VehicleData {
   id: string
+  vehicleId: string
   vehicleName: string
 }
 
 export interface TimeData {
-  id: string
-  time: string
-  originalDateTimeISO: string
+  scheduleTimeISO: string
+  hourFormat: string
+  hourMinuteFormat: string
 }
 
 export interface TicketData {
@@ -30,19 +26,11 @@ export interface TicketData {
   scheduledStartTime?: string
 }
 
-export interface AppData {
-  schedule: ScheduleData
-  tickets: TicketData[]
-  vehicles: VehicleData[]
-}
-
 export type UpdatedTicketData = Pick<TicketData, 'id'> & Partial<TicketData>
 
-// ----------------------------------------------------------------------------
-//
-// ui interfaces
-//
-// ----------------------------------------------------------------------------
+export type RowHeader = TimeData
+
+export type ColHeader = VehicleData
 
 export enum CellKind {
   ROW_HEADER = 'ROW_HEADER',
@@ -50,30 +38,33 @@ export enum CellKind {
   DATA_CELL = 'DATA_CELL',
 }
 
-export interface RowHeader extends TimeData {
-  kind: CellKind.ROW_HEADER
-  display: string
-}
-
-export interface ColHeader extends VehicleData {
-  kind: CellKind.COL_HEADER
-  display: string
-}
-
-export interface DataCell {
-  kind: CellKind.DATA_CELL
-  ticket: TicketData | undefined
-}
-
-export interface Cell {
+interface BaseCell<Kind extends CellKind> {
+  kind: Kind
   rowIdx: number
   colIdx: number
-  data: RowHeader | ColHeader | DataCell
 }
 
-export interface ScheduleMatrix {
-  rowHeaders: RowHeader[]
-  colHeaders: ColHeader[]
-  cells: Cell[][]
-  timeIntervalInMinutes: number
+export interface RowHeaderCell
+  extends BaseCell<CellKind.ROW_HEADER>,
+    RowHeader {
+  display: string
+}
+
+export interface ColHeaderCell
+  extends BaseCell<CellKind.COL_HEADER>,
+    ColHeader {
+  display: string
+}
+
+export interface DataCell extends BaseCell<CellKind.DATA_CELL> {
+  ticket: TicketData | undefined
+  rowHeader: RowHeader
+  colHeader: ColHeader
+}
+
+export type Cell = { key: string } & (RowHeaderCell | ColHeaderCell | DataCell)
+
+export interface Row {
+  key: string
+  cells: Cell[]
 }

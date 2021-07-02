@@ -4,12 +4,11 @@ import { set, format, addMinutes } from 'date-fns'
 import { CellKind } from '@/types/types'
 import type {
   VehicleData,
-  TimeData,
   TicketData,
+  Row,
+  Cell,
   RowHeader,
   ColHeader,
-  Cell,
-  ScheduleMatrix,
 } from '@/types/types'
 
 /**
@@ -17,31 +16,38 @@ import type {
  *
  *
  */
-export const makeTimeRangeListForDate = ({
-  startTime = 8,
-  endTime = 18,
-  date = new Date(Date.now()),
-  timeIntervalInMinutes = 30,
-} = {}): Date[] => {
-  const range: Date[] = []
+export interface MakeScheduleTimesProps {
+  startHour: number
+  endHour: number
+  date?: Date
+  timeBlockInMinutes: number
+}
 
-  let day = set(date, {
+export const makeScheduleTimes = ({
+  startHour,
+  endHour,
+  date = new Date(Date.now()),
+  timeBlockInMinutes,
+}: MakeScheduleTimesProps): Date[] => {
+  const scheduleTimes: Date[] = []
+
+  let scheduleTime = set(date, {
     year: date.getFullYear(),
     month: date.getMonth(),
     date: date.getDay(),
-    hours: startTime,
+    hours: startHour,
     minutes: 0,
     seconds: 0,
     milliseconds: 0,
   })
 
-  while (startTime < endTime) {
-    range.push(day)
-    day = addMinutes(day, timeIntervalInMinutes)
-    startTime = day.getHours()
+  while (startHour < endHour) {
+    scheduleTimes.push(scheduleTime)
+    scheduleTime = addMinutes(scheduleTime, timeBlockInMinutes)
+    startHour = scheduleTime.getHours()
   }
 
-  return range
+  return scheduleTimes
 }
 
 /**
@@ -49,41 +55,29 @@ export const makeTimeRangeListForDate = ({
  *
  *
  */
-export const makeTimeDataList = (
-  dateRange: Date[] = [],
-  timeIntervalInMinutes = 30
-): TimeData[] =>
-  dateRange.map((date, idx) => {
-    const timeFactor = 60 / timeIntervalInMinutes
-    return {
-      id: format(date, 'h:mm a'),
-      time: idx % timeFactor !== 0 ? '' : format(date, 'h a'),
-      originalDateTimeISO: date.toISOString(),
-    }
-  })
+export interface MakeRowHeadersProps {
+  scheduleTimes: Date[]
+  timeBlockInMinutes?: number
+}
 
-/**
- *
- *
- *
- */
-export const makeRowHeaders = (times: TimeData[] = []): RowHeader[] => {
+export const makeRowHeaders = ({
+  scheduleTimes,
+  timeBlockInMinutes = 30,
+}: MakeRowHeadersProps): RowHeader[] => {
   return [
     {
-      kind: CellKind.ROW_HEADER,
-      display: '',
-      id: '',
-      time: '',
-      originalDateTimeISO: '',
+      scheduleTimeISO: '',
+      hourFormat: '',
+      hourMinuteFormat: '',
     },
-    ...times.map(
-      (timeData) =>
-        ({
-          kind: CellKind.ROW_HEADER,
-          display: timeData.time,
-          ...timeData,
-        } as RowHeader)
-    ),
+    ...scheduleTimes.map((scheduleTime, idx) => {
+      const timeFactor = 60 / timeBlockInMinutes
+      return {
+        scheduleTimeISO: scheduleTime.toISOString(),
+        hourMinuteFormat: format(scheduleTime, 'h:mm a'),
+        hourFormat: idx % timeFactor !== 0 ? '' : format(scheduleTime, 'h a'),
+      }
+    }),
   ]
 }
 
@@ -92,18 +86,8 @@ export const makeRowHeaders = (times: TimeData[] = []): RowHeader[] => {
  *
  *
  */
-export const makeColHeaders = (vehicles: VehicleData[] = []): ColHeader[] => {
-  return [
-    { kind: CellKind.COL_HEADER, display: '', id: '', vehicleName: '' },
-    ...vehicles.map(
-      (vehicleData) =>
-        ({
-          kind: CellKind.COL_HEADER,
-          display: vehicleData.vehicleName,
-          ...vehicleData,
-        } as ColHeader)
-    ),
-  ]
+export const makeColHeaders = (vehicles: VehicleData[]): ColHeader[] => {
+  return [{ id: '', vehicleId: '', vehicleName: '' }, ...vehicles]
 }
 
 /**
@@ -113,10 +97,10 @@ export const makeColHeaders = (vehicles: VehicleData[] = []): ColHeader[] => {
  */
 export const computeTicketFields = (tickets: TicketData[]): TicketData[] => {
   return tickets.map((ticket) => {
-    const scheduledDate = new Date(ticket.scheduledDateTimeISO)
-    const scheduledStartTime = format(scheduledDate, 'h:mm a')
-    const timeRange = `${format(scheduledDate, 'h:mmaaa')} - ${format(
-      addMinutes(scheduledDate, ticket.durationInMinutes),
+    const scheduledDateTime = new Date(ticket.scheduledDateTimeISO)
+    const scheduledStartTime = format(scheduledDateTime, 'h:mm a')
+    const timeRange = `${format(scheduledDateTime, 'h:mmaaa')} - ${format(
+      addMinutes(scheduledDateTime, ticket.durationInMinutes),
       'h:mmaaa'
     )}`
 
@@ -129,11 +113,17 @@ export const computeTicketFields = (tickets: TicketData[]): TicketData[] => {
  *
  *
  */
-export const groupTicketsBy = (
-  tickets: TicketData[] = [],
-  rowField: keyof TicketData,
+export interface GroupTicketsByProps {
+  tickets: TicketData[]
+  rowField: keyof TicketData
   colField: keyof TicketData
-): { [key: string]: { [key: string]: TicketData } } => {
+}
+
+export const groupTicketsBy = ({
+  tickets,
+  rowField,
+  colField,
+}: GroupTicketsByProps): { [key: string]: { [key: string]: TicketData } } => {
   const ticketsByRow = _.groupBy(tickets, (ticket) => ticket[rowField])
 
   return Object.keys(ticketsByRow).reduce(
@@ -150,45 +140,76 @@ export const groupTicketsBy = (
  *
  *
  */
-interface MakeCellsProps {
+export interface MakeRowsProps {
   tickets: TicketData[]
   rowHeaders: RowHeader[]
   colHeaders: ColHeader[]
 }
 
-export const makeCells = ({
-  tickets = [],
-  rowHeaders = [],
-  colHeaders = [],
-}: MakeCellsProps): Cell[][] => {
+export const makeRows = ({
+  tickets,
+  rowHeaders,
+  colHeaders,
+}: MakeRowsProps): Row[] => {
   if (!tickets.every((ticket) => 'scheduledStartTime' in ticket)) {
     throw new Error(
       `Missing ticket field: 'scheduledStartTime'. Call 'computeTicketFields'`
     )
   }
 
-  const ticketHash = groupTicketsBy(tickets, 'scheduledStartTime', 'vehicleId')
+  const ticketHash = groupTicketsBy({
+    tickets,
+    rowField: 'scheduledStartTime',
+    colField: 'vehicleId',
+  })
 
   return rowHeaders.map((rowHeader, rowIdx) => {
-    return colHeaders.map((colHeader, colIdx) => {
-      const cell = { rowIdx, colIdx }
+    const row: Row = {
+      key: `row-${rowIdx}`,
+      cells: colHeaders.map((colHeader, colIdx) => {
+        const defaultFields = {
+          key: `${rowIdx}-${colIdx}`,
+          rowIdx,
+          colIdx,
+        }
+        let cell: Cell
 
-      if (rowIdx === 0) {
-        return { ...cell, data: colHeader }
-      }
+        if (rowIdx === 0) {
+          cell = {
+            ...defaultFields,
+            ...colHeader,
+            kind: CellKind.COL_HEADER,
+            display: colHeader.vehicleName,
+          }
+          return cell
+        }
 
-      if (colIdx === 0) {
-        return { ...cell, data: rowHeader }
-      }
+        if (colIdx === 0) {
+          cell = {
+            ...defaultFields,
+            ...rowHeader,
+            kind: CellKind.ROW_HEADER,
+            display: rowHeader.hourFormat,
+          }
+          return cell
+        }
 
-      return {
-        ...cell,
-        data: {
+        cell = {
+          ...defaultFields,
           kind: CellKind.DATA_CELL,
-          ticket: _.get(ticketHash, [rowHeader.id, colHeader.id]),
-        },
-      }
-    })
+          rowHeader,
+          colHeader,
+          ticket: _.get(ticketHash, [
+            rowHeader.hourMinuteFormat,
+            colHeader.vehicleId,
+          ]),
+        }
+
+        return cell
+      }),
+    }
+
+    return row
   })
 }
 
@@ -206,7 +227,7 @@ export const getPreviousCellWithTicket = (
   while (idx < cell.rowIdx) {
     const prevCell = cells[cell.rowIdx - idx]?.[cell.colIdx]
 
-    if (prevCell?.data.kind === CellKind.DATA_CELL && prevCell.data.ticket) {
+    if (prevCell?.kind === CellKind.DATA_CELL && prevCell.ticket) {
       return prevCell
     }
 
@@ -224,24 +245,24 @@ export const getPreviousCellWithTicket = (
 export interface IsCellCoveredByTicketProps {
   cell: Cell
   prevCell: Cell
-  timeIntervalInMinutes: number
+  timeBlockInMinutes: number
 }
 
 export const isCellCoveredByTicket = ({
   cell,
   prevCell,
-  timeIntervalInMinutes,
+  timeBlockInMinutes,
 }: IsCellCoveredByTicketProps): boolean => {
   if (
-    cell.data.kind !== CellKind.DATA_CELL ||
-    prevCell.data.kind !== CellKind.DATA_CELL
+    cell.kind !== CellKind.DATA_CELL ||
+    prevCell.kind !== CellKind.DATA_CELL
   ) {
     throw new Error('Both cells passed must be DATA_CELL kind.')
   }
 
   const rowDiff = cell.rowIdx - prevCell.rowIdx
-  const ticket = cell.data.ticket
-  const prevTicket = prevCell.data.ticket
+  const ticket = cell.ticket
+  const prevTicket = prevCell.ticket
 
   if (ticket) {
     throw new Error('`cell` has a ticket - it cannot be covered.')
@@ -251,7 +272,7 @@ export const isCellCoveredByTicket = ({
     throw new Error('`prevCell` must have a ticket.')
   }
 
-  return prevTicket.durationInMinutes / timeIntervalInMinutes >= rowDiff + 1
+  return prevTicket.durationInMinutes / timeBlockInMinutes >= rowDiff + 1
 }
 
 /**
@@ -259,30 +280,33 @@ export const isCellCoveredByTicket = ({
  *
  *
  */
-export interface IsSpaceForTicketAtCell {
+export interface IsSpaceForTicketAtCellProps {
   ticket: TicketData
   targetCell: Cell
-  matrix: ScheduleMatrix
+  rows: Row[]
+  timeBlockInMinutes: number
 }
+
 export const isSpaceForTicketAtCell = ({
   ticket,
   targetCell,
-  matrix,
-}: IsSpaceForTicketAtCell): boolean => {
-  if (targetCell.data.kind !== CellKind.DATA_CELL) {
+  rows,
+  timeBlockInMinutes,
+}: IsSpaceForTicketAtCellProps): boolean => {
+  if (targetCell.kind !== CellKind.DATA_CELL) {
     throw new Error('`targetCell` must be DATA_CELL kind.')
   }
 
-  const numCellsNeeded = ticket.durationInMinutes / matrix.timeIntervalInMinutes
+  const numCellsNeeded = ticket.durationInMinutes / timeBlockInMinutes
 
-  if (targetCell.rowIdx + numCellsNeeded - 1 >= matrix.cells.length) {
+  if (targetCell.rowIdx + numCellsNeeded - 1 >= rows.length) {
     return false
   }
 
   for (let offset = 1; offset < numCellsNeeded; offset += 1) {
-    const cell = matrix.cells[targetCell.rowIdx + offset]?.[targetCell.colIdx]
+    const cell = rows[targetCell.rowIdx + offset]?.cells[targetCell.colIdx]
     const cellTicket =
-      cell?.data.kind === CellKind.DATA_CELL ? cell.data.ticket : undefined
+      cell?.kind === CellKind.DATA_CELL ? cell.ticket : undefined
 
     if (cellTicket && !(cellTicket.id === ticket.id)) {
       return false

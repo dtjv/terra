@@ -2,17 +2,16 @@ import path from 'path'
 import process from 'process'
 import * as fs from 'fs/promises'
 
-import type { AppData, TicketData, UpdatedTicketData } from '@/types/types'
+import type { TicketData, UpdatedTicketData } from '@/types/types'
 
-export const getData = async (): Promise<AppData | undefined> => {
+const TICKETS_FILE = 'src/data/tickets.json'
+
+export const readData = async <T>(file: string): Promise<T | undefined> => {
   try {
-    const data = await fs.readFile(
-      path.resolve(process.cwd(), 'src/data/data.json'),
-      'utf8'
-    )
+    const data = await fs.readFile(path.resolve(process.cwd(), file), 'utf8')
     return JSON.parse(data)
   } catch (err) {
-    console.error('Failed to read data file')
+    console.error(`Failed to read data from '${file}'`)
   }
 
   return undefined
@@ -21,30 +20,32 @@ export const getData = async (): Promise<AppData | undefined> => {
 export const updateTicket = async (
   updatedTicket: UpdatedTicketData
 ): Promise<TicketData | undefined> => {
-  const appData = await getData()
+  const tickets = await readData<TicketData[]>(TICKETS_FILE)
 
-  if (!appData) {
-    throw new Error('No data found')
+  if (!tickets) {
+    console.log('No tickets found')
+    return undefined
   }
 
   let completeUpdatedTicket: TicketData | undefined = undefined
 
-  const updatedAppData = {
-    ...appData,
-    tickets: appData.tickets.map((ticket) => {
-      if (ticket.id === updatedTicket.id) {
-        completeUpdatedTicket = { ...ticket, ...updatedTicket }
-        return completeUpdatedTicket
-      }
-      return ticket
-    }),
-  }
+  const updatedTickets = tickets.map((ticket) => {
+    if (ticket.id === updatedTicket.id) {
+      completeUpdatedTicket = { ...ticket, ...updatedTicket }
+      return completeUpdatedTicket
+    }
+    return ticket
+  })
 
-  await fs.writeFile(
-    path.resolve(process.cwd(), 'src/data/data.json'),
-    JSON.stringify(updatedAppData),
-    'utf8'
-  )
+  try {
+    await fs.writeFile(
+      path.resolve(process.cwd(), TICKETS_FILE),
+      JSON.stringify(updatedTickets),
+      'utf8'
+    )
+  } catch (err) {
+    console.error(`Failed to write updates to '${TICKETS_FILE}'`)
+  }
 
   return completeUpdatedTicket
 }
