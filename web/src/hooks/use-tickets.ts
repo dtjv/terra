@@ -1,16 +1,40 @@
 import axios from 'axios'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+  UseMutationResult,
+} from 'react-query'
 
 import type { TicketData } from '@/types/types'
 
-export const useTickets = (url = '/api/tickets') => {
+export type UseTicketsReturnType = {
+  ticketsQuery: UseQueryResult<TicketData[]>
+  updateTicketMutation: UseMutationResult<
+    TicketData,
+    Error,
+    TicketData,
+    { previousTickets: TicketData[] | undefined }
+  >
+}
+
+export const useTickets = (url = '/api/tickets'): UseTicketsReturnType => {
   const queryClient = useQueryClient()
   const ticketsQuery = useQuery<TicketData[], Error>(
     ['tickets'],
     async () => (await axios.get(url)).data,
-    {}
+    {
+      refetchInterval: 1000 * 60,
+      refetchIntervalInBackground: true,
+    }
   )
-  const updateTicketMutation = useMutation(
+  const updateTicketMutation = useMutation<
+    TicketData,
+    Error,
+    TicketData,
+    { previousTickets: TicketData[] | undefined }
+  >(
     async (updatedTicket) => {
       return (await axios.patch(url, { updatedTicket })).data
     },

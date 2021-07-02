@@ -1,13 +1,24 @@
 import axios from 'axios'
-import { useQuery } from 'react-query'
+import { useQuery, UseQueryResult, UseQueryOptions } from 'react-query'
 
 import type { ScheduleData } from '@/types/types'
 
-export const useScheduleConfig = (url = '/api/schedule') => {
-  const scheduleConfigQuery = useQuery<ScheduleData, Error>(
+export type UseScheduleConfigReturnType<T> = {
+  scheduleConfigQuery: UseQueryResult<T>
+}
+
+export const useScheduleConfig = <T = ScheduleData>(
+  url = '/api/schedule',
+  options?: UseQueryOptions<T, Error>
+): UseScheduleConfigReturnType<T> => {
+  const scheduleConfigQuery = useQuery<T, Error>(
     ['schedule-config'],
     async () => (await axios.get(url)).data,
-    {}
+    {
+      refetchIntervalInBackground: true,
+      refetchInterval: 60 * 5,
+      ...options,
+    }
   )
 
   return { scheduleConfigQuery }
