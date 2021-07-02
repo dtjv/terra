@@ -16,8 +16,8 @@ export const useVehicles = <T = VehicleData[]>(
     ['vehicles'],
     async () => (await axios.get(url)).data,
     {
-      refetchIntervalInBackground: true,
-      refetchInterval: 60 * 5,
+      // TODO: unlikely to change, but...
+      refetchInterval: false,
       ...options,
     }
   )

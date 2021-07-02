@@ -15,8 +15,8 @@ export const useScheduleConfig = <T = ScheduleData>(
     ['schedule-config'],
     async () => (await axios.get(url)).data,
     {
-      refetchIntervalInBackground: true,
-      refetchInterval: 60 * 5,
+      // TODO: unlikely to change. but...
+      refetchInterval: false,
       ...options,
     }
   )
