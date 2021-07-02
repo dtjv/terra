@@ -220,12 +220,12 @@ export const makeRows = ({
  */
 export const getPreviousCellWithTicket = (
   cell: Cell,
-  cells: Cell[][]
+  rows: Row[]
 ): Cell | undefined => {
   let idx = 1
 
   while (idx < cell.rowIdx) {
-    const prevCell = cells[cell.rowIdx - idx]?.[cell.colIdx]
+    const prevCell = rows[cell.rowIdx - idx]?.cells[cell.colIdx]
 
     if (prevCell?.kind === CellKind.DATA_CELL && prevCell.ticket) {
       return prevCell
