@@ -1,3 +1,5 @@
+import { CellKind } from '@/constants/constants'
+
 export interface ScheduleData {
   id: string
   startHour: number
@@ -28,15 +30,11 @@ export interface TicketData {
 
 export type UpdatedTicketData = Pick<TicketData, 'id'> & Partial<TicketData>
 
+export type TicketContext = { previousTickets: TicketData[] }
+
 export type RowHeader = TimeData
 
 export type ColHeader = VehicleData
-
-export enum CellKind {
-  ROW_HEADER = 'ROW_HEADER',
-  COL_HEADER = 'COL_HEADER',
-  DATA_CELL = 'DATA_CELL',
-}
 
 interface BaseCell<Kind extends CellKind> {
   kind: Kind
