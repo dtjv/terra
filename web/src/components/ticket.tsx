@@ -2,10 +2,10 @@ import * as React from 'react'
 import { useDrag } from 'react-dnd'
 import { Box, Flex } from '@chakra-ui/react'
 import { DragHandleIcon } from '@chakra-ui/icons'
-
 import type { TicketData } from '@/types/types'
+import { DragItem, MIN_ROW_HEIGHT } from '@/constants/constants'
 
-export interface TicketProps {
+export type TicketProps = {
   ticket: TicketData | undefined
   timeBlockInMinutes: number
 }
@@ -16,7 +16,7 @@ export const Ticket: React.FC<TicketProps> = ({
 }) => {
   const [{ isDragging }, dragRef, dragPreviewRef] = useDrag(
     () => ({
-      type: 'TICKET',
+      type: DragItem.TICKET,
       item: ticket,
       collect: (monitor) => ({
         isDragging: !!monitor.isDragging(),
@@ -27,8 +27,8 @@ export const Ticket: React.FC<TicketProps> = ({
 
   if (!ticket) return null
 
-  // TODO: replace magic numbers
-  const height = (ticket.durationInMinutes / timeBlockInMinutes) * 60 - 5
+  const height =
+    (ticket.durationInMinutes / timeBlockInMinutes) * MIN_ROW_HEIGHT - 5
 
   return (
     <Box

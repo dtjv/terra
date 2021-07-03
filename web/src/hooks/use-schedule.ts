@@ -1,6 +1,5 @@
 import * as React from 'react'
 import type { UseMutationResult } from 'react-query'
-
 import { useTickets } from '@/hooks/use-tickets'
 import { useVehicles } from '@/hooks/use-vehicles'
 import { useScheduleConfig } from '@/hooks/use-schedule-config'
@@ -11,7 +10,13 @@ import {
   makeColHeaders,
   computeTicketFields,
 } from '@/lib/utils'
-import type { Row, TicketData, VehicleData, ScheduleData } from '@/types/types'
+import type {
+  Row,
+  TicketData,
+  VehicleData,
+  ScheduleData,
+  TicketContext,
+} from '@/types/types'
 
 const SCHEDULE_CONFIG_DEFAULTS = {
   id: '',
@@ -20,7 +25,7 @@ const SCHEDULE_CONFIG_DEFAULTS = {
   timeBlockInMinutes: 30,
 }
 
-export type UseScheduleReturnType = {
+type UseScheduleReturnType = {
   isLoading: boolean
   isError: boolean
   error: Error | undefined
@@ -29,7 +34,7 @@ export type UseScheduleReturnType = {
     TicketData,
     Error,
     TicketData,
-    { previousTickets: TicketData[] | undefined }
+    TicketContext
   >
   data: {
     tickets: TicketData[]
@@ -61,25 +66,21 @@ export const useSchedule = (): UseScheduleReturnType => {
     })
   }, [scheduleConfigQuery])
 
-  const colHeaders = React.useMemo(
-    () =>
-      vehiclesQuery.isLoading || vehiclesQuery.isError
-        ? []
-        : makeColHeaders(vehiclesQuery.data ?? []),
-    [vehiclesQuery]
-  )
+  const colHeaders = React.useMemo(() => {
+    return vehiclesQuery.isLoading || vehiclesQuery.isError
+      ? []
+      : makeColHeaders(vehiclesQuery.data ?? [])
+  }, [vehiclesQuery])
 
-  const rows = React.useMemo(
-    () =>
-      ticketsQuery.isLoading || ticketsQuery.isError
-        ? []
-        : makeRows({
-            tickets: computeTicketFields(ticketsQuery.data ?? []),
-            rowHeaders,
-            colHeaders,
-          }),
-    [ticketsQuery, rowHeaders, colHeaders]
-  )
+  const rows = React.useMemo(() => {
+    return ticketsQuery.isLoading || ticketsQuery.isError
+      ? []
+      : makeRows({
+          tickets: computeTicketFields(ticketsQuery.data ?? []),
+          rowHeaders,
+          colHeaders,
+        })
+  }, [ticketsQuery, rowHeaders, colHeaders])
 
   return {
     isLoading:

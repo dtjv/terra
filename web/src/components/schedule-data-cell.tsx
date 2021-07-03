@@ -2,27 +2,20 @@ import * as React from 'react'
 import { useDrop } from 'react-dnd'
 import { GridItem } from '@chakra-ui/react'
 import type { UseMutationResult } from 'react-query'
-
 import { Ticket } from '@/components/ticket'
 import {
   getPreviousCellWithTicket,
   isCellCoveredByTicket,
   isSpaceForTicketAtCell,
 } from '@/lib/utils'
+import { CellKind, DragItem } from '@/constants/constants'
+import type { Cell, Row, TicketData, TicketContext } from '@/types/types'
 
-import { CellKind } from '@/types/types'
-import type { Cell, Row, TicketData } from '@/types/types'
-
-export interface ScheduleDataCellProps {
+export type ScheduleDataCellProps = {
   cell: Cell
   rows: Row[]
   timeBlockInMinutes: number
-  updateTicket: UseMutationResult<
-    TicketData,
-    Error,
-    TicketData,
-    { previousTickets: TicketData[] | undefined }
-  >
+  updateTicket: UseMutationResult<TicketData, Error, TicketData, TicketContext>
 }
 
 export const ScheduleDataCell: React.FC<ScheduleDataCellProps> = ({
@@ -31,9 +24,11 @@ export const ScheduleDataCell: React.FC<ScheduleDataCellProps> = ({
   updateTicket,
   timeBlockInMinutes,
 }) => {
+  const numRows = rows.length
+  const numCols = rows[0]?.cells.length ?? 0
   const [, dropRef] = useDrop(
     () => ({
-      accept: 'TICKET',
+      accept: DragItem.TICKET,
       canDrop: (dragTicket: TicketData, monitor) => {
         if (cell.kind !== CellKind.DATA_CELL) {
           return false
@@ -102,12 +97,7 @@ export const ScheduleDataCell: React.FC<ScheduleDataCellProps> = ({
     [cell, rows, timeBlockInMinutes]
   )
 
-  if (cell.kind !== CellKind.DATA_CELL) {
-    return null
-  }
-
-  const numRows = rows.length
-  const numCols = rows[0]?.cells.length ?? 0
+  if (cell.kind !== CellKind.DATA_CELL) return null
 
   return (
     <GridItem

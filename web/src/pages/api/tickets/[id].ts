@@ -1,10 +1,9 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-
-import type { TicketData } from '@/types/types'
 import { updateTicket } from '@/lib/db'
+import type { TicketData } from '@/types/types'
 
 //------------------------------------------------------------------------------
-// Handler for api calls to `/api/tickets/:ticketid`
+// Handler for api calls to `/api/tickets/:id`
 //------------------------------------------------------------------------------
 const handler: NextApiHandler = async (
   req: NextApiRequest,

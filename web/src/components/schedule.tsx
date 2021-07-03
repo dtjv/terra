@@ -1,14 +1,10 @@
 import * as React from 'react'
 import { Flex, Grid } from '@chakra-ui/react'
-
-import { CellKind } from '@/types/types'
 import { useSchedule } from '@/hooks/use-schedule'
 import { ScheduleColHeader } from '@/components/schedule-col-header'
 import { ScheduleRowHeader } from '@/components/schedule-row-header'
 import { ScheduleDataCell } from '@/components//schedule-data-cell'
-
-const COL_WIDTH = '100px'
-const ROW_HEIGHT = '60px'
+import { MIN_ROW_HEIGHT, MIN_COL_WIDTH, CellKind } from '@/constants/constants'
 
 export const Schedule: React.FC = () => {
   const { isLoading, isError, rows, error, updateTicketMutation, data } =
@@ -16,8 +12,8 @@ export const Schedule: React.FC = () => {
 
   const numRows = rows.length
   const numCols = rows[0]?.cells.length ?? 0
-  const templateRows = `repeat(${numRows}, minmax(${ROW_HEIGHT}, 1fr))`
-  const templateCols = `repeat(${numCols}, minmax(${COL_WIDTH}, 1fr))`
+  const templateRows = `repeat(${numRows}, minmax(${MIN_ROW_HEIGHT}px, 1fr))`
+  const templateCols = `repeat(${numCols}, minmax(${MIN_COL_WIDTH}px, 1fr))`
 
   if (isLoading) {
     return <div>render skeleton...</div>
@@ -50,8 +46,8 @@ export const Schedule: React.FC = () => {
                     key={cell.key}
                     cell={cell}
                     rows={rows}
-                    timeBlockInMinutes={data.scheduleConfig.timeBlockInMinutes}
                     updateTicket={updateTicketMutation}
+                    timeBlockInMinutes={data.scheduleConfig.timeBlockInMinutes}
                   />
                 )
               default:

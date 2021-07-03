@@ -1,7 +1,5 @@
 import _ from 'lodash'
 import { set, format, addMinutes } from 'date-fns'
-
-import { CellKind } from '@/types/types'
 import type {
   VehicleData,
   TicketData,
@@ -10,6 +8,7 @@ import type {
   RowHeader,
   ColHeader,
 } from '@/types/types'
+import { CellKind } from '@/constants/constants'
 
 /**
  *

@@ -1,10 +1,9 @@
 import * as React from 'react'
 import { Box, Flex, GridItem } from '@chakra-ui/react'
-
-import { CellKind } from '@/types/types'
 import type { Cell } from '@/types/types'
+import { CellKind } from '@/constants/constants'
 
-export interface ScheduleRowHeaderProps {
+export type ScheduleRowHeaderProps = {
   cell: Cell
   numRows: number
   numCols: number

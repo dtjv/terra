@@ -1,25 +1,25 @@
 import axios from 'axios'
-import { useQuery } from 'react-query'
-import type { UseQueryResult, UseQueryOptions } from 'react-query'
-
+import { useQuery, UseQueryResult } from 'react-query'
 import type { VehicleData } from '@/types/types'
 
-export type UseVehiclesReturnType<T> = {
+const VEHICLES_QUERY_KEY = 'vehicles'
+const VEHICLES_API = process.env['NEXT_PUBLIC_VEHICLES_API'] ?? ''
+
+type UseVehiclesReturnType<T> = {
   vehiclesQuery: UseQueryResult<T>
 }
 
-export const useVehicles = <T = VehicleData[]>(
-  url = '/api/vehicles',
-  options?: UseQueryOptions<T, Error>
-): UseVehiclesReturnType<T> => {
+export const useVehicles = <T = VehicleData[]>(): UseVehiclesReturnType<T> => {
   const vehiclesQuery = useQuery<T, Error>(
-    ['vehicles'],
-    async () => (await axios.get(url)).data,
-    {
-      // TODO: unlikely to change, but...
-      refetchInterval: false,
-      ...options,
-    }
+    [VEHICLES_QUERY_KEY],
+    async () => {
+      if (VEHICLES_API === '') {
+        throw new Error('No vehicle API defined')
+      }
+      const { data } = await axios.get(VEHICLES_API)
+      return data
+    },
+    { refetchInterval: false }
   )
 
   return { vehiclesQuery }

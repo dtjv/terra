@@ -1,11 +1,12 @@
 import path from 'path'
-import process from 'process'
 import * as fs from 'fs/promises'
-
 import type { TicketData, UpdatedTicketData } from '@/types/types'
 
-const TICKETS_FILE = 'src/data/tickets.json'
-
+/**
+ *
+ *
+ *
+ */
 export const readData = async <T>(file: string): Promise<T | undefined> => {
   try {
     const data = await fs.readFile(path.resolve(process.cwd(), file), 'utf8')
@@ -17,9 +18,15 @@ export const readData = async <T>(file: string): Promise<T | undefined> => {
   return undefined
 }
 
+/**
+ *
+ *
+ *
+ */
 export const updateTicket = async (
   updatedTicket: UpdatedTicketData
 ): Promise<TicketData | undefined> => {
+  const TICKETS_FILE = 'src/data/tickets.json'
   const tickets = await readData<TicketData[]>(TICKETS_FILE)
 
   if (!tickets) {

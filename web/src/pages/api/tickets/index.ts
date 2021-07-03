@@ -1,7 +1,6 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-
-import type { TicketData } from '@/types/types'
 import { readData } from '@/lib/db'
+import type { TicketData } from '@/types/types'
 
 //------------------------------------------------------------------------------
 // Handler for api calls to `/api/tickets`
