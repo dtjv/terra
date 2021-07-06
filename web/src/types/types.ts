@@ -1,4 +1,6 @@
-import { CellKind } from '@/constants/constants'
+import { Infer } from 'superstruct'
+import { CellKind, TicketStatus } from '@/constants/constants'
+import { TicketFormSchema } from '@/schemas/schemas'
 
 export interface ScheduleData {
   id: string
@@ -19,6 +21,7 @@ export interface TimeData {
   hourMinuteFormat: string
 }
 
+/*
 export interface TicketData {
   id: string
   scheduledDateTimeISO: string
@@ -27,6 +30,25 @@ export interface TicketData {
   timeRange?: string
   scheduledStartTime?: string
 }
+*/
+
+export type TicketFormInputs = Infer<typeof TicketFormSchema>
+
+export type TicketComputedFields = {
+  // computed & stored.
+  id: string // by DB
+  status: TicketStatus // default=OPEN. conditionally changes.
+  createdAt: Date // by DB
+  updatedAt: Date // by DB
+  createdBy: string // by app
+  updatedBy: string[] // by app
+
+  // computed. NOT stored
+  timeRange?: string
+  scheduledStartTime?: string
+}
+
+export type TicketData = TicketComputedFields & TicketFormInputs
 
 export type UpdatedTicketData = Pick<TicketData, 'id'> & Partial<TicketData>
 
