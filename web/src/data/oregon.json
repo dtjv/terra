@@ -1,0 +1,2468 @@
+[
+  {
+    "zip": "97006",
+    "city": "Beaverton",
+    "county": "Washington",
+    "pop": 74070
+  },
+  {
+    "zip": "97007",
+    "city": "Beaverton",
+    "county": "Washington",
+    "pop": 72299
+  },
+  {
+    "zip": "97701",
+    "city": "Bend",
+    "county": "Deschutes",
+    "pop": 69499
+  },
+  {
+    "zip": "97229",
+    "city": "Portland",
+    "county": "Washington",
+    "pop": 69450
+  },
+  {
+    "zip": "97045",
+    "city": "Oregon City",
+    "county": "Clackamas",
+    "pop": 56250
+  },
+  {
+    "zip": "97301",
+    "city": "Salem",
+    "county": "Marion",
+    "pop": 56196
+  },
+  {
+    "zip": "97124",
+    "city": "Hillsboro",
+    "county": "Washington",
+    "pop": 55170
+  },
+  {
+    "zip": "97206",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 52996
+  },
+  {
+    "zip": "97402",
+    "city": "Eugene",
+    "county": "Lane",
+    "pop": 52310
+  },
+  {
+    "zip": "97223",
+    "city": "Portland",
+    "county": "Washington",
+    "pop": 50585
+  },
+  {
+    "zip": "97702",
+    "city": "Bend",
+    "county": "Deschutes",
+    "pop": 50164
+  },
+  {
+    "zip": "97123",
+    "city": "Hillsboro",
+    "county": "Washington",
+    "pop": 49317
+  },
+  {
+    "zip": "97504",
+    "city": "Medford",
+    "county": "Jackson",
+    "pop": 47947
+  },
+  {
+    "zip": "97501",
+    "city": "Medford",
+    "county": "Jackson",
+    "pop": 45993
+  },
+  {
+    "zip": "97401",
+    "city": "Eugene",
+    "county": "Lane",
+    "pop": 45830
+  },
+  {
+    "zip": "97405",
+    "city": "Eugene",
+    "county": "Lane",
+    "pop": 45250
+  },
+  {
+    "zip": "97080",
+    "city": "Gresham",
+    "county": "Multnomah",
+    "pop": 44335
+  },
+  {
+    "zip": "97305",
+    "city": "Salem",
+    "county": "Marion",
+    "pop": 43917
+  },
+  {
+    "zip": "97202",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 43371
+  },
+  {
+    "zip": "97330",
+    "city": "Corvallis",
+    "county": "Benton",
+    "pop": 42956
+  },
+  {
+    "zip": "97219",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 42528
+  },
+  {
+    "zip": "97303",
+    "city": "Salem",
+    "county": "Marion",
+    "pop": 41173
+  },
+  {
+    "zip": "97236",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 40892
+  },
+  {
+    "zip": "97233",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 40477
+  },
+  {
+    "zip": "97478",
+    "city": "Springfield",
+    "county": "Lane",
+    "pop": 39939
+  },
+  {
+    "zip": "97230",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 39776
+  },
+  {
+    "zip": "97756",
+    "city": "Redmond",
+    "county": "Deschutes",
+    "pop": 38844
+  },
+  {
+    "zip": "97302",
+    "city": "Salem",
+    "county": "Marion",
+    "pop": 38706
+  },
+  {
+    "zip": "97030",
+    "city": "Gresham",
+    "county": "Multnomah",
+    "pop": 38358
+  },
+  {
+    "zip": "97128",
+    "city": "Mcminnville",
+    "county": "Yamhill",
+    "pop": 37993
+  },
+  {
+    "zip": "97477",
+    "city": "Springfield",
+    "county": "Lane",
+    "pop": 37535
+  },
+  {
+    "zip": "97222",
+    "city": "Portland",
+    "county": "Clackamas",
+    "pop": 36952
+  },
+  {
+    "zip": "97527",
+    "city": "Grants Pass",
+    "county": "Josephine",
+    "pop": 36180
+  },
+  {
+    "zip": "97526",
+    "city": "Grants Pass",
+    "county": "Josephine",
+    "pop": 35920
+  },
+  {
+    "zip": "97266",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 35727
+  },
+  {
+    "zip": "97224",
+    "city": "Portland",
+    "county": "Washington",
+    "pop": 35434
+  },
+  {
+    "zip": "97211",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 35429
+  },
+  {
+    "zip": "97203",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 34890
+  },
+  {
+    "zip": "97217",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 34709
+  },
+  {
+    "zip": "97404",
+    "city": "Eugene",
+    "county": "Lane",
+    "pop": 34616
+  },
+  {
+    "zip": "97267",
+    "city": "Portland",
+    "county": "Clackamas",
+    "pop": 33636
+  },
+  {
+    "zip": "97213",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 33011
+  },
+  {
+    "zip": "97306",
+    "city": "Salem",
+    "county": "Marion",
+    "pop": 32416
+  },
+  {
+    "zip": "97304",
+    "city": "Salem",
+    "county": "Polk",
+    "pop": 31863
+  },
+  {
+    "zip": "97355",
+    "city": "Lebanon",
+    "county": "Linn",
+    "pop": 30364
+  },
+  {
+    "zip": "97008",
+    "city": "Beaverton",
+    "county": "Washington",
+    "pop": 29916
+  },
+  {
+    "zip": "97071",
+    "city": "Woodburn",
+    "county": "Marion",
+    "pop": 29796
+  },
+  {
+    "zip": "97132",
+    "city": "Newberg",
+    "county": "Yamhill",
+    "pop": 29732
+  },
+  {
+    "zip": "97220",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 29629
+  },
+  {
+    "zip": "97068",
+    "city": "West Linn",
+    "county": "Clackamas",
+    "pop": 29582
+  },
+  {
+    "zip": "97603",
+    "city": "Klamath Falls",
+    "county": "Klamath",
+    "pop": 29357
+  },
+  {
+    "zip": "97502",
+    "city": "Central Point",
+    "county": "Jackson",
+    "pop": 28975
+  },
+  {
+    "zip": "97062",
+    "city": "Tualatin",
+    "county": "Washington",
+    "pop": 28694
+  },
+  {
+    "zip": "97420",
+    "city": "Coos Bay",
+    "county": "Coos",
+    "pop": 27926
+  },
+  {
+    "zip": "97116",
+    "city": "Forest Grove",
+    "county": "Washington",
+    "pop": 27281
+  },
+  {
+    "zip": "97321",
+    "city": "Albany",
+    "county": "Linn",
+    "pop": 26995
+  },
+  {
+    "zip": "97035",
+    "city": "Lake Oswego",
+    "county": "Clackamas",
+    "pop": 26977
+  },
+  {
+    "zip": "97214",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 26853
+  },
+  {
+    "zip": "97212",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 26562
+  },
+  {
+    "zip": "97005",
+    "city": "Beaverton",
+    "county": "Washington",
+    "pop": 26329
+  },
+  {
+    "zip": "97140",
+    "city": "Sherwood",
+    "county": "Washington",
+    "pop": 26248
+  },
+  {
+    "zip": "97838",
+    "city": "Hermiston",
+    "county": "Umatilla",
+    "pop": 26153
+  },
+  {
+    "zip": "97225",
+    "city": "Portland",
+    "county": "Washington",
+    "pop": 26095
+  },
+  {
+    "zip": "97520",
+    "city": "Ashland",
+    "county": "Jackson",
+    "pop": 25177
+  },
+  {
+    "zip": "97070",
+    "city": "Wilsonville",
+    "county": "Clackamas",
+    "pop": 25101
+  },
+  {
+    "zip": "97013",
+    "city": "Canby",
+    "county": "Clackamas",
+    "pop": 24138
+  },
+  {
+    "zip": "97015",
+    "city": "Clackamas",
+    "county": "Clackamas",
+    "pop": 23633
+  },
+  {
+    "zip": "97333",
+    "city": "Corvallis",
+    "county": "Benton",
+    "pop": 23302
+  },
+  {
+    "zip": "97601",
+    "city": "Klamath Falls",
+    "county": "Klamath",
+    "pop": 22726
+  },
+  {
+    "zip": "97060",
+    "city": "Troutdale",
+    "county": "Multnomah",
+    "pop": 22471
+  },
+  {
+    "zip": "97338",
+    "city": "Dallas",
+    "county": "Polk",
+    "pop": 21880
+  },
+  {
+    "zip": "97058",
+    "city": "The Dalles",
+    "county": "Wasco",
+    "pop": 20619
+  },
+  {
+    "zip": "97801",
+    "city": "Pendleton",
+    "county": "Umatilla",
+    "pop": 20563
+  },
+  {
+    "zip": "97754",
+    "city": "Prineville",
+    "county": "Crook",
+    "pop": 20270
+  },
+  {
+    "zip": "97470",
+    "city": "Roseburg",
+    "county": "Douglas",
+    "pop": 19785
+  },
+  {
+    "zip": "97914",
+    "city": "Ontario",
+    "county": "Malheur",
+    "pop": 19400
+  },
+  {
+    "zip": "97209",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 18982
+  },
+  {
+    "zip": "97215",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 18934
+  },
+  {
+    "zip": "97055",
+    "city": "Sandy",
+    "county": "Clackamas",
+    "pop": 18923
+  },
+  {
+    "zip": "97031",
+    "city": "Hood River",
+    "county": "Hood River",
+    "pop": 18902
+  },
+  {
+    "zip": "97034",
+    "city": "Lake Oswego",
+    "county": "Clackamas",
+    "pop": 18656
+  },
+  {
+    "zip": "97201",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 17993
+  },
+  {
+    "zip": "97424",
+    "city": "Cottage Grove",
+    "county": "Lane",
+    "pop": 17909
+  },
+  {
+    "zip": "97103",
+    "city": "Astoria",
+    "county": "Clatsop",
+    "pop": 17677
+  },
+  {
+    "zip": "97850",
+    "city": "La Grande",
+    "county": "Union",
+    "pop": 17294
+  },
+  {
+    "zip": "97051",
+    "city": "Saint Helens",
+    "county": "Columbia",
+    "pop": 16977
+  },
+  {
+    "zip": "97216",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 16965
+  },
+  {
+    "zip": "97381",
+    "city": "Silverton",
+    "county": "Marion",
+    "pop": 16158
+  },
+  {
+    "zip": "97038",
+    "city": "Molalla",
+    "county": "Clackamas",
+    "pop": 15676
+  },
+  {
+    "zip": "97218",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 15191
+  },
+  {
+    "zip": "97524",
+    "city": "Eagle Point",
+    "county": "Jackson",
+    "pop": 14974
+  },
+  {
+    "zip": "97113",
+    "city": "Cornelius",
+    "county": "Washington",
+    "pop": 14918
+  },
+  {
+    "zip": "97439",
+    "city": "Florence",
+    "county": "Lane",
+    "pop": 14713
+  },
+  {
+    "zip": "97386",
+    "city": "Sweet Home",
+    "county": "Linn",
+    "pop": 14693
+  },
+  {
+    "zip": "97415",
+    "city": "Brookings",
+    "county": "Curry",
+    "pop": 14182
+  },
+  {
+    "zip": "97141",
+    "city": "Tillamook",
+    "county": "Tillamook",
+    "pop": 14035
+  },
+  {
+    "zip": "97232",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 13706
+  },
+  {
+    "zip": "97459",
+    "city": "North Bend",
+    "county": "Coos",
+    "pop": 13643
+  },
+  {
+    "zip": "97403",
+    "city": "Eugene",
+    "county": "Lane",
+    "pop": 13398
+  },
+  {
+    "zip": "97408",
+    "city": "Eugene",
+    "county": "Lane",
+    "pop": 13360
+  },
+  {
+    "zip": "97448",
+    "city": "Junction City",
+    "county": "Lane",
+    "pop": 13080
+  },
+  {
+    "zip": "97503",
+    "city": "White City",
+    "county": "Jackson",
+    "pop": 12819
+  },
+  {
+    "zip": "97741",
+    "city": "Madras",
+    "county": "Jefferson",
+    "pop": 12608
+  },
+  {
+    "zip": "97739",
+    "city": "La Pine",
+    "county": "Deschutes",
+    "pop": 12595
+  },
+  {
+    "zip": "97027",
+    "city": "Gladstone",
+    "county": "Clackamas",
+    "pop": 12521
+  },
+  {
+    "zip": "97221",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 12467
+  },
+  {
+    "zip": "97814",
+    "city": "Baker City",
+    "county": "Baker",
+    "pop": 12348
+  },
+  {
+    "zip": "97361",
+    "city": "Monmouth",
+    "county": "Polk",
+    "pop": 12297
+  },
+  {
+    "zip": "97862",
+    "city": "Milton Freewater",
+    "county": "Umatilla",
+    "pop": 11949
+  },
+  {
+    "zip": "97210",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 11877
+  },
+  {
+    "zip": "97056",
+    "city": "Scappoose",
+    "county": "Columbia",
+    "pop": 11678
+  },
+  {
+    "zip": "97365",
+    "city": "Newport",
+    "county": "Lincoln",
+    "pop": 11348
+  },
+  {
+    "zip": "97351",
+    "city": "Independence",
+    "county": "Polk",
+    "pop": 11150
+  },
+  {
+    "zip": "97138",
+    "city": "Seaside",
+    "county": "Clatsop",
+    "pop": 10693
+  },
+  {
+    "zip": "97024",
+    "city": "Fairview",
+    "county": "Multnomah",
+    "pop": 10344
+  },
+  {
+    "zip": "97457",
+    "city": "Myrtle Creek",
+    "county": "Douglas",
+    "pop": 10288
+  },
+  {
+    "zip": "97426",
+    "city": "Creswell",
+    "county": "Lane",
+    "pop": 10119
+  },
+  {
+    "zip": "97383",
+    "city": "Stayton",
+    "county": "Marion",
+    "pop": 10046
+  },
+  {
+    "zip": "97023",
+    "city": "Estacada",
+    "county": "Clackamas",
+    "pop": 9968
+  },
+  {
+    "zip": "97367",
+    "city": "Lincoln City",
+    "county": "Lincoln",
+    "pop": 9746
+  },
+  {
+    "zip": "97479",
+    "city": "Sutherlin",
+    "county": "Douglas",
+    "pop": 9710
+  },
+  {
+    "zip": "97487",
+    "city": "Veneta",
+    "county": "Lane",
+    "pop": 9106
+  },
+  {
+    "zip": "97370",
+    "city": "Philomath",
+    "county": "Benton",
+    "pop": 8695
+  },
+  {
+    "zip": "97009",
+    "city": "Boring",
+    "county": "Clackamas",
+    "pop": 8603
+  },
+  {
+    "zip": "97540",
+    "city": "Talent",
+    "county": "Jackson",
+    "pop": 8484
+  },
+  {
+    "zip": "97378",
+    "city": "Sheridan",
+    "county": "Yamhill",
+    "pop": 8442
+  },
+  {
+    "zip": "97882",
+    "city": "Umatilla",
+    "county": "Umatilla",
+    "pop": 7972
+  },
+  {
+    "zip": "97759",
+    "city": "Sisters",
+    "county": "Deschutes",
+    "pop": 7896
+  },
+  {
+    "zip": "97048",
+    "city": "Rainier",
+    "county": "Columbia",
+    "pop": 7756
+  },
+  {
+    "zip": "97496",
+    "city": "Winston",
+    "county": "Douglas",
+    "pop": 7737
+  },
+  {
+    "zip": "97537",
+    "city": "Rogue River",
+    "county": "Jackson",
+    "pop": 7463
+  },
+  {
+    "zip": "97205",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 7462
+  },
+  {
+    "zip": "97411",
+    "city": "Bandon",
+    "county": "Coos",
+    "pop": 7337
+  },
+  {
+    "zip": "97392",
+    "city": "Turner",
+    "county": "Marion",
+    "pop": 7011
+  },
+  {
+    "zip": "97325",
+    "city": "Aumsville",
+    "county": "Marion",
+    "pop": 6997
+  },
+  {
+    "zip": "97530",
+    "city": "Jacksonville",
+    "county": "Jackson",
+    "pop": 6913
+  },
+  {
+    "zip": "97760",
+    "city": "Terrebonne",
+    "county": "Deschutes",
+    "pop": 6872
+  },
+  {
+    "zip": "97146",
+    "city": "Warrenton",
+    "county": "Clatsop",
+    "pop": 6698
+  },
+  {
+    "zip": "97423",
+    "city": "Coquille",
+    "county": "Coos",
+    "pop": 6670
+  },
+  {
+    "zip": "97002",
+    "city": "Aurora",
+    "county": "Marion",
+    "pop": 6657
+  },
+  {
+    "zip": "97352",
+    "city": "Jefferson",
+    "county": "Marion",
+    "pop": 6518
+  },
+  {
+    "zip": "97016",
+    "city": "Clatskanie",
+    "county": "Columbia",
+    "pop": 6224
+  },
+  {
+    "zip": "97707",
+    "city": "Bend",
+    "county": "Deschutes",
+    "pop": 6115
+  },
+  {
+    "zip": "97446",
+    "city": "Harrisburg",
+    "county": "Linn",
+    "pop": 6106
+  },
+  {
+    "zip": "97391",
+    "city": "Toledo",
+    "county": "Lincoln",
+    "pop": 6012
+  },
+  {
+    "zip": "97444",
+    "city": "Gold Beach",
+    "county": "Curry",
+    "pop": 5643
+  },
+  {
+    "zip": "97523",
+    "city": "Cave Junction",
+    "county": "Josephine",
+    "pop": 5485
+  },
+  {
+    "zip": "97535",
+    "city": "Phoenix",
+    "county": "Jackson",
+    "pop": 5406
+  },
+  {
+    "zip": "97394",
+    "city": "Waldport",
+    "county": "Lincoln",
+    "pop": 5224
+  },
+  {
+    "zip": "97227",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 5146
+  },
+  {
+    "zip": "97114",
+    "city": "Dayton",
+    "county": "Yamhill",
+    "pop": 5102
+  },
+  {
+    "zip": "97032",
+    "city": "Hubbard",
+    "county": "Marion",
+    "pop": 5048
+  },
+  {
+    "zip": "97467",
+    "city": "Reedsport",
+    "county": "Douglas",
+    "pop": 5014
+  },
+  {
+    "zip": "97630",
+    "city": "Lakeview",
+    "county": "Lake",
+    "pop": 4969
+  },
+  {
+    "zip": "97106",
+    "city": "Banks",
+    "county": "Washington",
+    "pop": 4908
+  },
+  {
+    "zip": "97913",
+    "city": "Nyssa",
+    "county": "Malheur",
+    "pop": 4875
+  },
+  {
+    "zip": "97133",
+    "city": "North Plains",
+    "county": "Washington",
+    "pop": 4734
+  },
+  {
+    "zip": "97119",
+    "city": "Gaston",
+    "county": "Washington",
+    "pop": 4527
+  },
+  {
+    "zip": "97374",
+    "city": "Scio",
+    "county": "Linn",
+    "pop": 4521
+  },
+  {
+    "zip": "97026",
+    "city": "Gervais",
+    "county": "Marion",
+    "pop": 4468
+  },
+  {
+    "zip": "97720",
+    "city": "Burns",
+    "county": "Harney",
+    "pop": 4435
+  },
+  {
+    "zip": "97458",
+    "city": "Myrtle Point",
+    "county": "Coos",
+    "pop": 4390
+  },
+  {
+    "zip": "97525",
+    "city": "Gold Hill",
+    "county": "Jackson",
+    "pop": 4350
+  },
+  {
+    "zip": "97148",
+    "city": "Yamhill",
+    "county": "Yamhill",
+    "pop": 4288
+  },
+  {
+    "zip": "97362",
+    "city": "Mount Angel",
+    "county": "Marion",
+    "pop": 4287
+  },
+  {
+    "zip": "97101",
+    "city": "Amity",
+    "county": "Yamhill",
+    "pop": 4278
+  },
+  {
+    "zip": "97818",
+    "city": "Boardman",
+    "county": "Morrow",
+    "pop": 4244
+  },
+  {
+    "zip": "97004",
+    "city": "Beavercreek",
+    "county": "Clackamas",
+    "pop": 4241
+  },
+  {
+    "zip": "97918",
+    "city": "Vale",
+    "county": "Malheur",
+    "pop": 4224
+  },
+  {
+    "zip": "97761",
+    "city": "Warm Springs",
+    "county": "Jefferson",
+    "pop": 4181
+  },
+  {
+    "zip": "97127",
+    "city": "Lafayette",
+    "county": "Yamhill",
+    "pop": 4149
+  },
+  {
+    "zip": "97844",
+    "city": "Irrigon",
+    "county": "Morrow",
+    "pop": 4133
+  },
+  {
+    "zip": "97115",
+    "city": "Dundee",
+    "county": "Yamhill",
+    "pop": 4008
+  },
+  {
+    "zip": "97231",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 3957
+  },
+  {
+    "zip": "97463",
+    "city": "Oakridge",
+    "county": "Lane",
+    "pop": 3899
+  },
+  {
+    "zip": "97462",
+    "city": "Oakland",
+    "county": "Douglas",
+    "pop": 3730
+  },
+  {
+    "zip": "97624",
+    "city": "Chiloquin",
+    "county": "Klamath",
+    "pop": 3573
+  },
+  {
+    "zip": "97111",
+    "city": "Carlton",
+    "county": "Yamhill",
+    "pop": 3572
+  },
+  {
+    "zip": "97734",
+    "city": "Culver",
+    "county": "Jefferson",
+    "pop": 3413
+  },
+  {
+    "zip": "97017",
+    "city": "Colton",
+    "county": "Clackamas",
+    "pop": 3407
+  },
+  {
+    "zip": "97327",
+    "city": "Brownsville",
+    "county": "Linn",
+    "pop": 3386
+  },
+  {
+    "zip": "97022",
+    "city": "Eagle Creek",
+    "county": "Clackamas",
+    "pop": 3386
+  },
+  {
+    "zip": "97396",
+    "city": "Willamina",
+    "county": "Yamhill",
+    "pop": 3384
+  },
+  {
+    "zip": "97368",
+    "city": "Otis",
+    "county": "Lincoln",
+    "pop": 3319
+  },
+  {
+    "zip": "97539",
+    "city": "Shady Cove",
+    "county": "Jackson",
+    "pop": 3311
+  },
+  {
+    "zip": "97053",
+    "city": "Warren",
+    "county": "Columbia",
+    "pop": 3248
+  },
+  {
+    "zip": "97455",
+    "city": "Pleasant Hill",
+    "county": "Lane",
+    "pop": 3175
+  },
+  {
+    "zip": "97064",
+    "city": "Vernonia",
+    "county": "Columbia",
+    "pop": 3167
+  },
+  {
+    "zip": "97019",
+    "city": "Corbett",
+    "county": "Multnomah",
+    "pop": 3167
+  },
+  {
+    "zip": "97828",
+    "city": "Enterprise",
+    "county": "Wallowa",
+    "pop": 3162
+  },
+  {
+    "zip": "97385",
+    "city": "Sublimity",
+    "county": "Marion",
+    "pop": 3151
+  },
+  {
+    "zip": "97875",
+    "city": "Stanfield",
+    "county": "Umatilla",
+    "pop": 3126
+  },
+  {
+    "zip": "97041",
+    "city": "Mount Hood Parkdale",
+    "county": "Hood River",
+    "pop": 2979
+  },
+  {
+    "zip": "97042",
+    "city": "Mulino",
+    "county": "Clackamas",
+    "pop": 2964
+  },
+  {
+    "zip": "97437",
+    "city": "Elmira",
+    "county": "Lane",
+    "pop": 2939
+  },
+  {
+    "zip": "97331",
+    "city": "Corvallis",
+    "county": "Benton",
+    "pop": 2865
+  },
+  {
+    "zip": "97845",
+    "city": "John Day",
+    "county": "Grant",
+    "pop": 2835
+  },
+  {
+    "zip": "97456",
+    "city": "Monroe",
+    "county": "Benton",
+    "pop": 2826
+  },
+  {
+    "zip": "97131",
+    "city": "Nehalem",
+    "county": "Tillamook",
+    "pop": 2751
+  },
+  {
+    "zip": "97469",
+    "city": "Riddle",
+    "county": "Douglas",
+    "pop": 2731
+  },
+  {
+    "zip": "97341",
+    "city": "Depoe Bay",
+    "county": "Lincoln",
+    "pop": 2682
+  },
+  {
+    "zip": "97544",
+    "city": "Williams",
+    "county": "Josephine",
+    "pop": 2606
+  },
+  {
+    "zip": "97380",
+    "city": "Siletz",
+    "county": "Lincoln",
+    "pop": 2583
+  },
+  {
+    "zip": "97753",
+    "city": "Powell Butte",
+    "county": "Crook",
+    "pop": 2570
+  },
+  {
+    "zip": "97623",
+    "city": "Bonanza",
+    "county": "Klamath",
+    "pop": 2566
+  },
+  {
+    "zip": "97532",
+    "city": "Merlin",
+    "county": "Josephine",
+    "pop": 2562
+  },
+  {
+    "zip": "97883",
+    "city": "Union",
+    "county": "Union",
+    "pop": 2526
+  },
+  {
+    "zip": "97358",
+    "city": "Lyons",
+    "county": "Linn",
+    "pop": 2488
+  },
+  {
+    "zip": "97360",
+    "city": "Mill City",
+    "county": "Linn",
+    "pop": 2458
+  },
+  {
+    "zip": "97827",
+    "city": "Elgin",
+    "county": "Union",
+    "pop": 2407
+  },
+  {
+    "zip": "97417",
+    "city": "Canyonville",
+    "county": "Douglas",
+    "pop": 2407
+  },
+  {
+    "zip": "97431",
+    "city": "Dexter",
+    "county": "Lane",
+    "pop": 2341
+  },
+  {
+    "zip": "97449",
+    "city": "Lakeside",
+    "county": "Coos",
+    "pop": 2170
+  },
+  {
+    "zip": "97443",
+    "city": "Glide",
+    "county": "Douglas",
+    "pop": 2135
+  },
+  {
+    "zip": "97435",
+    "city": "Drain",
+    "county": "Douglas",
+    "pop": 2135
+  },
+  {
+    "zip": "97442",
+    "city": "Glendale",
+    "county": "Douglas",
+    "pop": 2047
+  },
+  {
+    "zip": "97465",
+    "city": "Port Orford",
+    "county": "Curry",
+    "pop": 2021
+  },
+  {
+    "zip": "97836",
+    "city": "Heppner",
+    "county": "Morrow",
+    "pop": 1941
+  },
+  {
+    "zip": "97347",
+    "city": "Grand Ronde",
+    "county": "Polk",
+    "pop": 1902
+  },
+  {
+    "zip": "97846",
+    "city": "Joseph",
+    "county": "Wallowa",
+    "pop": 1878
+  },
+  {
+    "zip": "97112",
+    "city": "Cloverdale",
+    "county": "Tillamook",
+    "pop": 1867
+  },
+  {
+    "zip": "97389",
+    "city": "Tangent",
+    "county": "Linn",
+    "pop": 1858
+  },
+  {
+    "zip": "97499",
+    "city": "Yoncalla",
+    "county": "Douglas",
+    "pop": 1839
+  },
+  {
+    "zip": "97107",
+    "city": "Bay City",
+    "county": "Tillamook",
+    "pop": 1828
+  },
+  {
+    "zip": "97018",
+    "city": "Columbia City",
+    "county": "Columbia",
+    "pop": 1789
+  },
+  {
+    "zip": "97868",
+    "city": "Pilot Rock",
+    "county": "Umatilla",
+    "pop": 1781
+  },
+  {
+    "zip": "97824",
+    "city": "Cove",
+    "county": "Union",
+    "pop": 1774
+  },
+  {
+    "zip": "97366",
+    "city": "South Beach",
+    "county": "Lincoln",
+    "pop": 1772
+  },
+  {
+    "zip": "97738",
+    "city": "Hines",
+    "county": "Harney",
+    "pop": 1772
+  },
+  {
+    "zip": "97067",
+    "city": "Welches",
+    "county": "Clackamas",
+    "pop": 1745
+  },
+  {
+    "zip": "97452",
+    "city": "Lowell",
+    "county": "Lane",
+    "pop": 1719
+  },
+  {
+    "zip": "97498",
+    "city": "Yachats",
+    "county": "Lincoln",
+    "pop": 1673
+  },
+  {
+    "zip": "97495",
+    "city": "Winchester",
+    "county": "Douglas",
+    "pop": 1673
+  },
+  {
+    "zip": "97049",
+    "city": "Rhododendron",
+    "county": "Clackamas",
+    "pop": 1647
+  },
+  {
+    "zip": "97040",
+    "city": "Mosier",
+    "county": "Wasco",
+    "pop": 1623
+  },
+  {
+    "zip": "97136",
+    "city": "Rockaway Beach",
+    "county": "Tillamook",
+    "pop": 1590
+  },
+  {
+    "zip": "97348",
+    "city": "Halsey",
+    "county": "Linn",
+    "pop": 1572
+  },
+  {
+    "zip": "97632",
+    "city": "Malin",
+    "county": "Klamath",
+    "pop": 1571
+  },
+  {
+    "zip": "97541",
+    "city": "Trail",
+    "county": "Jackson",
+    "pop": 1559
+  },
+  {
+    "zip": "97054",
+    "city": "Deer Island",
+    "county": "Columbia",
+    "pop": 1541
+  },
+  {
+    "zip": "97497",
+    "city": "Wolf Creek",
+    "county": "Josephine",
+    "pop": 1514
+  },
+  {
+    "zip": "97344",
+    "city": "Falls City",
+    "county": "Polk",
+    "pop": 1491
+  },
+  {
+    "zip": "97375",
+    "city": "Scotts Mills",
+    "county": "Marion",
+    "pop": 1477
+  },
+  {
+    "zip": "97454",
+    "city": "Marcola",
+    "county": "Lane",
+    "pop": 1471
+  },
+  {
+    "zip": "97538",
+    "city": "Selma",
+    "county": "Josephine",
+    "pop": 1463
+  },
+  {
+    "zip": "97121",
+    "city": "Hammond",
+    "county": "Clatsop",
+    "pop": 1402
+  },
+  {
+    "zip": "97813",
+    "city": "Athena",
+    "county": "Umatilla",
+    "pop": 1392
+  },
+  {
+    "zip": "97014",
+    "city": "Cascade Locks",
+    "county": "Hood River",
+    "pop": 1388
+  },
+  {
+    "zip": "97137",
+    "city": "St. Paul",
+    "county": "Marion",
+    "pop": 1385
+  },
+  {
+    "zip": "97416",
+    "city": "Camas Valley",
+    "county": "Douglas",
+    "pop": 1349
+  },
+  {
+    "zip": "97324",
+    "city": "Alsea",
+    "county": "Benton",
+    "pop": 1322
+  },
+  {
+    "zip": "97885",
+    "city": "Wallowa",
+    "county": "Wallowa",
+    "pop": 1295
+  },
+  {
+    "zip": "97466",
+    "city": "Powers",
+    "county": "Coos",
+    "pop": 1272
+  },
+  {
+    "zip": "97633",
+    "city": "Merrill",
+    "county": "Klamath",
+    "pop": 1263
+  },
+  {
+    "zip": "97886",
+    "city": "Weston",
+    "county": "Umatilla",
+    "pop": 1256
+  },
+  {
+    "zip": "97376",
+    "city": "Seal Rock",
+    "county": "Lincoln",
+    "pop": 1254
+  },
+  {
+    "zip": "97488",
+    "city": "Vida",
+    "county": "Lane",
+    "pop": 1219
+  },
+  {
+    "zip": "97326",
+    "city": "Blodgett",
+    "county": "Benton",
+    "pop": 1205
+  },
+  {
+    "zip": "97641",
+    "city": "Christmas Valley",
+    "county": "Lake",
+    "pop": 1196
+  },
+  {
+    "zip": "97110",
+    "city": "Cannon Beach",
+    "county": "Clatsop",
+    "pop": 1166
+  },
+  {
+    "zip": "97826",
+    "city": "Echo",
+    "county": "Umatilla",
+    "pop": 1144
+  },
+  {
+    "zip": "97810",
+    "city": "Adams",
+    "county": "Umatilla",
+    "pop": 1105
+  },
+  {
+    "zip": "97865",
+    "city": "Mount Vernon",
+    "county": "Grant",
+    "pop": 1091
+  },
+  {
+    "zip": "97438",
+    "city": "Fall Creek",
+    "county": "Lane",
+    "pop": 1084
+  },
+  {
+    "zip": "97419",
+    "city": "Cheshire",
+    "county": "Lane",
+    "pop": 1074
+  },
+  {
+    "zip": "97204",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 1036
+  },
+  {
+    "zip": "97536",
+    "city": "Prospect",
+    "county": "Jackson",
+    "pop": 1031
+  },
+  {
+    "zip": "97021",
+    "city": "Dufur",
+    "county": "Wasco",
+    "pop": 1012
+  },
+  {
+    "zip": "97346",
+    "city": "Gates",
+    "county": "Marion",
+    "pop": 988
+  },
+  {
+    "zip": "97037",
+    "city": "Maupin",
+    "county": "Wasco",
+    "pop": 975
+  },
+  {
+    "zip": "97377",
+    "city": "Shedd",
+    "county": "Linn",
+    "pop": 967
+  },
+  {
+    "zip": "97876",
+    "city": "Summerville",
+    "county": "Union",
+    "pop": 960
+  },
+  {
+    "zip": "97434",
+    "city": "Dorena",
+    "county": "Lane",
+    "pop": 959
+  },
+  {
+    "zip": "97413",
+    "city": "Blue River",
+    "county": "Lane",
+    "pop": 944
+  },
+  {
+    "zip": "97869",
+    "city": "Prairie City",
+    "county": "Grant",
+    "pop": 930
+  },
+  {
+    "zip": "97534",
+    "city": "O Brien",
+    "county": "Josephine",
+    "pop": 927
+  },
+  {
+    "zip": "97823",
+    "city": "Condon",
+    "county": "Gilliam",
+    "pop": 922
+  },
+  {
+    "zip": "97020",
+    "city": "Donald",
+    "county": "Marion",
+    "pop": 918
+  },
+  {
+    "zip": "97812",
+    "city": "Arlington",
+    "county": "Gilliam",
+    "pop": 909
+  },
+  {
+    "zip": "97834",
+    "city": "Halfway",
+    "county": "Baker",
+    "pop": 904
+  },
+  {
+    "zip": "97063",
+    "city": "Tygh Valley",
+    "county": "Wasco",
+    "pop": 900
+  },
+  {
+    "zip": "97820",
+    "city": "Canyon City",
+    "county": "Grant",
+    "pop": 899
+  },
+  {
+    "zip": "97011",
+    "city": "Brightwood",
+    "county": "Clackamas",
+    "pop": 840
+  },
+  {
+    "zip": "97453",
+    "city": "Mapleton",
+    "county": "Lane",
+    "pop": 835
+  },
+  {
+    "zip": "97461",
+    "city": "Noti",
+    "county": "Lane",
+    "pop": 834
+  },
+  {
+    "zip": "97867",
+    "city": "North Powder",
+    "county": "Union",
+    "pop": 811
+  },
+  {
+    "zip": "97870",
+    "city": "Richland",
+    "county": "Baker",
+    "pop": 798
+  },
+  {
+    "zip": "97118",
+    "city": "Garibaldi",
+    "county": "Tillamook",
+    "pop": 797
+  },
+  {
+    "zip": "97388",
+    "city": "Gleneden Beach",
+    "county": "Lincoln",
+    "pop": 790
+  },
+  {
+    "zip": "97489",
+    "city": "Walterville",
+    "county": "Lane",
+    "pop": 785
+  },
+  {
+    "zip": "97481",
+    "city": "Tenmile",
+    "county": "Douglas",
+    "pop": 757
+  },
+  {
+    "zip": "97390",
+    "city": "Tidewater",
+    "county": "Lincoln",
+    "pop": 750
+  },
+  {
+    "zip": "97429",
+    "city": "Days Creek",
+    "county": "Douglas",
+    "pop": 746
+  },
+  {
+    "zip": "97833",
+    "city": "Haines",
+    "county": "Baker",
+    "pop": 740
+  },
+  {
+    "zip": "97345",
+    "city": "Foster",
+    "county": "Linn",
+    "pop": 731
+  },
+  {
+    "zip": "97149",
+    "city": "Neskowin",
+    "county": "Tillamook",
+    "pop": 721
+  },
+  {
+    "zip": "97117",
+    "city": "Gales Creek",
+    "county": "Washington",
+    "pop": 719
+  },
+  {
+    "zip": "97135",
+    "city": "Pacific City",
+    "county": "Tillamook",
+    "pop": 716
+  },
+  {
+    "zip": "97901",
+    "city": "Adrian",
+    "county": "Malheur",
+    "pop": 710
+  },
+  {
+    "zip": "97436",
+    "city": "Elkton",
+    "county": "Douglas",
+    "pop": 698
+  },
+  {
+    "zip": "97492",
+    "city": "Westfir",
+    "county": "Lane",
+    "pop": 667
+  },
+  {
+    "zip": "97486",
+    "city": "Umpqua",
+    "county": "Douglas",
+    "pop": 663
+  },
+  {
+    "zip": "97371",
+    "city": "Rickreall",
+    "county": "Polk",
+    "pop": 659
+  },
+  {
+    "zip": "97639",
+    "city": "Sprague River",
+    "county": "Klamath",
+    "pop": 659
+  },
+  {
+    "zip": "97843",
+    "city": "Ione",
+    "county": "Morrow",
+    "pop": 643
+  },
+  {
+    "zip": "97830",
+    "city": "Fossil",
+    "county": "Wheeler",
+    "pop": 642
+  },
+  {
+    "zip": "97108",
+    "city": "Beaver",
+    "county": "Tillamook",
+    "pop": 640
+  },
+  {
+    "zip": "97627",
+    "city": "Keno",
+    "county": "Klamath",
+    "pop": 638
+  },
+  {
+    "zip": "97410",
+    "city": "Azalea",
+    "county": "Douglas",
+    "pop": 637
+  },
+  {
+    "zip": "97543",
+    "city": "Wilderville",
+    "county": "Josephine",
+    "pop": 600
+  },
+  {
+    "zip": "97065",
+    "city": "Wasco",
+    "county": "Sherman",
+    "pop": 598
+  },
+  {
+    "zip": "97737",
+    "city": "Gilchrist",
+    "county": "Klamath",
+    "pop": 591
+  },
+  {
+    "zip": "97447",
+    "city": "Idleyld Park",
+    "county": "Douglas",
+    "pop": 590
+  },
+  {
+    "zip": "97522",
+    "city": "Butte Falls",
+    "county": "Jackson",
+    "pop": 588
+  },
+  {
+    "zip": "97441",
+    "city": "Gardiner",
+    "county": "Douglas",
+    "pop": 586
+  },
+  {
+    "zip": "97531",
+    "city": "Kerby",
+    "county": "Josephine",
+    "pop": 578
+  },
+  {
+    "zip": "97638",
+    "city": "Silver Lake",
+    "county": "Lake",
+    "pop": 559
+  },
+  {
+    "zip": "97841",
+    "city": "Imbler",
+    "county": "Union",
+    "pop": 553
+  },
+  {
+    "zip": "97039",
+    "city": "Moro",
+    "county": "Sherman",
+    "pop": 552
+  },
+  {
+    "zip": "97857",
+    "city": "Lostine",
+    "county": "Wallowa",
+    "pop": 551
+  },
+  {
+    "zip": "97109",
+    "city": "Buxton",
+    "county": "Washington",
+    "pop": 538
+  },
+  {
+    "zip": "97910",
+    "city": "Jordan Valley",
+    "county": "Malheur",
+    "pop": 526
+  },
+  {
+    "zip": "97412",
+    "city": "Blachly",
+    "county": "Lane",
+    "pop": 518
+  },
+  {
+    "zip": "97636",
+    "city": "Paisley",
+    "county": "Lake",
+    "pop": 503
+  },
+  {
+    "zip": "97907",
+    "city": "Huntington",
+    "county": "Baker",
+    "pop": 501
+  },
+  {
+    "zip": "97364",
+    "city": "Neotsu",
+    "county": "Lincoln",
+    "pop": 464
+  },
+  {
+    "zip": "97622",
+    "city": "Bly",
+    "county": "Klamath",
+    "pop": 458
+  },
+  {
+    "zip": "97874",
+    "city": "Spray",
+    "county": "Wheeler",
+    "pop": 444
+  },
+  {
+    "zip": "97130",
+    "city": "Manzanita",
+    "county": "Tillamook",
+    "pop": 435
+  },
+  {
+    "zip": "97450",
+    "city": "Langlois",
+    "county": "Curry",
+    "pop": 413
+  },
+  {
+    "zip": "97122",
+    "city": "Hebo",
+    "county": "Tillamook",
+    "pop": 396
+  },
+  {
+    "zip": "97451",
+    "city": "Lorane",
+    "county": "Lane",
+    "pop": 391
+  },
+  {
+    "zip": "97733",
+    "city": "Crescent",
+    "county": "Klamath",
+    "pop": 391
+  },
+  {
+    "zip": "97625",
+    "city": "Dairy",
+    "county": "Klamath",
+    "pop": 387
+  },
+  {
+    "zip": "97731",
+    "city": "Chemult",
+    "county": "Klamath",
+    "pop": 371
+  },
+  {
+    "zip": "97493",
+    "city": "Westlake",
+    "county": "Lane",
+    "pop": 367
+  },
+  {
+    "zip": "97856",
+    "city": "Long Creek",
+    "county": "Grant",
+    "pop": 358
+  },
+  {
+    "zip": "97750",
+    "city": "Mitchell",
+    "county": "Wheeler",
+    "pop": 354
+  },
+  {
+    "zip": "97145",
+    "city": "Tolovana Park",
+    "county": "Clatsop",
+    "pop": 352
+  },
+  {
+    "zip": "97147",
+    "city": "Wheeler",
+    "county": "Tillamook",
+    "pop": 349
+  },
+  {
+    "zip": "97430",
+    "city": "Deadwood",
+    "county": "Lane",
+    "pop": 349
+  },
+  {
+    "zip": "97476",
+    "city": "Sixes",
+    "county": "Curry",
+    "pop": 343
+  },
+  {
+    "zip": "97001",
+    "city": "Antelope",
+    "county": "Wasco",
+    "pop": 338
+  },
+  {
+    "zip": "97880",
+    "city": "Ukiah",
+    "county": "Umatilla",
+    "pop": 338
+  },
+  {
+    "zip": "97480",
+    "city": "Swisshome",
+    "county": "Lane",
+    "pop": 333
+  },
+  {
+    "zip": "97102",
+    "city": "Arch Cape",
+    "county": "Clatsop",
+    "pop": 318
+  },
+  {
+    "zip": "97906",
+    "city": "Harper",
+    "county": "Malheur",
+    "pop": 317
+  },
+  {
+    "zip": "97414",
+    "city": "Broadbent",
+    "county": "Coos",
+    "pop": 306
+  },
+  {
+    "zip": "97873",
+    "city": "Seneca",
+    "county": "Grant",
+    "pop": 295
+  },
+  {
+    "zip": "97134",
+    "city": "Oceanside",
+    "county": "Tillamook",
+    "pop": 290
+  },
+  {
+    "zip": "97839",
+    "city": "Lexington",
+    "county": "Morrow",
+    "pop": 283
+  },
+  {
+    "zip": "97877",
+    "city": "Sumpter",
+    "county": "Baker",
+    "pop": 282
+  },
+  {
+    "zip": "97125",
+    "city": "Manning",
+    "county": "Washington",
+    "pop": 281
+  },
+  {
+    "zip": "97029",
+    "city": "Grass Valley",
+    "county": "Sherman",
+    "pop": 269
+  },
+  {
+    "zip": "97835",
+    "city": "Helix",
+    "county": "Umatilla",
+    "pop": 264
+  },
+  {
+    "zip": "97490",
+    "city": "Walton",
+    "county": "Lane",
+    "pop": 257
+  },
+  {
+    "zip": "97473",
+    "city": "Scottsburg",
+    "county": "Douglas",
+    "pop": 254
+  },
+  {
+    "zip": "97904",
+    "city": "Drewsey",
+    "county": "Harney",
+    "pop": 253
+  },
+  {
+    "zip": "97825",
+    "city": "Dayville",
+    "county": "Grant",
+    "pop": 248
+  },
+  {
+    "zip": "97634",
+    "city": "Midland",
+    "county": "Klamath",
+    "pop": 242
+  },
+  {
+    "zip": "97864",
+    "city": "Monument",
+    "county": "Grant",
+    "pop": 226
+  },
+  {
+    "zip": "97343",
+    "city": "Eddyville",
+    "county": "Lincoln",
+    "pop": 222
+  },
+  {
+    "zip": "97730",
+    "city": "Camp Sherman",
+    "county": "Jefferson",
+    "pop": 222
+  },
+  {
+    "zip": "97721",
+    "city": "Princeton",
+    "county": "Harney",
+    "pop": 222
+  },
+  {
+    "zip": "97840",
+    "city": "Oxbow",
+    "county": "Baker",
+    "pop": 216
+  },
+  {
+    "zip": "97350",
+    "city": "Idanha",
+    "county": "Marion",
+    "pop": 210
+  },
+  {
+    "zip": "97373",
+    "city": "Saint Benedict",
+    "county": "Marion",
+    "pop": 196
+  },
+  {
+    "zip": "97028",
+    "city": "Government Camp",
+    "county": "Clackamas",
+    "pop": 192
+  },
+  {
+    "zip": "97848",
+    "city": "Kimberly",
+    "county": "Grant",
+    "pop": 192
+  },
+  {
+    "zip": "97369",
+    "city": "Otter Rock",
+    "county": "Lincoln",
+    "pop": 187
+  },
+  {
+    "zip": "97484",
+    "city": "Tiller",
+    "county": "Douglas",
+    "pop": 178
+  },
+  {
+    "zip": "97620",
+    "city": "Adel",
+    "county": "Lake",
+    "pop": 177
+  },
+  {
+    "zip": "97357",
+    "city": "Logsden",
+    "county": "Lincoln",
+    "pop": 174
+  },
+  {
+    "zip": "97050",
+    "city": "Rufus",
+    "county": "Sherman",
+    "pop": 173
+  },
+  {
+    "zip": "97635",
+    "city": "New Pine Creek",
+    "county": "Lake",
+    "pop": 170
+  },
+  {
+    "zip": "97859",
+    "city": "Meacham",
+    "county": "Umatilla",
+    "pop": 151
+  },
+  {
+    "zip": "97621",
+    "city": "Beatty",
+    "county": "Klamath",
+    "pop": 150
+  },
+  {
+    "zip": "97329",
+    "city": "Cascadia",
+    "county": "Linn",
+    "pop": 146
+  },
+  {
+    "zip": "97604",
+    "city": "Crater Lake",
+    "county": "Klamath",
+    "pop": 135
+  },
+  {
+    "zip": "97884",
+    "city": "Unity",
+    "county": "Baker",
+    "pop": 129
+  },
+  {
+    "zip": "97637",
+    "city": "Plush",
+    "county": "Lake",
+    "pop": 127
+  },
+  {
+    "zip": "97640",
+    "city": "Summer Lake",
+    "county": "Lake",
+    "pop": 127
+  },
+  {
+    "zip": "97732",
+    "city": "Crane",
+    "county": "Harney",
+    "pop": 123
+  },
+  {
+    "zip": "97842",
+    "city": "Imnaha",
+    "county": "Wallowa",
+    "pop": 118
+  },
+  {
+    "zip": "97144",
+    "city": "Timber",
+    "county": "Washington",
+    "pop": 117
+  },
+  {
+    "zip": "97710",
+    "city": "Fields",
+    "county": "Harney",
+    "pop": 115
+  },
+  {
+    "zip": "97736",
+    "city": "Frenchglen",
+    "county": "Harney",
+    "pop": 105
+  },
+  {
+    "zip": "97909",
+    "city": "Jamieson",
+    "county": "Malheur",
+    "pop": 97
+  },
+  {
+    "zip": "97735",
+    "city": "Fort Rock",
+    "county": "Lake",
+    "pop": 97
+  },
+  {
+    "zip": "97342",
+    "city": "Detroit",
+    "county": "Marion",
+    "pop": 89
+  },
+  {
+    "zip": "97758",
+    "city": "Riley",
+    "county": "Harney",
+    "pop": 89
+  },
+  {
+    "zip": "97712",
+    "city": "Brothers",
+    "county": "Deschutes",
+    "pop": 86
+  },
+  {
+    "zip": "97905",
+    "city": "Durkee",
+    "county": "Baker",
+    "pop": 85
+  },
+  {
+    "zip": "97751",
+    "city": "Paulina",
+    "county": "Crook",
+    "pop": 77
+  },
+  {
+    "zip": "97920",
+    "city": "Westfall",
+    "county": "Malheur",
+    "pop": 73
+  },
+  {
+    "zip": "97911",
+    "city": "Juntura",
+    "county": "Malheur",
+    "pop": 69
+  },
+  {
+    "zip": "97494",
+    "city": "Wilbur",
+    "county": "Douglas",
+    "pop": 67
+  },
+  {
+    "zip": "97722",
+    "city": "Diamond",
+    "county": "Harney",
+    "pop": 65
+  },
+  {
+    "zip": "97837",
+    "city": "Hereford",
+    "county": "Baker",
+    "pop": 60
+  },
+  {
+    "zip": "97817",
+    "city": "Bates",
+    "county": "Grant",
+    "pop": 60
+  },
+  {
+    "zip": "97903",
+    "city": "Brogan",
+    "county": "Malheur",
+    "pop": 51
+  },
+  {
+    "zip": "97033",
+    "city": "Kent",
+    "county": "Sherman",
+    "pop": 50
+  },
+  {
+    "zip": "97406",
+    "city": "Agness",
+    "county": "Curry",
+    "pop": 48
+  },
+  {
+    "zip": "97626",
+    "city": "Fort Klamath",
+    "county": "Klamath",
+    "pop": 45
+  },
+  {
+    "zip": "97908",
+    "city": "Ironside",
+    "county": "Malheur",
+    "pop": 38
+  },
+  {
+    "zip": "97711",
+    "city": "Ashwood",
+    "county": "Jefferson",
+    "pop": 32
+  },
+  {
+    "zip": "97819",
+    "city": "Bridgeport",
+    "county": "Baker",
+    "pop": 17
+  },
+  {
+    "zip": "97057",
+    "city": "Shaniko",
+    "county": "Wasco",
+    "pop": 9
+  },
+  {
+    "zip": "97384",
+    "city": "Mehama",
+    "county": "Marion",
+    "pop": 0
+  },
+  {
+    "zip": "97208",
+    "city": "Portland",
+    "county": "Multnomah",
+    "pop": 0
+  },
+  {
+    "zip": "97752",
+    "city": "Post",
+    "county": "Crook",
+    "pop": 0
+  }
+]
