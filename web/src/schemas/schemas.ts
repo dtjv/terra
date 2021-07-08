@@ -1,20 +1,23 @@
 import phone from 'phone'
-import isEmail from 'isemail'
+import { parseOneAddress } from 'email-addresses'
 import {
   define,
-  defaulted,
   enums,
   intersection,
   number,
   object,
   optional,
   string,
+  coerce,
 } from 'superstruct'
 import oregon from '@/data/oregon.json'
 import { TicketType } from '@/constants/constants'
 
-export const EmailSchema = define('EmailSchema', (value) =>
-  isEmail.validate(value as string)
+export const IntSchema = coerce(number(), string(), (value) => parseInt(value))
+
+export const EmailSchema = define(
+  'EmailSchema',
+  (value) => !!parseOneAddress(value as string)
 )
 
 export const PhoneSchema = define(
@@ -34,11 +37,11 @@ export const TicketFormSchema = object({
   customerEmail: intersection([string(), EmailSchema]),
   customerPhone: PhoneSchema,
   deliveryAddress: AddressSchema,
-  orderId: optional(string()), // TODO: see NOTES
-  // products: array(ProductSchema),
+  //  orderId: optional(string()), // TODO: see NOTES
+  //  products: array(ProductSchema),
   vehicleId: string(), // TODO: see NOTES
   scheduledDateTimeISO: string(), // TODO: see NOTES
-  durationInMinutes: number(), // TODO: see NOTES
-  numExtraPersons: defaulted(number(), () => 0),
+  durationInMinutes: IntSchema, // TODO: see NOTES
+  numExtraPersons: IntSchema,
   notes: optional(string()),
 })
