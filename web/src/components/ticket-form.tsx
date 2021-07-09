@@ -19,6 +19,21 @@ export const TicketForm: React.FC = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<TicketFormInputs>({
+    defaultValues: {
+      ticketType: TicketType.DELIVERY,
+      customerFirstName: 'hans',
+      customerLastName: 'gruber',
+      customerEmail: 'hans@gruber.com',
+      customerPhone: '(408) 280-9876',
+      deliveryAddress: {
+        street: '555 Market St.',
+        zip: '97301',
+      },
+      vehicleId: '102',
+      scheduledDateTimeISO: '1/1/2021',
+      durationInMinutes: 30,
+      numExtraPersons: 0,
+    },
     resolver: superstructResolver(TicketFormSchema, { coerce: true }),
   })
 
@@ -133,7 +148,7 @@ export const TicketForm: React.FC = () => {
         </FormErrorMessage>
       </FormControl>
 
-      <FormControl isInvalid={!!errors.durationInMinutes} isRequired>
+      <FormControl isInvalid={!!errors.durationInMinutes}>
         <FormLabel htmlFor="durationInMinutes">Duration</FormLabel>
         <Select
           id="durationInMinutes"
@@ -149,9 +164,18 @@ export const TicketForm: React.FC = () => {
         </FormErrorMessage>
       </FormControl>
 
-      <FormControl isInvalid={!!errors.numExtraPersons} isRequired>
+      <FormControl isInvalid={!!errors.numExtraPersons}>
         <FormLabel htmlFor="numExtraPersons">Number of extra helpers</FormLabel>
-        <Input id="numExtraPersons" {...register('numExtraPersons')} />
+        <Select
+          id="numExtraPersons"
+          placeholder="0"
+          {...register('numExtraPersons')}
+        >
+          <option value={0}>0</option>
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+        </Select>
         <FormErrorMessage>
           {errors.numExtraPersons && errors.numExtraPersons.message}
         </FormErrorMessage>
