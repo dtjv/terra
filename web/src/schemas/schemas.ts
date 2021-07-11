@@ -1,14 +1,15 @@
 import phone from 'phone'
 import { parseOneAddress } from 'email-addresses'
 import {
+  coerce,
   define,
   enums,
   intersection,
   number,
   object,
   optional,
+  size,
   string,
-  coerce,
 } from 'superstruct'
 import oregon from '@/data/oregon.json'
 import { TicketType } from '@/constants/constants'
@@ -26,22 +27,22 @@ export const PhoneSchema = define(
 )
 
 export const AddressSchema = object({
-  street: string(),
+  street: size(string(), 2, 40),
   zip: enums(oregon.map((location) => location.zip)),
 })
 
 export const TicketFormSchema = object({
   ticketType: enums([TicketType.PICKUP, TicketType.DELIVERY]),
-  customerFirstName: string(),
-  customerLastName: string(),
+  customerFirstName: size(string(), 2, 40),
+  customerLastName: size(string(), 2, 40),
   customerEmail: intersection([string(), EmailSchema]),
   customerPhone: PhoneSchema,
   deliveryAddress: AddressSchema,
-  //  orderId: optional(string()), // TODO: see NOTES
+  //  orderId: optional(string()),
   //  products: array(ProductSchema),
-  vehicleId: string(), // TODO: see NOTES
-  scheduledDateTimeISO: string(), // TODO: see NOTES
-  durationInMinutes: IntSchema, // TODO: see NOTES
+  vehicleId: string(),
+  scheduledDateTimeISO: string(),
+  durationInMinutes: IntSchema,
   numExtraPersons: IntSchema,
   notes: optional(string()),
 })
