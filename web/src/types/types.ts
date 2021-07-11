@@ -21,37 +21,27 @@ export interface TimeData {
   hourMinuteFormat: string
 }
 
-/*
-export interface TicketData {
-  id: string
-  scheduledDateTimeISO: string
-  vehicleId: string
-  durationInMinutes: number
-  timeRange?: string
-  scheduledStartTime?: string
-}
-*/
-
 export type TicketFormInputs = Infer<typeof TicketFormSchema>
 
 export type TicketComputedFields = {
   // computed & stored.
-  id: string // by DB
-  status: TicketStatus // default=OPEN. conditionally changes.
-  createdAt: Date // by DB
-  updatedAt: Date // by DB
-  createdBy: string // by app
-  updatedBy: string[] // by app
-
+  id: string
+  status?: TicketStatus
+  createdAt?: string
+  updatedAt?: string
+  createdBy?: string
+  updatedBy?: string[]
   // computed. NOT stored
   timeRange?: string
   scheduledStartTime?: string
 }
 
+// TicketData is read from DB.
 export type TicketData = TicketComputedFields & TicketFormInputs
 
 export type UpdatedTicketData = Pick<TicketData, 'id'> & Partial<TicketData>
 
+// TODO: specific to react-dnd? rename?
 export type TicketContext = { previousTickets: TicketData[] }
 
 export type RowHeader = TimeData
