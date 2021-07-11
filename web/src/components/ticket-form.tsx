@@ -10,34 +10,98 @@ import {
 } from '@chakra-ui/react'
 import { superstructResolver } from '@hookform/resolvers/superstruct'
 import { TicketFormSchema } from '@/schemas/schemas'
-import { TicketFormInputs } from '@/types/types'
+import type { TicketFormInputs } from '@/types/types'
 import { TicketType } from '@/constants/constants'
 
+// TODO: remove...
+let renderCount = 0
+
+// TODO: remove extras...
+const defaultValues = {
+  ticketType: TicketType.DELIVERY,
+  customerFirstName: 'hans',
+  customerLastName: 'gruber',
+  customerEmail: 'hans@gruber.com',
+  customerPhone: '(408) 280-9876',
+  deliveryAddress: {
+    street: '555 Market St.',
+    //  zip: '97301',
+  },
+  vehicleId: '102',
+  scheduledDateTimeISO: '1/1/2021',
+  durationInMinutes: 30,
+}
+
+//-----------------------------------------------------------------------------
+//
+// Ticket Form
+//
+//-----------------------------------------------------------------------------
 export const TicketForm: React.FC = () => {
   const {
+    watch,
+    setValue,
+    getValues,
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<TicketFormInputs>({
-    defaultValues: {
-      ticketType: TicketType.DELIVERY,
-      customerFirstName: 'hans',
-      customerLastName: 'gruber',
-      customerEmail: 'hans@gruber.com',
-      customerPhone: '(408) 280-9876',
-      deliveryAddress: {
-        street: '555 Market St.',
-        zip: '97301',
-      },
-      vehicleId: '102',
-      scheduledDateTimeISO: '1/1/2021',
-      durationInMinutes: 30,
-      numExtraPersons: 0,
-    },
+    defaultValues,
     resolver: superstructResolver(TicketFormSchema, { coerce: true }),
+    mode: 'onTouched',
   })
 
-  const onSubmit: SubmitHandler<TicketFormInputs> = (data) => console.log(data)
+  const watchDeliveryAddress = watch([
+    'deliveryAddress.street',
+    'deliveryAddress.zip',
+  ])
+
+  React.useEffect(() => {
+    if (isValid) {
+      const { deliveryAddress, durationInMinutes } = getValues()
+
+      // TODO
+      // replace w/ api
+      // react-query should handle caching results (so api isn't called)
+      const maps = (deliveryAddress: { zip: string; street: string }) => {
+        switch (deliveryAddress.zip) {
+          case '97301':
+            return 60
+          case '97302':
+            return 90
+          default:
+            return 120
+        }
+      }
+      const estimatedDurationInMinutes = maps(deliveryAddress)
+
+      // this block prevents an infinite render loop by not updating form cache
+      if (estimatedDurationInMinutes !== durationInMinutes) {
+        setValue('durationInMinutes', estimatedDurationInMinutes, {
+          shouldValidate: true,
+        })
+      }
+    }
+  }, [isValid, watchDeliveryAddress, getValues, setValue])
+
+  //---------------------------------------------------------------------------
+  //
+  // Event Handlers
+  //
+  //---------------------------------------------------------------------------
+  const onSubmit: SubmitHandler<TicketFormInputs> = (data) => {
+    // TODO
+    // call api
+    console.log('submitted', data)
+  }
+
+  //---------------------------------------------------------------------------
+  //
+  // Render
+  //
+  //---------------------------------------------------------------------------
+  renderCount++
+  console.log('renderCount', renderCount)
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -123,7 +187,11 @@ export const TicketForm: React.FC = () => {
 
       <FormControl isInvalid={!!errors.deliveryAddress?.zip} isRequired>
         <FormLabel htmlFor="deliveryAddress.zip">Zip Code</FormLabel>
-        <Input id="deliveryAddress.zip" {...register('deliveryAddress.zip')} />
+        <Input
+          id="deliveryAddress.zip"
+          placeholder="97301"
+          {...register('deliveryAddress.zip')}
+        />
         <FormErrorMessage>
           {errors.deliveryAddress?.zip && errors.deliveryAddress.zip.message}
         </FormErrorMessage>
@@ -148,27 +216,10 @@ export const TicketForm: React.FC = () => {
         </FormErrorMessage>
       </FormControl>
 
-      <FormControl isInvalid={!!errors.durationInMinutes}>
-        <FormLabel htmlFor="durationInMinutes">Duration</FormLabel>
-        <Select
-          id="durationInMinutes"
-          placeholder="Select option"
-          {...register('durationInMinutes')}
-        >
-          <option value={30}>30</option>
-          <option value={60}>60</option>
-          <option value={90}>90</option>
-        </Select>
-        <FormErrorMessage>
-          {errors.durationInMinutes && errors.durationInMinutes.message}
-        </FormErrorMessage>
-      </FormControl>
-
       <FormControl isInvalid={!!errors.numExtraPersons}>
-        <FormLabel htmlFor="numExtraPersons">Number of extra helpers</FormLabel>
         <Select
           id="numExtraPersons"
-          placeholder="0"
+          placeholder="How many helpers?"
           {...register('numExtraPersons')}
         >
           <option value={0}>0</option>
