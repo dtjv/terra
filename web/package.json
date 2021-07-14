@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "cli": "ts-node",
     "dev": "next dev",
     "lint": "next lint --dir src",
     "build": "next build",

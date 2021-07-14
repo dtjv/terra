@@ -1,16 +1,16 @@
 {
+  "ts-node":{
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
   "compilerOptions": {
     "baseUrl": "src",
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "paths": {
-      "@/lib/*": ["lib/*"],
-      "@/data/*": ["data/*"],
-      "@/hooks/*": ["hooks/*"],
-      "@/types/*": ["types/*"],
-      "@/schemas/*": ["schemas/*"],
-      "@/constants/*": ["constants/*"],
-      "@/components/*": ["components/*"]
+      "@/*": ["*"]
     },
     "allowJs": true,
     "skipLibCheck": true,
