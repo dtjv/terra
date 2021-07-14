@@ -11,7 +11,7 @@ export enum DragItem {
   TICKET = 'TICKET',
 }
 
-export enum TicketType {
+export enum TicketKind {
   DELIVERY = 'DELIVERY',
   PICKUP = 'PICKUP',
 }
