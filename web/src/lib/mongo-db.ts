@@ -27,8 +27,9 @@ export const connectToDB = async (): Promise<boolean> => {
   try {
     db = await connect(composeDbURI(), {
       useNewUrlParser: true,
-      useUnifiedTopology: true,
       useFindAndModify: false,
+      useCreateIndex: true,
+      useUnifiedTopology: true,
     })
 
     const connection = db.connections[0]
