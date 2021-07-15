@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "cli": "ts-node",
+    "cli": "DOTENV_CONFIG_PATH=./.env.development.local ts-node -r dotenv/config -r tsconfig-paths/register",
     "dev": "next dev",
     "lint": "next lint --dir src",
     "build": "next build",
@@ -19,6 +19,7 @@
     "@hookform/resolvers": "2.6.0",
     "axios": "0.21.1",
     "date-fns": "2.22.1",
+    "dotenv": "10.0.0",
     "email-addresses": "4.0.0",
     "framer-motion": "4.1.17",
     "lodash": "4.17.21",
@@ -45,6 +46,7 @@
     "eslint-config-prettier": "8.3.0",
     "prettier": "2.3.2",
     "ts-node": "10.1.0",
+    "tsconfig-paths": "3.10.1",
     "typescript": "4.3.5"
   }
 }
