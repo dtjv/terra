@@ -4,7 +4,7 @@ import { Vehicle, VehicleProps } from '@/models/vehicle'
 import { vehicles } from '@/data/vehicles'
 import { connectToDB } from '@/lib/mongo-db'
 
-export const createVehicles = async () => {
+export const createVehicles = async (): Promise<void> => {
   if (!(await connectToDB())) {
     console.error(`failed to connect to db`)
     process.exit(1)
