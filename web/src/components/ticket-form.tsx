@@ -11,7 +11,7 @@ import {
 import { superstructResolver } from '@hookform/resolvers/superstruct'
 import { TicketFormSchema } from '@/schemas/schemas'
 import type { TicketFormInputs } from '@/types/types'
-import { TicketType } from '@/constants/constants'
+import { TicketKind } from '@/constants/constants'
 
 //-----------------------------------------------------------------------------
 //
@@ -91,8 +91,8 @@ export const TicketForm: React.FC = () => {
       <FormControl isInvalid={!!errors.ticketType} isRequired>
         <FormLabel htmlFor="ticketType">Ticket type</FormLabel>
         <Select id="ticketType" {...register('ticketType')}>
-          <option value={TicketType.DELIVERY}>Delivery</option>
-          <option value={TicketType.PICKUP}>Pickup</option>
+          <option value={TicketKind.DELIVERY}>Delivery</option>
+          <option value={TicketKind.PICKUP}>Pickup</option>
         </Select>
         <FormErrorMessage>{errors?.ticketType?.message ?? ''}</FormErrorMessage>
       </FormControl>

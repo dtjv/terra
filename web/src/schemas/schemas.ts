@@ -1,6 +1,6 @@
 import { coerce, enums, number, object, size, string } from 'superstruct'
 import oregon from '@/data/oregon.json'
-import { TicketType } from '@/constants/constants'
+import { TicketKind } from '@/constants/constants'
 
 export const IntSchema = coerce(number(), string(), (value) => parseInt(value))
 
@@ -10,7 +10,7 @@ export const AddressSchema = object({
 })
 
 export const TicketFormSchema = object({
-  ticketType: enums([TicketType.PICKUP, TicketType.DELIVERY]),
+  ticketType: enums([TicketKind.PICKUP, TicketKind.DELIVERY]),
   customerName: size(string(), 2, 40),
   deliveryAddress: AddressSchema,
   vehicleId: string(),
