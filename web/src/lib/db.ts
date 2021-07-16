@@ -1,58 +1,43 @@
-import path from 'path'
-import * as fs from 'fs/promises'
-import type { TicketData, UpdatedTicketData } from '@/types/types'
+import { connect, STATES } from 'mongoose'
 
-/**
- *
- *
- *
- */
-export const readData = async <T>(file: string): Promise<T | undefined> => {
-  try {
-    const data = await fs.readFile(path.resolve(process.cwd(), file), 'utf8')
-    return JSON.parse(data)
-  } catch (err) {
-    console.error(`Failed to read data from '${file}'`)
-  }
+let isConnected = false
 
-  return undefined
+const composeDbURI = () => {
+  const dbPath = process.env['DB_PATH']
+  const dbUser = process.env['DB_USER']
+  const dbPass = process.env['DB_PASS']
+  const dbName = process.env['DB_NAME']
+
+  if (!dbPath) throw new Error(`Missing env var 'DB_PATH'`)
+  if (!dbUser) throw new Error(`Missing env var 'DB_USER'`)
+  if (!dbPass) throw new Error(`Missing env var 'DB_PASS'`)
+  if (!dbName) throw new Error(`Missing env var 'DB_NAME'`)
+
+  return dbPath
+    .replace(/\$DB_USER/, dbUser)
+    .replace(/\$DB_PASS/, dbPass)
+    .replace(/\$DB_NAME/, dbName)
 }
 
-/**
- *
- *
- *
- */
-export const updateTicket = async (
-  updatedTicket: UpdatedTicketData
-): Promise<TicketData | undefined> => {
-  const TICKETS_FILE = 'src/data/tickets.json'
-  const tickets = await readData<TicketData[]>(TICKETS_FILE)
+export const connectToDB = async (): Promise<boolean> => {
+  let db = null
 
-  if (!tickets) {
-    console.log('No tickets found')
-    return undefined
-  }
-
-  let completeUpdatedTicket: TicketData | undefined = undefined
-
-  const updatedTickets = tickets.map((ticket) => {
-    if (ticket.id === updatedTicket.id) {
-      completeUpdatedTicket = { ...ticket, ...updatedTicket }
-      return completeUpdatedTicket
-    }
-    return ticket
-  })
+  if (isConnected) return isConnected
 
   try {
-    await fs.writeFile(
-      path.resolve(process.cwd(), TICKETS_FILE),
-      JSON.stringify(updatedTickets),
-      'utf8'
-    )
-  } catch (err) {
-    console.error(`Failed to write updates to '${TICKETS_FILE}'`)
+    db = await connect(composeDbURI(), {
+      useNewUrlParser: true,
+      useFindAndModify: false,
+      useCreateIndex: true,
+      useUnifiedTopology: true,
+    })
+
+    const connection = db.connections[0]
+
+    isConnected = !!connection && STATES[connection.readyState] === 'connected'
+  } catch (error) {
+    console.error(error)
   }
 
-  return completeUpdatedTicket
+  return isConnected
 }
