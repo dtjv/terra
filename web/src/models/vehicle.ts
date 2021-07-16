@@ -1,15 +1,13 @@
-import { Schema, model, Model } from 'mongoose'
+import { Schema, model, Model, Document } from 'mongoose'
 
 export interface VehicleProps {
   key: string
   name: string
 }
 
-const vehicleSchema = new Schema<
-  VehicleProps,
-  Model<VehicleProps>,
-  VehicleProps
->({
+export interface VehicleDoc extends VehicleProps, Document {}
+
+const vehicleSchema = new Schema<VehicleDoc, Model<VehicleDoc>, VehicleDoc>({
   key: {
     type: String,
     unique: true,
@@ -17,7 +15,7 @@ const vehicleSchema = new Schema<
   name: String,
 })
 
-export const Vehicle = model<VehicleProps, Model<VehicleProps>>(
+export const Vehicle = model<VehicleDoc, Model<VehicleDoc>>(
   'Vehicle',
   vehicleSchema
 )

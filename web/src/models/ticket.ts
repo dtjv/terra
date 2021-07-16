@@ -1,6 +1,8 @@
-import { Schema, model, Model } from 'mongoose'
+import { Schema, model } from 'mongoose'
+import type { Model, Document, LeanDocument } from 'mongoose'
 
 import oregon from '@/data/oregon.json'
+import { Vehicle } from '@/models/vehicle'
 import { TicketKind } from '@/constants/constants'
 
 // ticket properties expected from ui.
@@ -17,11 +19,13 @@ export interface TicketProps {
 }
 
 // ticket properties we need to store.
-export interface TicketData extends TicketProps {
-  vehicle: Schema.Types.ObjectId
+export interface TicketDoc extends TicketProps, Document {
+  vehicle: Schema.Types.ObjectId | typeof Vehicle
 }
 
-const ticketSchema = new Schema<TicketData, Model<TicketData>, TicketData>({
+export type TicketLeanDoc = LeanDocument<TicketDoc>
+
+const ticketSchema = new Schema<TicketDoc, Model<TicketDoc>, TicketDoc>({
   ticketKind: {
     type: String,
     enum: Object.values(TicketKind),
@@ -66,7 +70,4 @@ const ticketSchema = new Schema<TicketData, Model<TicketData>, TicketData>({
   },
 })
 
-export const Ticket = model<TicketData, Model<TicketData>>(
-  'Ticket',
-  ticketSchema
-)
+export const Ticket = model<TicketDoc, Model<TicketDoc>>('Ticket', ticketSchema)
