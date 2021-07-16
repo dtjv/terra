@@ -1,5 +1,5 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { updateTicket } from '@/lib/db'
+import { updateTicket } from '@/lib/fs-db'
 import type { TicketData } from '@/types/types'
 
 //------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { readData } from '@/lib/db'
+import { readData } from '@/lib/fs-db'
 import type { ScheduleData } from '@/types/types'
 
 //------------------------------------------------------------------------------
