@@ -1,13 +1,13 @@
 import mongoose from 'mongoose'
 
-import { Ticket, TicketData } from '@/models/ticket'
+import { Ticket, TicketLeanDoc } from '@/models/ticket'
 import { Vehicle } from '@/models/vehicle'
 import { newTickets } from '@/data/tickets'
-import { connectToDB } from '@/lib/mongo-db'
+import { connectToDB } from '@/lib/db'
 
 export const createTickets = async (): Promise<void> => {
   if (!(await connectToDB())) {
-    console.error(`failed to connect to db`)
+    console.error(`Failed to connect to db.`)
     process.exit(1)
   }
 
@@ -22,19 +22,17 @@ export const createTickets = async (): Promise<void> => {
 
   const vehicles = await Vehicle.find({})
 
-  const tickets: TicketData[] = newTickets.map((ticket) => {
+  const tickets: TicketLeanDoc[] = newTickets.map((ticket) => {
     const vehicle = vehicles.find((doc) => doc.key === ticket.vehicleKey)
 
     if (!vehicle) {
-      throw new Error(
-        `ticket references invalid vehicle key, '${ticket.vehicleKey}'`
-      )
+      throw new Error(`Invalid vehicle key, '${ticket.vehicleKey}'`)
     }
 
     return { ...ticket, vehicle: vehicle._id }
   })
 
-  await Ticket.create<TicketData[]>(tickets)
+  await Ticket.create<TicketLeanDoc[]>(tickets)
 
   process.exit(0)
 }

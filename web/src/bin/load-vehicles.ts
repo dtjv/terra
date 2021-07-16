@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 import { Vehicle, VehicleProps } from '@/models/vehicle'
 import { vehicles } from '@/data/vehicles'
-import { connectToDB } from '@/lib/mongo-db'
+import { connectToDB } from '@/lib/db'
 
 export const createVehicles = async (): Promise<void> => {
   if (!(await connectToDB())) {
