@@ -1,22 +1,30 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { readData } from '@/lib/db'
-import type { TicketData } from '@/types/types'
+import { getTickets, createTicket } from '@/lib/db'
 
 //------------------------------------------------------------------------------
 // Handler for api calls to `/api/tickets`
 //------------------------------------------------------------------------------
 const handler: NextApiHandler = async (
   req: NextApiRequest,
-  res: NextApiResponse<TicketData[] | string>
+  res: NextApiResponse
 ) => {
   if (req.method === 'GET') {
-    const ticketData = await readData<TicketData[]>('src/data/tickets.json')
+    const tickets = await getTickets()
+    // TODO: add all computed fields
+    return res.status(200).json({ tickets })
+  }
 
-    if (!ticketData) {
-      return res.status(500).send('Failed to read ticket data')
+  if (req.method === 'POST') {
+    const { newTicket } = req.body
+
+    try {
+      const ticket = await createTicket(newTicket)
+      return res.status(200).json({ ticket })
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: 'Failed to create ticket.', error })
     }
-
-    return res.status(200).json(ticketData)
   }
 }
 
