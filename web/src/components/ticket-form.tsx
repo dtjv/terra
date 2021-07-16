@@ -8,9 +8,9 @@ import {
   Button,
   Select,
 } from '@chakra-ui/react'
-import { superstructResolver } from '@hookform/resolvers/superstruct'
-import { TicketFormSchema } from '@/schemas/schemas'
-import type { TicketFormInputs } from '@/types/types'
+//import { superstructResolver } from '@hookform/resolvers/superstruct'
+//import { TicketFormSchema } from '@/schemas/schemas'
+import type { TicketProps } from '@/models/ticket'
 import { TicketKind } from '@/constants/constants'
 
 //-----------------------------------------------------------------------------
@@ -26,28 +26,27 @@ export const TicketForm: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
-  } = useForm<TicketFormInputs>({
+  } = useForm<TicketProps>({
     mode: 'onTouched',
     defaultValues: {
       durationInMinutes: 30,
     },
-    resolver: superstructResolver(TicketFormSchema, { coerce: true }),
+    //resolver: superstructResolver(TicketFormSchema, { coerce: true }),
   })
 
   const watchDeliveryAddress = watch([
-    'deliveryAddress.street',
-    'deliveryAddress.zip',
+    'destinationAddress.street',
+    'destinationAddress.zip',
   ])
 
   React.useEffect(() => {
     if (isValid) {
-      const { deliveryAddress, durationInMinutes } = getValues()
+      const { destinationAddress, durationInMinutes } = getValues()
 
       // TODO
-      // call api
-      // react-query should handle caching results (so api isn't called)
-      const maps = (deliveryAddress: { zip: string; street: string }) => {
-        switch (deliveryAddress.zip) {
+      // - POST /api.googlemaps
+      const maps = (destinationAddress: { zip: string; street: string }) => {
+        switch (destinationAddress.zip) {
           case '97301':
             return 60
           case '97302':
@@ -56,9 +55,9 @@ export const TicketForm: React.FC = () => {
             return 120
         }
       }
-      const estimatedDurationInMinutes = maps(deliveryAddress)
+      const estimatedDurationInMinutes = maps(destinationAddress)
 
-      // don't update form cache unnecessarily. prevents an infinite render loop
+      // prevent infinite render loop by not updating form cache unnecessarily.
       if (estimatedDurationInMinutes !== durationInMinutes) {
         setValue('durationInMinutes', estimatedDurationInMinutes, {
           shouldValidate: true,
@@ -67,14 +66,35 @@ export const TicketForm: React.FC = () => {
     }
   }, [isValid, watchDeliveryAddress, getValues, setValue])
 
+  // TODO
+  // - render 'durationInMinutes'
+  // - add filters (truck, am/pm)
+  // - add 'search for times' or 'schedule' button
+  // - add handler to call api to get open slots
+  // - render list of 5 open slots, each with a button to select
+  // - add link to get next 5 open slots - TBD
+  // - add handler on select buttons to set 'scheduleAt' property
+  // - render 'scheduledAt'
+  // - once all required fields are set, enable 'create' button
+
+  // TODO
+  // - Q: is ticket form a modal or page?
+
   //---------------------------------------------------------------------------
   //
   // Event Handlers
   //
   //---------------------------------------------------------------------------
-  const onSubmit: SubmitHandler<TicketFormInputs> = (data) => {
-    // TODO: call api
-    console.log('submitted', data)
+  const onSubmit: SubmitHandler<TicketProps> = (fields) => {
+    const newTicket = {
+      ...fields,
+      scheduleAt: new Date(Date.now()),
+      durationInMinutes: 60,
+    }
+
+    // TODO
+    // - POST /api/tickets
+    console.log(newTicket)
   }
 
   //---------------------------------------------------------------------------
@@ -88,13 +108,13 @@ export const TicketForm: React.FC = () => {
   // - remove vehicle and schedule
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl isInvalid={!!errors.ticketType} isRequired>
-        <FormLabel htmlFor="ticketType">Ticket type</FormLabel>
-        <Select id="ticketType" {...register('ticketType')}>
+      <FormControl isInvalid={!!errors.ticketKind} isRequired>
+        <FormLabel htmlFor="ticketKind">Ticket type</FormLabel>
+        <Select id="ticketKind" {...register('ticketKind')}>
           <option value={TicketKind.DELIVERY}>Delivery</option>
           <option value={TicketKind.PICKUP}>Pickup</option>
         </Select>
-        <FormErrorMessage>{errors?.ticketType?.message ?? ''}</FormErrorMessage>
+        <FormErrorMessage>{errors?.ticketKind?.message ?? ''}</FormErrorMessage>
       </FormControl>
 
       <FormControl isInvalid={!!errors.customerName} isRequired>
@@ -105,43 +125,37 @@ export const TicketForm: React.FC = () => {
         </FormErrorMessage>
       </FormControl>
 
-      <FormControl isInvalid={!!errors.deliveryAddress?.street} isRequired>
-        <FormLabel htmlFor="deliveryAddress.street">Street address</FormLabel>
+      <FormControl isInvalid={!!errors.destinationAddress?.street} isRequired>
+        <FormLabel htmlFor="destinationAddress.street">
+          Street address
+        </FormLabel>
         <Input
-          id="deliveryAddress.street"
-          {...register('deliveryAddress.street')}
+          id="destinationAddress.street"
+          {...register('destinationAddress.street')}
         />
         <FormErrorMessage>
-          {errors?.deliveryAddress?.street?.message ?? ''}
+          {errors?.destinationAddress?.street?.message ?? ''}
         </FormErrorMessage>
       </FormControl>
 
-      <FormControl isInvalid={!!errors.deliveryAddress?.zip} isRequired>
-        <FormLabel htmlFor="deliveryAddress.zip">ZIP / Postal</FormLabel>
-        <Input id="deliveryAddress.zip" {...register('deliveryAddress.zip')} />
+      <FormControl isInvalid={!!errors.destinationAddress?.zip} isRequired>
+        <FormLabel htmlFor="destinationAddress.zip">ZIP / Postal</FormLabel>
+        <Input
+          id="destinationAddress.zip"
+          {...register('destinationAddress.zip')}
+        />
         <FormErrorMessage>
-          {errors?.deliveryAddress?.zip?.message ?? ''}
+          {errors?.destinationAddress?.zip?.message ?? ''}
         </FormErrorMessage>
       </FormControl>
 
-      <FormControl isInvalid={!!errors.vehicleId} isRequired>
-        <FormLabel htmlFor="vehicleId">Vehicle</FormLabel>
-        <Select id="vehicleId" {...register('vehicleId')}>
+      <FormControl isInvalid={!!errors.vehicleKey} isRequired>
+        <FormLabel htmlFor="vehicleKey">Vehicle</FormLabel>
+        <Select id="vehicleKey" {...register('vehicleKey')}>
           <option value="102">Truck 102</option>
           <option value="202">Truck 202</option>
         </Select>
-        <FormErrorMessage>{errors?.vehicleId?.message ?? ''}</FormErrorMessage>
-      </FormControl>
-
-      <FormControl isInvalid={!!errors.scheduledDateTimeISO} isRequired>
-        <FormLabel htmlFor="scheduledDateTimeISO">Schedule date</FormLabel>
-        <Input
-          id="scheduledDateTimeISO"
-          {...register('scheduledDateTimeISO')}
-        />
-        <FormErrorMessage>
-          {errors?.scheduledDateTimeISO?.message ?? ''}
-        </FormErrorMessage>
+        <FormErrorMessage>{errors?.vehicleKey?.message ?? ''}</FormErrorMessage>
       </FormControl>
 
       <Button mt={4} colorScheme="teal" isLoading={isSubmitting} type="submit">
