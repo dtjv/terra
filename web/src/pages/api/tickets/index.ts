@@ -26,6 +26,8 @@ const handler: NextApiHandler = async (
         .json({ message: 'Failed to create ticket.', error })
     }
   }
+
+  return res.status(404).send(`Unsupported method: ${req.method}`)
 }
 
 export default handler

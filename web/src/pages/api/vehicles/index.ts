@@ -1,23 +1,19 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { readData } from '@/lib/fs-db'
-import type { VehicleData } from '@/types/types'
+import { getVehicles } from '@/lib/db'
 
 //------------------------------------------------------------------------------
 // Handler for api calls to `/api/vehicles`
 //------------------------------------------------------------------------------
 const handler: NextApiHandler = async (
   req: NextApiRequest,
-  res: NextApiResponse<VehicleData[] | string>
+  res: NextApiResponse
 ) => {
   if (req.method === 'GET') {
-    const vehicleData = await readData<VehicleData[]>('src/data/vehicles.json')
-
-    if (!vehicleData) {
-      return res.status(500).send('Failed to read vehicle data')
-    }
-
-    return res.status(200).json(vehicleData)
+    const vehicles = await getVehicles()
+    return res.status(200).json(vehicles)
   }
+
+  return res.status(404).send(`Unsupported method: ${req.method}`)
 }
 
 export default handler
