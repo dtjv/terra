@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
 
-import { Ticket, TicketLeanDoc } from '@/models/ticket'
-import { Vehicle } from '@/models/vehicle'
-import { newTickets } from '@/data/tickets'
 import { connectToDB } from '@/lib/db'
+import { TicketModel } from '@/models/ticket'
+import type { Ticket } from '@/models/ticket'
+import { newTickets } from '@/data/tickets'
 
 export const createTickets = async (): Promise<void> => {
   if (!(await connectToDB())) {
@@ -20,19 +20,7 @@ export const createTickets = async (): Promise<void> => {
     }
   }
 
-  const vehicles = await Vehicle.find({})
-
-  const tickets: TicketLeanDoc[] = newTickets.map((ticket) => {
-    const vehicle = vehicles.find((doc) => doc.key === ticket.vehicleKey)
-
-    if (!vehicle) {
-      throw new Error(`Invalid vehicle key, '${ticket.vehicleKey}'`)
-    }
-
-    return { ...ticket, vehicle: vehicle._id }
-  })
-
-  await Ticket.create<TicketLeanDoc[]>(tickets)
+  await TicketModel.create<Ticket>(newTickets)
 
   process.exit(0)
 }

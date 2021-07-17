@@ -1,8 +1,9 @@
 import mongoose from 'mongoose'
 
-import { Vehicle, VehicleProps } from '@/models/vehicle'
-import { vehicles } from '@/data/vehicles'
 import { connectToDB } from '@/lib/db'
+import { VehicleModel } from '@/models/vehicle'
+import type { Vehicle } from '@/models/vehicle'
+import { vehicles } from '@/data/vehicles'
 
 export const createVehicles = async (): Promise<void> => {
   if (!(await connectToDB())) {
@@ -17,7 +18,7 @@ export const createVehicles = async (): Promise<void> => {
     process.exit(1)
   }
 
-  await Vehicle.create<VehicleProps[]>(vehicles)
+  await VehicleModel.create<Vehicle[]>(vehicles)
 
   process.exit(0)
 }

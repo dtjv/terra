@@ -1,28 +1,26 @@
 import * as React from 'react'
-import type { UseMutationResult } from 'react-query'
+//import type { UseMutationResult } from 'react-query'
 import { useTickets } from '@/hooks/use-tickets'
 import { useVehicles } from '@/hooks/use-vehicles'
-import { useScheduleConfig } from '@/hooks/use-schedule-config'
 import {
   makeScheduleTimes,
   makeRows,
   makeRowHeaders,
   makeColHeaders,
-  computeTicketFields,
 } from '@/lib/utils'
-import type {
-  Row,
-  TicketData,
-  VehicleData,
-  ScheduleData,
-  TicketContext,
-} from '@/types/types'
+import type { Row } from '@/types/types'
+import type { TicketLeanDoc } from '@/models/ticket'
+import type { VehicleLeanDoc } from '@/models/vehicle'
+import {
+  SCHEDULE_START_HOUR,
+  SCHEDULE_END_HOUR,
+  SCHEDULE_TIME_BLOCK_IN_MINUTES,
+} from '@/constants/constants'
 
-const SCHEDULE_CONFIG_DEFAULTS = {
-  id: '',
-  startHour: 8,
-  endHour: 18,
-  timeBlockInMinutes: 30,
+const scheduleConfig = {
+  startHour: SCHEDULE_START_HOUR,
+  endHour: SCHEDULE_END_HOUR,
+  timeBlockInMinutes: SCHEDULE_TIME_BLOCK_IN_MINUTES,
 }
 
 type UseScheduleReturnType = {
@@ -30,41 +28,35 @@ type UseScheduleReturnType = {
   isError: boolean
   error: Error | undefined
   rows: Row[]
+  /*
   updateTicketMutation: UseMutationResult<
     TicketData,
     Error,
     TicketData,
     TicketContext
   >
+  */
   data: {
-    tickets: TicketData[]
-    vehicles: VehicleData[]
-    scheduleConfig: ScheduleData
+    tickets: TicketLeanDoc[]
+    vehicles: VehicleLeanDoc[]
+    scheduleConfig: {
+      startHour: number
+      endHour: number
+      timeBlockInMinutes: number
+    }
   }
 }
 
 export const useSchedule = (): UseScheduleReturnType => {
-  const { ticketsQuery, updateTicketMutation } = useTickets()
+  const { ticketsQuery /*updateTicketMutation*/ } = useTickets()
   const { vehiclesQuery } = useVehicles()
-  const { scheduleConfigQuery } = useScheduleConfig()
 
   const rowHeaders = React.useMemo(() => {
-    if (scheduleConfigQuery.isLoading || scheduleConfigQuery.isError) {
-      return []
-    }
-
-    const { startHour, endHour, timeBlockInMinutes } =
-      scheduleConfigQuery.data ?? SCHEDULE_CONFIG_DEFAULTS
-
     return makeRowHeaders({
-      scheduleTimes: makeScheduleTimes({
-        startHour,
-        endHour,
-        timeBlockInMinutes,
-      }),
-      timeBlockInMinutes,
+      scheduleTimes: makeScheduleTimes(scheduleConfig),
+      timeBlockInMinutes: scheduleConfig.timeBlockInMinutes,
     })
-  }, [scheduleConfigQuery])
+  }, [])
 
   const colHeaders = React.useMemo(() => {
     return vehiclesQuery.isLoading || vehiclesQuery.isError
@@ -76,34 +68,26 @@ export const useSchedule = (): UseScheduleReturnType => {
     return ticketsQuery.isLoading || ticketsQuery.isError
       ? []
       : makeRows({
-          tickets: computeTicketFields(ticketsQuery.data ?? []),
+          tickets: ticketsQuery.data ?? [],
           rowHeaders,
           colHeaders,
         })
   }, [ticketsQuery, rowHeaders, colHeaders])
 
   return {
-    isLoading:
-      scheduleConfigQuery.isLoading ||
-      ticketsQuery.isLoading ||
-      vehiclesQuery.isLoading,
-    isError:
-      scheduleConfigQuery.isError ||
-      ticketsQuery.isError ||
-      vehiclesQuery.isError,
-    error: scheduleConfigQuery.isError
-      ? (scheduleConfigQuery.error as Error)
-      : ticketsQuery.isError
+    isLoading: ticketsQuery.isLoading || vehiclesQuery.isLoading,
+    isError: ticketsQuery.isError || vehiclesQuery.isError,
+    error: ticketsQuery.isError
       ? (ticketsQuery.error as Error)
       : vehiclesQuery.isError
       ? (vehiclesQuery.error as Error)
       : undefined,
     rows,
-    updateTicketMutation,
+    //updateTicketMutation,
     data: {
+      scheduleConfig,
       tickets: ticketsQuery.data ?? [],
       vehicles: vehiclesQuery.data ?? [],
-      scheduleConfig: scheduleConfigQuery.data ?? SCHEDULE_CONFIG_DEFAULTS,
     },
   }
 }

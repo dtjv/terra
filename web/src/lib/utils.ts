@@ -1,20 +1,10 @@
 import _ from 'lodash'
 import { set, format, addMinutes } from 'date-fns'
-import type {
-  VehicleData,
-  TicketData,
-  Row,
-  Cell,
-  RowHeader,
-  ColHeader,
-} from '@/types/types'
+import type { TicketLeanDoc } from '@/models/ticket'
+import type { VehicleLeanDoc } from '@/models/vehicle'
+import type { Row, Cell, RowHeader, ColHeader } from '@/types/types'
 import { CellKind } from '@/constants/constants'
 
-/**
- *
- *
- *
- */
 export interface MakeScheduleTimesProps {
   startHour: number
   endHour: number
@@ -49,11 +39,6 @@ export const makeScheduleTimes = ({
   return scheduleTimes
 }
 
-/**
- *
- *
- *
- */
 export interface MakeRowHeadersProps {
   scheduleTimes: Date[]
   timeBlockInMinutes?: number
@@ -80,49 +65,23 @@ export const makeRowHeaders = ({
   ]
 }
 
-/**
- *
- *
- *
- */
-export const makeColHeaders = (vehicles: VehicleData[]): ColHeader[] => {
-  return [{ id: '', vehicleId: '', vehicleName: '' }, ...vehicles]
+export const makeColHeaders = (vehicles: VehicleLeanDoc[]): ColHeader[] => {
+  return [{ key: '', name: '' }, ...vehicles]
 }
 
-/**
- *
- *
- *
- */
-export const computeTicketFields = (tickets: TicketData[]): TicketData[] => {
-  return tickets.map((ticket) => {
-    const scheduledDateTime = new Date(ticket.scheduledDateTimeISO)
-    const scheduledStartTime = format(scheduledDateTime, 'h:mm a')
-    const timeRange = `${format(scheduledDateTime, 'h:mmaaa')} - ${format(
-      addMinutes(scheduledDateTime, ticket.durationInMinutes),
-      'h:mmaaa'
-    )}`
-
-    return { ...ticket, timeRange, scheduledStartTime }
-  })
-}
-
-/**
- *
- *
- *
- */
 export interface GroupTicketsByProps {
-  tickets: TicketData[]
-  rowField: keyof TicketData
-  colField: keyof TicketData
+  tickets: TicketLeanDoc[]
+  rowField: keyof TicketLeanDoc
+  colField: keyof TicketLeanDoc
 }
 
 export const groupTicketsBy = ({
   tickets,
   rowField,
   colField,
-}: GroupTicketsByProps): { [key: string]: { [key: string]: TicketData } } => {
+}: GroupTicketsByProps): {
+  [key: string]: { [key: string]: TicketLeanDoc }
+} => {
   const ticketsByRow = _.groupBy(tickets, (ticket) => ticket[rowField])
 
   return Object.keys(ticketsByRow).reduce(
@@ -134,13 +93,8 @@ export const groupTicketsBy = ({
   )
 }
 
-/**
- *
- *
- *
- */
 export interface MakeRowsProps {
-  tickets: TicketData[]
+  tickets: TicketLeanDoc[]
   rowHeaders: RowHeader[]
   colHeaders: ColHeader[]
 }
@@ -150,16 +104,10 @@ export const makeRows = ({
   rowHeaders,
   colHeaders,
 }: MakeRowsProps): Row[] => {
-  if (!tickets.every((ticket) => 'scheduledStartTime' in ticket)) {
-    throw new Error(
-      `Missing ticket field: 'scheduledStartTime'. Call 'computeTicketFields'`
-    )
-  }
-
   const ticketHash = groupTicketsBy({
     tickets,
     rowField: 'scheduledStartTime',
-    colField: 'vehicleId',
+    colField: 'vehicleKey',
   })
 
   return rowHeaders.map((rowHeader, rowIdx) => {
@@ -178,7 +126,7 @@ export const makeRows = ({
             ...defaultFields,
             ...colHeader,
             kind: CellKind.COL_HEADER,
-            display: colHeader.vehicleName,
+            display: colHeader.name,
           }
           return cell
         }
@@ -200,7 +148,7 @@ export const makeRows = ({
           colHeader,
           ticket: _.get(ticketHash, [
             rowHeader.hourMinuteFormat,
-            colHeader.vehicleId,
+            colHeader.key,
           ]),
         }
 
@@ -212,11 +160,6 @@ export const makeRows = ({
   })
 }
 
-/**
- *
- *
- *
- */
 export const getPreviousCellWithTicket = (
   cell: Cell,
   rows: Row[]
@@ -236,11 +179,6 @@ export const getPreviousCellWithTicket = (
   return undefined
 }
 
-/**
- *
- *
- *
- */
 export interface IsCellCoveredByTicketProps {
   cell: Cell
   prevCell: Cell
@@ -274,13 +212,8 @@ export const isCellCoveredByTicket = ({
   return prevTicket.durationInMinutes / timeBlockInMinutes >= rowDiff + 1
 }
 
-/**
- *
- *
- *
- */
 export interface IsSpaceForTicketAtCellProps {
-  ticket: TicketData
+  ticket: TicketLeanDoc
   targetCell: Cell
   rows: Row[]
   timeBlockInMinutes: number

@@ -1,34 +1,32 @@
 import axios from 'axios'
 import {
-  useMutation,
+  //useQueryClient,
   useQuery,
-  useQueryClient,
   UseQueryResult,
-  UseMutationResult,
+  //useMutation,
+  //UseMutationResult,
 } from 'react-query'
-import type {
-  TicketData,
-  TicketContext,
-  UpdatedTicketData,
-} from '@/types/types'
+import { TicketLeanDoc } from '@/models/ticket'
 
-const ONE_MINUTE = 1000 * 60 // in milliseconds
 const TICKETS_QUERY_KEY = 'tickets'
 const TICKETS_API = process.env['NEXT_PUBLIC_TICKETS_API'] ?? ''
+const ONE_MINUTE_IN_MS = 1000 * 60
 
 type UseTicketsReturnType = {
-  ticketsQuery: UseQueryResult<TicketData[]>
+  ticketsQuery: UseQueryResult<TicketLeanDoc[]>
+  /*
   updateTicketMutation: UseMutationResult<
     TicketData,
     Error,
     TicketData,
     TicketContext
   >
+  */
 }
 
 export const useTickets = (): UseTicketsReturnType => {
-  const queryClient = useQueryClient()
-  const ticketsQuery = useQuery<TicketData[], Error>(
+  //const queryClient = useQueryClient()
+  const ticketsQuery = useQuery<TicketLeanDoc[], Error>(
     [TICKETS_QUERY_KEY],
     async () => {
       if (TICKETS_API === '') {
@@ -38,10 +36,11 @@ export const useTickets = (): UseTicketsReturnType => {
       return data
     },
     {
-      refetchInterval: ONE_MINUTE,
+      refetchInterval: ONE_MINUTE_IN_MS,
       refetchIntervalInBackground: true,
     }
   )
+  /*
   const updateTicketMutation = useMutation<
     TicketData,
     Error,
@@ -90,6 +89,7 @@ export const useTickets = (): UseTicketsReturnType => {
       },
     }
   )
+  */
 
-  return { ticketsQuery, updateTicketMutation }
+  return { ticketsQuery }
 }

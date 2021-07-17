@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useQuery, UseQueryResult } from 'react-query'
-import type { VehicleData } from '@/types/types'
+import type { VehicleLeanDoc } from '@/models/vehicle'
 
 const VEHICLES_QUERY_KEY = 'vehicles'
 const VEHICLES_API = process.env['NEXT_PUBLIC_VEHICLES_API'] ?? ''
@@ -9,7 +9,9 @@ type UseVehiclesReturnType<T> = {
   vehiclesQuery: UseQueryResult<T>
 }
 
-export const useVehicles = <T = VehicleData[]>(): UseVehiclesReturnType<T> => {
+export const useVehicles = <
+  T = VehicleLeanDoc[]
+>(): UseVehiclesReturnType<T> => {
   const vehiclesQuery = useQuery<T, Error>(
     [VEHICLES_QUERY_KEY],
     async () => {

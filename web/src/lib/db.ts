@@ -1,13 +1,24 @@
 import { connect, STATES } from 'mongoose'
 
-import { Ticket } from '@/models/ticket'
-import { Vehicle } from '@/models/vehicle'
-import type { TicketProps, TicketDoc, TicketLeanDoc } from '@/models/ticket'
+import { VehicleModel } from '@/models/vehicle'
+import type { VehicleLeanDoc } from '@/models/vehicle'
+import { TicketModel } from '@/models/ticket'
+import type { Ticket, TicketDoc, TicketLeanDoc } from '@/models/ticket'
+
+export const getVehicles = async (): Promise<VehicleLeanDoc[]> => {
+  await connectToDB()
+
+  const vehicles = await VehicleModel.find({})
+
+  return vehicles.map((vehicle) =>
+    vehicle.toObject({ transform: transformObjectId })
+  )
+}
 
 export const getTickets = async (): Promise<TicketLeanDoc[]> => {
   await connectToDB()
 
-  const tickets = await Ticket.find({}).populate('vehicle')
+  const tickets = await TicketModel.find({}).populate('vehicle')
 
   return tickets.map((ticket) =>
     ticket.toObject({ transform: transformObjectId })
@@ -15,21 +26,13 @@ export const getTickets = async (): Promise<TicketLeanDoc[]> => {
 }
 
 export const createTicket = async (
-  newTicket: TicketProps
+  newTicket: Ticket
 ): Promise<TicketLeanDoc> => {
   await connectToDB()
 
-  const vehicles = await Vehicle.find({})
-  const vehicle = vehicles.find((doc) => doc.key === newTicket.vehicleKey)
+  const savedTicket = await TicketModel.create<Ticket>(newTicket)
 
-  if (!vehicle) {
-    throw new Error(`Invalid vehicle key, '${newTicket.vehicleKey}'`)
-  }
-
-  return await Ticket.create<TicketLeanDoc>({
-    ...newTicket,
-    vehicle: vehicle._id,
-  })
+  return savedTicket.toObject({ transform: transformObjectId })
 }
 
 let isConnected = false
