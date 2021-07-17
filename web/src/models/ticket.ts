@@ -20,7 +20,9 @@ export interface Ticket {
   durationInMinutes: number
 }
 
-// ticket properties we need to store.
+export type TicketUpdated = Partial<Ticket>
+
+// calculated & virtual ticket properties
 export interface TicketDoc extends Ticket, Document {
   vehicle: PopulatedDoc<VehicleDoc & Document>
   ticketRange: string

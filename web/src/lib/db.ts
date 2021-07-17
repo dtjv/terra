@@ -3,13 +3,16 @@ import { connect, STATES } from 'mongoose'
 import { VehicleModel } from '@/models/vehicle'
 import type { VehicleLeanDoc } from '@/models/vehicle'
 import { TicketModel } from '@/models/ticket'
-import type { Ticket, TicketDoc, TicketLeanDoc } from '@/models/ticket'
+import type {
+  Ticket,
+  TicketUpdated,
+  TicketDoc,
+  TicketLeanDoc,
+} from '@/models/ticket'
 
 export const getVehicles = async (): Promise<VehicleLeanDoc[]> => {
   await connectToDB()
-
   const vehicles = await VehicleModel.find({})
-
   return vehicles.map((vehicle) =>
     vehicle.toObject({ transform: transformObjectId })
   )
@@ -17,9 +20,7 @@ export const getVehicles = async (): Promise<VehicleLeanDoc[]> => {
 
 export const getTickets = async (): Promise<TicketLeanDoc[]> => {
   await connectToDB()
-
   const tickets = await TicketModel.find({}).populate('vehicle')
-
   return tickets.map((ticket) =>
     ticket.toObject({ transform: transformObjectId })
   )
@@ -29,10 +30,24 @@ export const createTicket = async (
   newTicket: Ticket
 ): Promise<TicketLeanDoc> => {
   await connectToDB()
-
   const savedTicket = await TicketModel.create<Ticket>(newTicket)
-
   return savedTicket.toObject({ transform: transformObjectId })
+}
+
+export const updateTicket = async (
+  ticketId: string,
+  updatedTicket: TicketUpdated
+): Promise<TicketLeanDoc> => {
+  await connectToDB()
+
+  const ticket = await TicketModel.findById(ticketId)
+
+  if (!ticket) {
+    throw new Error(`Ticket '${ticketId}' not found.`)
+  }
+
+  ticket.set(updatedTicket)
+  return ticket.save()
 }
 
 let isConnected = false

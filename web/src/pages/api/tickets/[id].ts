@@ -1,21 +1,28 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { updateTicket } from '@/lib/fs-db'
-import type { TicketData } from '@/types/types'
+import { updateTicket } from '@/lib/db'
 
 //------------------------------------------------------------------------------
 // Handler for api calls to `/api/tickets/:id`
 //------------------------------------------------------------------------------
 const handler: NextApiHandler = async (
   req: NextApiRequest,
-  res: NextApiResponse<TicketData | string>
+  res: NextApiResponse
 ) => {
-  if (req.method === 'PATCH') {
-    const updatedTicket = await updateTicket(req.body.updatedTicket)
+  const ticketId = req.query['id'] ?? ''
 
-    return updatedTicket
-      ? res.status(200).json(updatedTicket)
-      : res.status(204).send(`No ticket to update`)
+  if (Array.isArray(ticketId)) {
+    return res.status(400).send(`Invalid ticket id type: '${ticketId}'`)
   }
+
+  if (req.method === 'PATCH') {
+    try {
+      const updatedTicket = await updateTicket(ticketId, req.body.updatedTicket)
+      return res.status(200).json(updatedTicket)
+    } catch (error) {
+      return res.status(500).send(`Failed to update ticket: '${ticketId}'`)
+    }
+  }
+
   return res.status(404).send(`Unsupported method: ${req.method}`)
 }
 
