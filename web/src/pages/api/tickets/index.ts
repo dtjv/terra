@@ -9,9 +9,14 @@ const handler: NextApiHandler = async (
   res: NextApiResponse
 ) => {
   if (req.method === 'GET') {
-    const tickets = await getTickets()
-    // TODO: add all computed fields
-    return res.status(200).json({ tickets })
+    try {
+      const tickets = await getTickets()
+      return res.status(200).json(tickets)
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: 'Failed to fetch tickets.', error })
+    }
   }
 
   if (req.method === 'POST') {
@@ -19,7 +24,7 @@ const handler: NextApiHandler = async (
 
     try {
       const ticket = await createTicket(newTicket)
-      return res.status(200).json({ ticket })
+      return res.status(200).json(ticket)
     } catch (error) {
       return res
         .status(500)
