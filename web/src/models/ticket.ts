@@ -1,12 +1,14 @@
+import { format, addMinutes } from 'date-fns'
 import { Schema, model } from 'mongoose'
-import type { Model, Document, LeanDocument } from 'mongoose'
+import type { Model, Document, LeanDocument, PopulatedDoc } from 'mongoose'
 
 import oregon from '@/data/oregon.json'
-import { Vehicle } from '@/models/vehicle'
+import { VehicleModel } from '@/models/vehicle'
+import type { VehicleDoc } from '@/models/vehicle'
 import { TicketKind } from '@/constants/constants'
 
 // ticket properties expected from ui.
-export interface TicketProps {
+export interface Ticket {
   ticketKind: TicketKind
   customerName: string
   destinationAddress: {
@@ -19,8 +21,10 @@ export interface TicketProps {
 }
 
 // ticket properties we need to store.
-export interface TicketDoc extends TicketProps, Document {
-  vehicle: Schema.Types.ObjectId | typeof Vehicle
+export interface TicketDoc extends Ticket, Document {
+  vehicle: PopulatedDoc<VehicleDoc & Document>
+  ticketRange: string
+  scheduledStartTime: string
 }
 
 export type TicketLeanDoc = LeanDocument<TicketDoc>
@@ -63,11 +67,40 @@ const ticketSchema = new Schema<TicketDoc, Model<TicketDoc>, TicketDoc>({
     type: String,
     required: true,
   },
+  // computed on save
   vehicle: {
     type: Schema.Types.ObjectId,
     ref: 'Vehicle',
-    required: true,
   },
 })
 
-export const Ticket = model<TicketDoc, Model<TicketDoc>>('Ticket', ticketSchema)
+ticketSchema.virtual('ticketRange').get(function (this: TicketDoc) {
+  const startTime = `${format(this.scheduledAt, 'h:mmaaa')}`
+  const endTime = `${format(
+    addMinutes(this.scheduledAt, this.durationInMinutes),
+    'h:mmaaa'
+  )}`
+  return `${startTime} - ${endTime}`
+})
+
+ticketSchema.virtual('scheduledStartTime').get(function (this: TicketDoc) {
+  return format(this.scheduledAt, 'h:mm a')
+})
+
+ticketSchema.pre<TicketDoc>('save', async function () {
+  const vehicles = await VehicleModel.find({})
+  const vehicle = vehicles.find(
+    (vehicleDoc) => vehicleDoc.key === this.vehicleKey
+  )
+
+  if (!vehicle) {
+    throw new Error(`Invalid vehicle key, '${this.vehicleKey}'`)
+  }
+
+  this.vehicle = vehicle._id
+})
+
+export const TicketModel = model<TicketDoc, Model<TicketDoc>>(
+  'Ticket',
+  ticketSchema
+)
