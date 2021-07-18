@@ -1,10 +1,12 @@
 import { Schema, model } from 'mongoose'
-import type { Model } from 'mongoose'
+import type { Model, Document } from 'mongoose'
 
 export interface Vehicle {
   key: string
   name: string
 }
+
+export interface VehicleDocument extends Vehicle, Document {}
 
 const vehicleSchema = new Schema<Vehicle, Model<Vehicle>, Vehicle>({
   key: {

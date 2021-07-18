@@ -26,7 +26,9 @@ export interface Ticket extends TicketInput {
   scheduledStartTime: string
 }
 
-export type UpdatedTicket = Partial<Ticket>
+export type UpdatedTicket = Partial<TicketInput>
+
+export type TicketDocument = Ticket & Document
 
 const ticketSchema = new Schema<Ticket, Model<Ticket>, Ticket>({
   ticketKind: {
