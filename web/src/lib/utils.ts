@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { set, format, addMinutes } from 'date-fns'
-import type { TicketLeanDoc } from '@/models/ticket'
-import type { VehicleLeanDoc } from '@/models/vehicle'
+import type { Ticket, TicketDocument } from '@/models/ticket'
+import type { Vehicle } from '@/models/vehicle'
 import type { Row, Cell, RowHeader, ColHeader } from '@/types/types'
 import { CellKind } from '@/constants/constants'
 
@@ -65,14 +65,14 @@ export const makeRowHeaders = ({
   ]
 }
 
-export const makeColHeaders = (vehicles: VehicleLeanDoc[]): ColHeader[] => {
+export const makeColHeaders = (vehicles: Vehicle[]): ColHeader[] => {
   return [{ key: '', name: '' }, ...vehicles]
 }
 
 export interface GroupTicketsByProps {
-  tickets: TicketLeanDoc[]
-  rowField: keyof TicketLeanDoc
-  colField: keyof TicketLeanDoc
+  tickets: Ticket[]
+  rowField: keyof Ticket
+  colField: keyof Ticket
 }
 
 export const groupTicketsBy = ({
@@ -80,7 +80,7 @@ export const groupTicketsBy = ({
   rowField,
   colField,
 }: GroupTicketsByProps): {
-  [key: string]: { [key: string]: TicketLeanDoc }
+  [key: string]: { [key: string]: Ticket }
 } => {
   const ticketsByRow = _.groupBy(tickets, (ticket) => ticket[rowField])
 
@@ -94,7 +94,7 @@ export const groupTicketsBy = ({
 }
 
 export interface MakeRowsProps {
-  tickets: TicketLeanDoc[]
+  tickets: TicketDocument[]
   rowHeaders: RowHeader[]
   colHeaders: ColHeader[]
 }
@@ -213,7 +213,7 @@ export const isCellCoveredByTicket = ({
 }
 
 export interface IsSpaceForTicketAtCellProps {
-  ticket: TicketLeanDoc
+  ticket: TicketDocument
   targetCell: Cell
   rows: Row[]
   timeBlockInMinutes: number
