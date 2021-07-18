@@ -6,11 +6,11 @@ import {
   //useMutation,
   //UseMutationResult,
 } from 'react-query'
-import { TicketLeanDoc } from '@/models/ticket'
+import type { TicketLeanDoc } from '@/models/ticket'
 
 const TICKETS_QUERY_KEY = 'tickets'
 const TICKETS_API = process.env['NEXT_PUBLIC_TICKETS_API'] ?? ''
-const ONE_MINUTE_IN_MS = 1000 * 60
+const TICKETS_REFRESH_INTERVAL = 1000 * 60 // 1 minute in ms
 
 type UseTicketsReturnType = {
   ticketsQuery: UseQueryResult<TicketLeanDoc[]>
@@ -36,7 +36,7 @@ export const useTickets = (): UseTicketsReturnType => {
       return data
     },
     {
-      refetchInterval: ONE_MINUTE_IN_MS,
+      refetchInterval: TICKETS_REFRESH_INTERVAL,
       refetchIntervalInBackground: true,
     }
   )

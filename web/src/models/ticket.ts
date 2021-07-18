@@ -20,8 +20,6 @@ export interface Ticket {
   durationInMinutes: number
 }
 
-export type TicketUpdated = Partial<Ticket>
-
 // calculated & virtual ticket properties
 export interface TicketDoc extends Ticket, Document {
   vehicle: PopulatedDoc<VehicleDoc & Document>
@@ -30,6 +28,8 @@ export interface TicketDoc extends Ticket, Document {
 }
 
 export type TicketLeanDoc = LeanDocument<TicketDoc>
+
+export type TicketUpdated = Pick<TicketLeanDoc, 'id'> & Partial<TicketLeanDoc>
 
 const ticketSchema = new Schema<TicketDoc, Model<TicketDoc>, TicketDoc>({
   ticketKind: {
