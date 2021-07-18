@@ -1,43 +1,35 @@
 import { connect, STATES } from 'mongoose'
 
-import { VehicleModel } from '@/models/vehicle'
-import type { VehicleLeanDoc } from '@/models/vehicle'
 import { TicketModel } from '@/models/ticket'
 import type {
-  Ticket,
-  TicketUpdated,
-  TicketDoc,
-  TicketLeanDoc,
+  TicketInput,
+  UpdatedTicket,
+  TicketDocument,
 } from '@/models/ticket'
+import { VehicleModel } from '@/models/vehicle'
+import type { VehicleDocument } from '@/models/vehicle'
 
-export const getVehicles = async (): Promise<VehicleLeanDoc[]> => {
+export const getVehicles = async (): Promise<VehicleDocument[]> => {
   await connectToDB()
-  const vehicles = await VehicleModel.find({})
-  return vehicles.map((vehicle) =>
-    vehicle.toObject({ transform: transformObjectId })
-  )
+  return await VehicleModel.find({})
 }
 
-export const getTickets = async (): Promise<TicketLeanDoc[]> => {
+export const getTickets = async (): Promise<TicketDocument[]> => {
   await connectToDB()
-  const tickets = await TicketModel.find({}).populate('vehicle')
-  return tickets.map((ticket) =>
-    ticket.toObject({ transform: transformObjectId })
-  )
+  return await TicketModel.find({}).populate('vehicle')
 }
 
 export const createTicket = async (
-  newTicket: Ticket
-): Promise<TicketLeanDoc> => {
+  newTicket: TicketInput
+): Promise<TicketDocument> => {
   await connectToDB()
-  const savedTicket = await TicketModel.create<Ticket>(newTicket)
-  return savedTicket.toObject({ transform: transformObjectId })
+  return await TicketModel.create<TicketInput>(newTicket)
 }
 
 export const updateTicket = async (
   ticketId: string,
-  updatedTicket: TicketUpdated
-): Promise<TicketLeanDoc> => {
+  updatedTicket: UpdatedTicket
+): Promise<TicketDocument> => {
   await connectToDB()
 
   const ticket = await TicketModel.findById(ticketId)
@@ -47,7 +39,7 @@ export const updateTicket = async (
   }
 
   ticket.set(updatedTicket)
-  return ticket.save()
+  return await ticket.save()
 }
 
 let isConnected = false
@@ -92,10 +84,13 @@ const composeDbURI = () => {
     .replace(/\$DB_NAME/, dbName)
 }
 
-const transformObjectId = (_: TicketDoc, ret: TicketDoc): TicketLeanDoc => {
-  if (ret._id) {
-    ret.id = ret._id.toString()
-    delete ret._id
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RetType = Record<string, any>
+
+export const transformObjectId = (_: unknown, ret: RetType): RetType => {
+  if (ret['_id']) {
+    ret['id'] = ret['_id'].toString()
+    delete ret['_id']
   }
   return ret
 }
