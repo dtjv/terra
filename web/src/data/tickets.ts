@@ -1,7 +1,7 @@
-import type { Ticket } from '@/models/ticket'
+import type { TicketInput } from '@/models/ticket'
 import { TicketKind } from '@/constants/constants'
 
-export const newTickets: Ticket[] = [
+export const newTickets: TicketInput[] = [
   {
     ticketKind: TicketKind.DELIVERY,
     customerName: 'Mr. White',
