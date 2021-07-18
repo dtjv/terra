@@ -1,14 +1,13 @@
 import { format, addMinutes } from 'date-fns'
 import { Schema, model } from 'mongoose'
-import type { Model, Document, LeanDocument, PopulatedDoc } from 'mongoose'
+import type { Model, Document, PopulatedDoc } from 'mongoose'
 
 import oregon from '@/data/oregon.json'
 import { VehicleModel } from '@/models/vehicle'
-import type { VehicleDoc } from '@/models/vehicle'
+import type { Vehicle } from '@/models/vehicle'
 import { TicketKind } from '@/constants/constants'
 
-// ticket properties expected from ui.
-export interface Ticket {
+export interface TicketInput {
   ticketKind: TicketKind
   customerName: string
   destinationAddress: {
@@ -20,18 +19,16 @@ export interface Ticket {
   durationInMinutes: number
 }
 
-// calculated & virtual ticket properties
-export interface TicketDoc extends Ticket, Document {
-  vehicle: PopulatedDoc<VehicleDoc & Document>
+// add computed and virtual properties
+export interface Ticket extends TicketInput {
+  vehicle: PopulatedDoc<Vehicle & Document>
   ticketRange: string
   scheduledStartTime: string
 }
 
-export type TicketLeanDoc = LeanDocument<TicketDoc>
+export type UpdatedTicket = Partial<Ticket>
 
-export type TicketUpdated = Pick<TicketLeanDoc, 'id'> & Partial<TicketLeanDoc>
-
-const ticketSchema = new Schema<TicketDoc, Model<TicketDoc>, TicketDoc>({
+const ticketSchema = new Schema<Ticket, Model<Ticket>, Ticket>({
   ticketKind: {
     type: String,
     enum: Object.values(TicketKind),
@@ -56,27 +53,26 @@ const ticketSchema = new Schema<TicketDoc, Model<TicketDoc>, TicketDoc>({
       required: true,
     },
   },
-  durationInMinutes: {
-    type: Number,
-    min: 0,
+  vehicleKey: {
+    type: String,
     required: true,
+  },
+  vehicle: {
+    type: Schema.Types.ObjectId,
+    ref: 'Vehicle',
   },
   scheduledAt: {
     type: Schema.Types.Date,
     required: true,
   },
-  vehicleKey: {
-    type: String,
+  durationInMinutes: {
+    type: Number,
+    min: 0,
     required: true,
-  },
-  // computed on save
-  vehicle: {
-    type: Schema.Types.ObjectId,
-    ref: 'Vehicle',
   },
 })
 
-ticketSchema.virtual('ticketRange').get(function (this: TicketDoc) {
+ticketSchema.virtual('ticketRange').get(function (this: Ticket) {
   const startTime = `${format(this.scheduledAt, 'h:mmaaa')}`
   const endTime = `${format(
     addMinutes(this.scheduledAt, this.durationInMinutes),
@@ -85,11 +81,11 @@ ticketSchema.virtual('ticketRange').get(function (this: TicketDoc) {
   return `${startTime} - ${endTime}`
 })
 
-ticketSchema.virtual('scheduledStartTime').get(function (this: TicketDoc) {
+ticketSchema.virtual('scheduledStartTime').get(function (this: Ticket) {
   return format(this.scheduledAt, 'h:mm a')
 })
 
-ticketSchema.pre<TicketDoc>('save', async function () {
+ticketSchema.pre<Ticket>('save', async function () {
   const vehicles = await VehicleModel.find({})
   const vehicle = vehicles.find(
     (vehicleDoc) => vehicleDoc.key === this.vehicleKey
@@ -102,7 +98,4 @@ ticketSchema.pre<TicketDoc>('save', async function () {
   this.vehicle = vehicle._id
 })
 
-export const TicketModel = model<TicketDoc, Model<TicketDoc>>(
-  'Ticket',
-  ticketSchema
-)
+export const TicketModel = model<Ticket, Model<Ticket>>('Ticket', ticketSchema)

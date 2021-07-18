@@ -1,24 +1,24 @@
 import { Schema, model } from 'mongoose'
-import type { Model, Document, LeanDocument } from 'mongoose'
+import type { Model } from 'mongoose'
 
 export interface Vehicle {
   key: string
   name: string
 }
 
-export interface VehicleDoc extends Vehicle, Document {}
-
-export type VehicleLeanDoc = LeanDocument<VehicleDoc>
-
-const vehicleSchema = new Schema<VehicleDoc, Model<VehicleDoc>, VehicleDoc>({
+const vehicleSchema = new Schema<Vehicle, Model<Vehicle>, Vehicle>({
   key: {
     type: String,
     unique: true,
+    required: true,
   },
-  name: String,
+  name: {
+    type: String,
+    required: true,
+  },
 })
 
-export const VehicleModel = model<VehicleDoc, Model<VehicleDoc>>(
+export const VehicleModel = model<Vehicle, Model<Vehicle>>(
   'Vehicle',
   vehicleSchema
 )
