@@ -1,4 +1,4 @@
-import { connect, STATES } from 'mongoose'
+import mongoose from 'mongoose'
 
 import { TicketModel } from '@/models/ticket'
 import type {
@@ -8,6 +8,8 @@ import type {
 } from '@/models/ticket'
 import { VehicleModel } from '@/models/vehicle'
 import type { VehicleDocument } from '@/models/vehicle'
+
+mongoose.set('toJSON', { virtuals: true })
 
 export const getVehicles = async (): Promise<VehicleDocument[]> => {
   await connectToDB()
@@ -50,7 +52,7 @@ export const connectToDB = async (): Promise<boolean> => {
   if (isConnected) return isConnected
 
   try {
-    db = await connect(composeDbURI(), {
+    db = await mongoose.connect(composeDbURI(), {
       useNewUrlParser: true,
       useFindAndModify: false,
       useCreateIndex: true,
@@ -59,7 +61,8 @@ export const connectToDB = async (): Promise<boolean> => {
 
     const connection = db.connections[0]
 
-    isConnected = !!connection && STATES[connection.readyState] === 'connected'
+    isConnected =
+      !!connection && mongoose.STATES[connection.readyState] === 'connected'
   } catch (error) {
     console.error(error)
   }
@@ -82,15 +85,4 @@ const composeDbURI = () => {
     .replace(/\$DB_USER/, dbUser)
     .replace(/\$DB_PASS/, dbPass)
     .replace(/\$DB_NAME/, dbName)
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type RetType = Record<string, any>
-
-export const transformObjectId = (_: unknown, ret: RetType): RetType => {
-  if (ret['_id']) {
-    ret['id'] = ret['_id'].toString()
-    delete ret['_id']
-  }
-  return ret
 }
