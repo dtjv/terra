@@ -1,34 +1,10 @@
 import { format, addMinutes } from 'date-fns'
 import { Schema, model } from 'mongoose'
-import type { Model, Document, PopulatedDoc } from 'mongoose'
-
+import type { Model } from 'mongoose'
 import oregon from '@/data/oregon.json'
 import { VehicleModel } from '@/models/vehicle'
-import type { Vehicle } from '@/models/vehicle'
-import { TicketKind } from '@/constants/constants'
-
-export interface TicketInput {
-  ticketKind: TicketKind
-  customerName: string
-  destinationAddress: {
-    street: string
-    zip: string
-  }
-  vehicleKey: string
-  scheduledAt: Date
-  durationInMinutes: number
-}
-
-// add computed and virtual properties
-export interface Ticket extends TicketInput {
-  vehicle: PopulatedDoc<Vehicle & Document>
-  ticketRange: string
-  scheduledStartTime: string
-}
-
-export type UpdatedTicket = Partial<TicketInput>
-
-export type TicketDocument = Ticket & Document
+import { TicketKind } from '@/types/enums'
+import type { Ticket } from '@/types/types'
 
 const ticketSchema = new Schema<Ticket, Model<Ticket>, Ticket>({
   ticketKind: {
@@ -59,7 +35,7 @@ const ticketSchema = new Schema<Ticket, Model<Ticket>, Ticket>({
     type: String,
     required: true,
   },
-  vehicle: {
+  vehicleDoc: {
     type: Schema.Types.ObjectId,
     ref: 'Vehicle',
   },
@@ -97,7 +73,7 @@ ticketSchema.pre<Ticket>('save', async function () {
     throw new Error(`Invalid vehicle key, '${this.vehicleKey}'`)
   }
 
-  this.vehicle = vehicle._id
+  this.vehicleDoc = vehicle._id
 })
 
 export const TicketModel = model<Ticket, Model<Ticket>>('Ticket', ticketSchema)

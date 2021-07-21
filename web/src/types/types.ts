@@ -1,53 +1,67 @@
-import { TicketLeanDoc } from '@/models/ticket'
-import { VehicleLeanDoc } from '@/models/vehicle'
-import { CellKind, TicketStatus } from '@/constants/constants'
+import type { Document, PopulatedDoc } from 'mongoose'
+import { CellKind, TicketKind } from '@/types/enums'
 
-// TODO: remove start
-import { Infer } from 'superstruct'
-import { TicketFormSchema } from '@/schemas/schemas'
+//-----------------------------------------------------------------------------
+//
+// Vehicle types
+//
+//-----------------------------------------------------------------------------
+export interface VehicleInput {
+  key: string
+  name: string
+}
 
-export interface VehicleData {
+export interface Vehicle extends VehicleInput {
   id: string
-  vehicleId: string
-  vehicleName: string
 }
 
-export interface TimeData {
-  scheduleTimeISO: string
-  hourFormat: string
-  hourMinuteFormat: string
+export interface VehicleDocument extends VehicleInput, Document {}
+
+//-----------------------------------------------------------------------------
+//
+// Ticket types
+//
+//-----------------------------------------------------------------------------
+export interface TicketInput {
+  ticketKind: TicketKind
+  customerName: string
+  destinationAddress: {
+    street: string
+    zip: string
+  }
+  vehicleKey: string
+  scheduledAt: Date
+  durationInMinutes: number
 }
 
-export type TicketFormInputs = Infer<typeof TicketFormSchema>
+interface TicketExtended extends TicketInput {
+  vehicleDoc: PopulatedDoc<VehicleDocument>
+  ticketRange: string
+  scheduledStartTime: string
+}
 
-export type TicketComputedFields = {
-  // computed & stored.
+export interface Ticket extends TicketExtended {
   id: string
-  status?: TicketStatus
-  createdAt?: string
-  updatedAt?: string
-  createdBy?: string
-  updatedBy?: string[]
-  // computed. NOT stored
-  timeRange?: string
-  scheduledStartTime?: string
 }
 
-// TicketData is read from DB.
-export type TicketData = TicketComputedFields & TicketFormInputs
+export interface TicketDocument extends TicketExtended, Document {}
 
-export type UpdatedTicketData = Pick<TicketData, 'id'> & Partial<TicketData>
+export type UpdatedTicket = Pick<Ticket, 'id'> & Partial<Ticket>
 
-export type TicketContext = { previousTickets: TicketData[] }
-// TODO: remove end
+export type TicketContext = { previousTickets: Ticket[] }
 
+//-----------------------------------------------------------------------------
+//
+// UI schedule types
+//
+//-----------------------------------------------------------------------------
 export type RowHeader = {
   scheduleTimeISO: string
   hourFormat: string
   hourMinuteFormat: string
 }
 
-export type ColHeader = VehicleLeanDoc
+export type ColHeader = Vehicle
 
 interface BaseCell<Kind extends CellKind> {
   kind: Kind
@@ -68,7 +82,7 @@ export interface ColHeaderCell
 }
 
 export interface DataCell extends BaseCell<CellKind.DATA_CELL> {
-  ticket: TicketLeanDoc | undefined
+  ticket: Ticket | undefined
   rowHeader: RowHeader
   colHeader: ColHeader
 }
