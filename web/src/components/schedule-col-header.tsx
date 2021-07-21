@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Flex, GridItem } from '@chakra-ui/react'
+import { CellKind } from '@/types/enums'
 import type { Cell } from '@/types/types'
-import { CellKind } from '@/constants/constants'
 
 export type ScheduleColHeaderProps = { cell: Cell }
 

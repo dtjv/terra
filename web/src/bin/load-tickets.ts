@@ -1,9 +1,8 @@
 import mongoose from 'mongoose'
-
 import { connectToDB } from '@/lib/db'
 import { TicketModel } from '@/models/ticket'
-import type { Ticket } from '@/models/ticket'
 import { newTickets } from '@/data/tickets'
+import type { TicketInput } from '@/types/types'
 
 export const createTickets = async (): Promise<void> => {
   if (!(await connectToDB())) {
@@ -20,7 +19,7 @@ export const createTickets = async (): Promise<void> => {
     }
   }
 
-  await TicketModel.create<Ticket>(newTickets)
+  await TicketModel.create<TicketInput[]>(newTickets)
 
   process.exit(0)
 }

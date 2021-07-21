@@ -1,37 +1,29 @@
 import axios from 'axios'
 import {
-  //useQueryClient,
+  useQueryClient,
   useQuery,
   UseQueryResult,
-  //useMutation,
-  //UseMutationResult,
+  useMutation,
+  UseMutationResult,
 } from 'react-query'
-import type { TicketLeanDoc } from '@/models/ticket'
+import type { Ticket, UpdatedTicket, TicketContext } from '@/types/types'
 
 const TICKETS_QUERY_KEY = 'tickets'
 const TICKETS_API = process.env['NEXT_PUBLIC_TICKETS_API'] ?? ''
 const TICKETS_REFRESH_INTERVAL = 1000 * 60 // 1 minute in ms
 
 type UseTicketsReturnType = {
-  ticketsQuery: UseQueryResult<TicketLeanDoc[]>
-  /*
-  updateTicketMutation: UseMutationResult<
-    TicketData,
-    Error,
-    TicketData,
-    TicketContext
-  >
-  */
+  ticketsQuery: UseQueryResult<Ticket[]>
+  updateTicketMutation: UseMutationResult<Ticket, Error, Ticket, TicketContext>
 }
 
 export const useTickets = (): UseTicketsReturnType => {
-  //const queryClient = useQueryClient()
-  const ticketsQuery = useQuery<TicketLeanDoc[], Error>(
+  const queryClient = useQueryClient()
+
+  const ticketsQuery = useQuery<Ticket[], Error>(
     [TICKETS_QUERY_KEY],
     async () => {
-      if (TICKETS_API === '') {
-        throw new Error('No ticket API defined')
-      }
+      // TODO: handle axios errors
       const { data } = await axios.get(TICKETS_API)
       return data
     },
@@ -40,18 +32,15 @@ export const useTickets = (): UseTicketsReturnType => {
       refetchIntervalInBackground: true,
     }
   )
-  /*
+
   const updateTicketMutation = useMutation<
-    TicketData,
+    Ticket,
     Error,
-    TicketData,
+    Ticket,
     TicketContext
   >(
-    async (updatedTicket: UpdatedTicketData) => {
-      if (TICKETS_API === '') {
-        throw new Error('No Ticket API defined')
-      }
-
+    async (updatedTicket: UpdatedTicket) => {
+      // TODO: handle axios errors
       const { data } = await axios.patch(`${TICKETS_API}/${updatedTicket.id}`, {
         updatedTicket,
       })
@@ -59,18 +48,18 @@ export const useTickets = (): UseTicketsReturnType => {
       return data
     },
     {
-      onMutate: async (updatedTicket: UpdatedTicketData) => {
+      onMutate: async (updatedTicket: UpdatedTicket) => {
         await queryClient.cancelQueries(TICKETS_QUERY_KEY)
 
-        const previousTickets: TicketData[] =
-          queryClient.getQueryData(TICKETS_QUERY_KEY) ?? []
+        const previousTickets =
+          queryClient.getQueryData<Ticket[]>(TICKETS_QUERY_KEY) ?? []
 
-        queryClient.setQueryData(
+        queryClient.setQueryData<Ticket[]>(
           TICKETS_QUERY_KEY,
-          (previousTickets: TicketData[] | undefined = []) => {
+          (previousTickets = []) => {
             return previousTickets.map((prevTicket) => {
               return prevTicket.id === updatedTicket.id
-                ? { ...prevTicket, ...updatedTicket }
+                ? ({ ...prevTicket, ...updatedTicket } as Ticket)
                 : prevTicket
             })
           }
@@ -89,7 +78,6 @@ export const useTickets = (): UseTicketsReturnType => {
       },
     }
   )
-  */
 
-  return { ticketsQuery }
+  return { ticketsQuery, updateTicketMutation }
 }

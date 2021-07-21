@@ -1,5 +1,5 @@
-import type { TicketInput } from '@/models/ticket'
-import { TicketKind } from '@/constants/constants'
+import { TicketKind } from '@/types/enums'
+import type { TicketInput } from '@/types/types'
 
 export const newTickets: TicketInput[] = [
   {

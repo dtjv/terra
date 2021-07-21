@@ -1,5 +1,7 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { getVehicles } from '@/lib/db'
+import { toVehicle } from '@/types/utils'
+import type { Vehicle, VehicleDocument } from '@/types/types'
 
 //------------------------------------------------------------------------------
 // Handler for api calls to `/api/vehicles`
@@ -9,7 +11,10 @@ const handler: NextApiHandler = async (
   res: NextApiResponse
 ) => {
   if (req.method === 'GET') {
-    const vehicles = await getVehicles()
+    const vehicleDocs: VehicleDocument[] = await getVehicles()
+    const vehicles: Vehicle[] = vehicleDocs.map((vehicleDoc) =>
+      toVehicle(vehicleDoc)
+    )
     return res.status(200).json(vehicles)
   }
 

@@ -2,20 +2,20 @@ import * as React from 'react'
 import { useDrop } from 'react-dnd'
 import { GridItem } from '@chakra-ui/react'
 import type { UseMutationResult } from 'react-query'
-import { Ticket } from '@/components/ticket'
+import { TicketView } from '@/components/ticket'
 import {
   getPreviousCellWithTicket,
   isCellCoveredByTicket,
   isSpaceForTicketAtCell,
 } from '@/lib/utils'
-import { CellKind, DragItem } from '@/constants/constants'
-import type { Cell, Row, TicketData, TicketContext } from '@/types/types'
+import { CellKind, DragItem } from '@/types/enums'
+import type { Cell, Row, Ticket, TicketContext } from '@/types/types'
 
 export type ScheduleDataCellProps = {
   cell: Cell
   rows: Row[]
   timeBlockInMinutes: number
-  updateTicket: UseMutationResult<TicketData, Error, TicketData, TicketContext>
+  updateTicket: UseMutationResult<Ticket, Error, Ticket, TicketContext>
 }
 
 export const ScheduleDataCell: React.FC<ScheduleDataCellProps> = ({
@@ -29,7 +29,7 @@ export const ScheduleDataCell: React.FC<ScheduleDataCellProps> = ({
   const [, dropRef] = useDrop(
     () => ({
       accept: DragItem.TICKET,
-      canDrop: (dragTicket: TicketData, monitor) => {
+      canDrop: (dragTicket: Ticket, monitor) => {
         if (cell.kind !== CellKind.DATA_CELL) {
           return false
         }
@@ -81,12 +81,12 @@ export const ScheduleDataCell: React.FC<ScheduleDataCellProps> = ({
 
         return false
       },
-      drop: (dragTicket: TicketData) => {
+      drop: (dragTicket: Ticket) => {
         if (cell.kind === CellKind.DATA_CELL) {
           updateTicket.mutate({
             ...dragTicket,
-            vehicleId: cell.colHeader.vehicleId,
-            scheduledDateTimeISO: cell.rowHeader.scheduleTimeISO,
+            vehicleKey: cell.colHeader.key,
+            scheduledAt: new Date(cell.rowHeader.scheduleTimeISO),
           })
         }
       },
@@ -118,7 +118,10 @@ export const ScheduleDataCell: React.FC<ScheduleDataCellProps> = ({
           : {}),
       }}
     >
-      <Ticket ticket={cell.ticket} timeBlockInMinutes={timeBlockInMinutes} />
+      <TicketView
+        ticket={cell.ticket}
+        timeBlockInMinutes={timeBlockInMinutes}
+      />
     </GridItem>
   )
 }

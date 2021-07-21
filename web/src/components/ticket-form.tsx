@@ -10,8 +10,8 @@ import {
 } from '@chakra-ui/react'
 //import { superstructResolver } from '@hookform/resolvers/superstruct'
 //import { TicketFormSchema } from '@/schemas/schemas'
-import type { TicketProps } from '@/models/ticket'
-import { TicketKind } from '@/constants/constants'
+import { TicketKind } from '@/types/enums'
+import type { TicketInput } from '@/types/types'
 
 //-----------------------------------------------------------------------------
 //
@@ -26,7 +26,7 @@ export const TicketForm: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
-  } = useForm<TicketProps>({
+  } = useForm<TicketInput>({
     mode: 'onTouched',
     defaultValues: {
       durationInMinutes: 30,
@@ -85,7 +85,7 @@ export const TicketForm: React.FC = () => {
   // Event Handlers
   //
   //---------------------------------------------------------------------------
-  const onSubmit: SubmitHandler<TicketProps> = (fields) => {
+  const onSubmit: SubmitHandler<TicketInput> = (fields) => {
     const newTicket = {
       ...fields,
       scheduleAt: new Date(Date.now()),

@@ -1,5 +1,7 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { updateTicket } from '@/lib/db'
+import { toTicket } from '@/types/utils'
+import type { TicketDocument } from '@/types/types'
 
 //------------------------------------------------------------------------------
 // Handler for api calls to `/api/tickets/:id`
@@ -16,8 +18,11 @@ const handler: NextApiHandler = async (
 
   if (req.method === 'PATCH') {
     try {
-      const updatedTicket = await updateTicket(ticketId, req.body.updatedTicket)
-      return res.status(200).json(updatedTicket)
+      const updatedTicket: TicketDocument = await updateTicket(
+        ticketId,
+        req.body.updatedTicket
+      )
+      return res.status(200).json(toTicket(updatedTicket))
     } catch (error) {
       return res.status(500).send(`Failed to update ticket: '${ticketId}'`)
     }

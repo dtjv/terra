@@ -1,13 +1,12 @@
 import mongoose from 'mongoose'
-
 import { TicketModel } from '@/models/ticket'
+import { VehicleModel } from '@/models/vehicle'
 import type {
   TicketInput,
   UpdatedTicket,
   TicketDocument,
-} from '@/models/ticket'
-import { VehicleModel } from '@/models/vehicle'
-import type { VehicleDocument } from '@/models/vehicle'
+  VehicleDocument,
+} from '@/types/types'
 
 mongoose.set('toJSON', { virtuals: true })
 

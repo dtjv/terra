@@ -1,5 +1,5 @@
 import * as React from 'react'
-//import type { UseMutationResult } from 'react-query'
+import type { UseMutationResult } from 'react-query'
 import { useTickets } from '@/hooks/use-tickets'
 import { useVehicles } from '@/hooks/use-vehicles'
 import {
@@ -8,19 +8,17 @@ import {
   makeRowHeaders,
   makeColHeaders,
 } from '@/lib/utils'
-import type { Row } from '@/types/types'
-import type { TicketLeanDoc } from '@/models/ticket'
-import type { VehicleLeanDoc } from '@/models/vehicle'
-import {
-  SCHEDULE_START_HOUR,
-  SCHEDULE_END_HOUR,
-  SCHEDULE_TIME_BLOCK_IN_MINUTES,
-} from '@/constants/constants'
+import type { Row, Ticket, Vehicle, TicketContext } from '@/types/types'
+
+const startHour = process.env['NEXT_PUBLIC_SCHEDULE_START_HOUR_IN_24HR'] ?? '8'
+const endHour = process.env['NEXT_PUBLIC_SCHEDULE_END_HOUR_IN_24HR'] ?? '18'
+const timeBlockInMinutes =
+  process.env['NEXT_PUBLIC_SCHEDULE_TIME_BLOCK_IN_MINUTES'] ?? '30'
 
 const scheduleConfig = {
-  startHour: SCHEDULE_START_HOUR,
-  endHour: SCHEDULE_END_HOUR,
-  timeBlockInMinutes: SCHEDULE_TIME_BLOCK_IN_MINUTES,
+  startHour: parseInt(startHour, 10),
+  endHour: parseInt(endHour, 10),
+  timeBlockInMinutes: parseInt(timeBlockInMinutes, 10),
 }
 
 type UseScheduleReturnType = {
@@ -28,17 +26,10 @@ type UseScheduleReturnType = {
   isError: boolean
   error: Error | undefined
   rows: Row[]
-  /*
-  updateTicketMutation: UseMutationResult<
-    TicketData,
-    Error,
-    TicketData,
-    TicketContext
-  >
-  */
+  updateTicketMutation: UseMutationResult<Ticket, Error, Ticket, TicketContext>
   data: {
-    tickets: TicketLeanDoc[]
-    vehicles: VehicleLeanDoc[]
+    tickets: Ticket[]
+    vehicles: Vehicle[]
     scheduleConfig: {
       startHour: number
       endHour: number
@@ -48,7 +39,7 @@ type UseScheduleReturnType = {
 }
 
 export const useSchedule = (): UseScheduleReturnType => {
-  const { ticketsQuery /*updateTicketMutation*/ } = useTickets()
+  const { ticketsQuery, updateTicketMutation } = useTickets()
   const { vehiclesQuery } = useVehicles()
 
   const rowHeaders = React.useMemo(() => {
@@ -83,7 +74,7 @@ export const useSchedule = (): UseScheduleReturnType => {
       ? (vehiclesQuery.error as Error)
       : undefined,
     rows,
-    //updateTicketMutation,
+    updateTicketMutation,
     data: {
       scheduleConfig,
       tickets: ticketsQuery.data ?? [],

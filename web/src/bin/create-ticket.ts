@@ -1,6 +1,6 @@
 import { connectToDB, createTicket } from '@/lib/db'
-import type { Ticket } from '@/models/ticket'
-import { TicketKind } from '@/constants/constants'
+import { TicketKind } from '@/types/enums'
+import type { TicketInput } from '@/types/types'
 
 export const makeTicket = async (): Promise<void> => {
   if (!(await connectToDB())) {
@@ -8,7 +8,7 @@ export const makeTicket = async (): Promise<void> => {
     process.exit(1)
   }
 
-  const newTicket: Ticket = {
+  const newTicket: TicketInput = {
     ticketKind: TicketKind.DELIVERY,
     customerName: 'sally',
     destinationAddress: {
@@ -20,9 +20,9 @@ export const makeTicket = async (): Promise<void> => {
     durationInMinutes: 30,
   }
 
-  const ticket = await createTicket(newTicket)
+  const ticketDocument = await createTicket(newTicket)
 
-  console.log(ticket)
+  console.log(ticketDocument)
 
   process.exit(0)
 }

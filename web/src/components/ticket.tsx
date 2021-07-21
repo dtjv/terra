@@ -2,15 +2,16 @@ import * as React from 'react'
 import { useDrag } from 'react-dnd'
 import { Box, Flex } from '@chakra-ui/react'
 import { DragHandleIcon } from '@chakra-ui/icons'
-import type { TicketData } from '@/types/types'
-import { DragItem, MIN_ROW_HEIGHT } from '@/constants/constants'
+import { DragItem } from '@/types/enums'
+import { MIN_ROW_HEIGHT } from '@/constants/constants'
+import type { Ticket } from '@/types/types'
 
-export type TicketProps = {
-  ticket: TicketData | undefined
+export type TicketViewProps = {
+  ticket: Ticket | undefined
   timeBlockInMinutes: number
 }
 
-export const Ticket: React.FC<TicketProps> = ({
+export const TicketView: React.FC<TicketViewProps> = ({
   ticket,
   timeBlockInMinutes,
 }) => {
@@ -55,7 +56,7 @@ export const Ticket: React.FC<TicketProps> = ({
           </div>
         </Flex>
         <Box fontSize="xs" color="gray.700">
-          {ticket.timeRange}
+          {ticket.ticketRange}
         </Box>
       </Box>
     </Box>

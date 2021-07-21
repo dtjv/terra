@@ -1,5 +1,7 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { getTickets, createTicket } from '@/lib/db'
+import { toTicket } from '@/types/utils'
+import type { Ticket, TicketDocument } from '@/types/types'
 
 //------------------------------------------------------------------------------
 // Handler for api calls to `/api/tickets`
@@ -10,7 +12,10 @@ const handler: NextApiHandler = async (
 ) => {
   if (req.method === 'GET') {
     try {
-      const tickets = await getTickets()
+      const ticketDocs: TicketDocument[] = await getTickets()
+      const tickets: Ticket[] = ticketDocs.map((ticketDoc) =>
+        toTicket(ticketDoc)
+      )
       return res.status(200).json(tickets)
     } catch (error) {
       return res
@@ -23,8 +28,8 @@ const handler: NextApiHandler = async (
     const { newTicket } = req.body
 
     try {
-      const ticket = await createTicket(newTicket)
-      return res.status(200).json(ticket)
+      const ticketDoc: TicketDocument = await createTicket(newTicket)
+      return res.status(200).json(toTicket(ticketDoc))
     } catch (error) {
       return res
         .status(500)

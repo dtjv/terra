@@ -1,9 +1,14 @@
 import _ from 'lodash'
 import { set, format, addMinutes } from 'date-fns'
-import type { Ticket, TicketDocument } from '@/models/ticket'
-import type { Vehicle } from '@/models/vehicle'
-import type { Row, Cell, RowHeader, ColHeader } from '@/types/types'
-import { CellKind } from '@/constants/constants'
+import { CellKind } from '@/types/enums'
+import type {
+  Ticket,
+  Vehicle,
+  Row,
+  Cell,
+  RowHeader,
+  ColHeader,
+} from '@/types/types'
 
 export interface MakeScheduleTimesProps {
   startHour: number
@@ -66,7 +71,7 @@ export const makeRowHeaders = ({
 }
 
 export const makeColHeaders = (vehicles: Vehicle[]): ColHeader[] => {
-  return [{ key: '', name: '' }, ...vehicles]
+  return [{ id: '', key: '', name: '' }, ...vehicles]
 }
 
 export interface GroupTicketsByProps {
@@ -94,7 +99,7 @@ export const groupTicketsBy = ({
 }
 
 export interface MakeRowsProps {
-  tickets: TicketDocument[]
+  tickets: Ticket[]
   rowHeaders: RowHeader[]
   colHeaders: ColHeader[]
 }
@@ -213,7 +218,7 @@ export const isCellCoveredByTicket = ({
 }
 
 export interface IsSpaceForTicketAtCellProps {
-  ticket: TicketDocument
+  ticket: Ticket
   targetCell: Cell
   rows: Row[]
   timeBlockInMinutes: number

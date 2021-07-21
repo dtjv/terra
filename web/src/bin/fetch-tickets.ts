@@ -6,8 +6,8 @@ export const fetchTickets = async (): Promise<void> => {
     process.exit(1)
   }
 
-  const tickets = await getTickets()
-  console.log(tickets)
+  const ticketDocuments = await getTickets()
+  console.log(ticketDocuments)
 
   process.exit(0)
 }

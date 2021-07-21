@@ -4,7 +4,8 @@ import { useSchedule } from '@/hooks/use-schedule'
 import { ScheduleColHeader } from '@/components/schedule-col-header'
 import { ScheduleRowHeader } from '@/components/schedule-row-header'
 import { ScheduleDataCell } from '@/components//schedule-data-cell'
-import { MIN_ROW_HEIGHT, MIN_COL_WIDTH, CellKind } from '@/constants/constants'
+import { CellKind } from '@/types/enums'
+import { MIN_ROW_HEIGHT, MIN_COL_WIDTH } from '@/constants/constants'
 
 export const Schedule: React.FC = () => {
   const { isLoading, isError, rows, error, updateTicketMutation, data } =
