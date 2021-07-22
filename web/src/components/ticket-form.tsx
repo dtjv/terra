@@ -8,8 +8,8 @@ import {
   Button,
   Select,
 } from '@chakra-ui/react'
-//import { superstructResolver } from '@hookform/resolvers/superstruct'
-//import { TicketFormSchema } from '@/schemas/schemas'
+import { superstructResolver } from '@hookform/resolvers/superstruct'
+import { TicketFormSchema } from '@/schemas/schemas'
 import { TicketKind } from '@/types/enums'
 import type { TicketInput } from '@/types/types'
 
@@ -31,7 +31,7 @@ export const TicketForm: React.FC = () => {
     defaultValues: {
       durationInMinutes: 30,
     },
-    //resolver: superstructResolver(TicketFormSchema, { coerce: true }),
+    resolver: superstructResolver(TicketFormSchema, { coerce: true }),
   })
 
   const watchDeliveryAddress = watch([
