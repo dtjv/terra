@@ -1,28 +1,22 @@
 import * as React from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import type { UseFormReturn } from 'react-hook-form'
 import {
-  FormErrorMessage,
-  FormLabel,
-  FormControl,
-  Input,
   Button,
   Select,
+  FormLabel,
+  FormControl,
+  FormErrorMessage,
 } from '@chakra-ui/react'
-import { object, enums, string, number, date } from 'superstruct'
+import { object, enums, string, number } from 'superstruct'
 import { superstructResolver } from '@hookform/resolvers/superstruct'
 import { Times } from '@/components/demo/times'
-
-/*
-interface Times {
-  id: number,
-  timeISO: string
-}
-*/
+import { Zip } from '@/components/demo/zip'
 
 const Schema = object({
   zip: enums(['11', '22']),
   truck: string(),
-  bookedAt: date(),
+  bookedAtISO: string(),
   duration: number(),
 })
 
@@ -30,49 +24,35 @@ interface TicketInput {
   zip: string
   truck: string
   duration: number
-  bookedAt: Date
+  bookedAtISO: string
 }
 
-//type NewTicket = Omit<TicketInput, 'bookedAt'> & {
-//  scheduledAt: Date
-//}
-//
-
 export const Demo: React.FC = () => {
+  const form: UseFormReturn<TicketInput> = useForm<TicketInput>({
+    mode: 'onTouched',
+    defaultValues: { truck: '102', bookedAtISO: '', duration: 30 },
+    resolver: superstructResolver(Schema, { coerce: true }),
+  })
   const {
-    //getValues,
-    control,
     register,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
-  } = useForm<TicketInput>({
-    mode: 'onTouched',
-    defaultValues: { truck: '102', bookedAt: undefined, duration: 30 },
-    resolver: superstructResolver(Schema, { coerce: true }),
-  })
-  //const [times, setTimes] = React.useState<Times[]>([])
-  //const [bookedAt, setBookedAt] = React.useState<Date | undefined>(undefined)
+  } = form
 
   //---------------------------------------------------------------------------
   // Effects
   //
   // ** A **
   // if zip changes then
-  //   call maps api
+  //   [x] call maps api
   //   if maps api result !== duration then
-  //     set duration to maps api result
-  //     clear list of times
+  //     [x] set duration to maps api result
+  //     [x] clear list of times
   //
   // ** B **
-  // if truck changes then
-  //   clear list of times
-  //
-  // ** C **
-  // if duration & truck exist then
-  //   call times api
-  //   set list of times
-  //
-  // C will be a watch component and render a list of times when its props chg.
+  // if duration | truck change then
+  //   [x] call times api
+  //   [x] render new list of times
   //---------------------------------------------------------------------------
 
   //---------------------------------------------------------------------------
@@ -90,11 +70,7 @@ export const Demo: React.FC = () => {
   //---------------------------------------------------------------------------
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
-      <FormControl isInvalid={!!errors.zip} isRequired>
-        <FormLabel htmlFor="zip">zip</FormLabel>
-        <Input id="zip" {...register('zip')} />
-        <FormErrorMessage> {errors?.zip?.message ?? ''} </FormErrorMessage>
-      </FormControl>
+      <Zip {...form} />
 
       <FormControl isInvalid={!!errors.truck} isRequired>
         <FormLabel htmlFor="truck">truck</FormLabel>
@@ -105,7 +81,7 @@ export const Demo: React.FC = () => {
         <FormErrorMessage>{errors?.truck?.message ?? ''}</FormErrorMessage>
       </FormControl>
 
-      <Times control={control} />
+      <Times {...form} />
 
       <Button mt={4} colorScheme="teal" isLoading={isSubmitting} type="submit">
         Submit

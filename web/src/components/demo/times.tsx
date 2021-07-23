@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useWatch, Controller } from 'react-hook-form'
-import type { Control } from 'react-hook-form'
+import type { UseFormReturn } from 'react-hook-form'
 import {
   FormLabel,
   FormControl,
@@ -14,10 +14,6 @@ interface TicketInput {
   truck: string
   duration: number
   bookedAtISO: string
-}
-
-interface TimesProps {
-  control: Control<TicketInput>
 }
 
 interface TimesData {
@@ -43,7 +39,10 @@ const api = async (): Promise<TimesData[]> => {
     }))
 }
 
-export const Times = ({ control }: TimesProps) => {
+export const Times = ({
+  control,
+  formState: { errors },
+}: UseFormReturn<TicketInput>) => {
   const duration = useWatch({
     control,
     name: 'duration',
@@ -56,9 +55,11 @@ export const Times = ({ control }: TimesProps) => {
 
   React.useEffect(() => {
     ;(async () => {
-      const results = await api()
-      console.log(results)
-      setTimes(results)
+      if (!errors.duration && !errors.truck) {
+        const results = await api()
+        console.log(`-> times:`, results)
+        setTimes(results)
+      }
     })()
   }, [duration, truck])
 
