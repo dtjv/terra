@@ -10,9 +10,9 @@ export const AddressSchema = object({
 })
 
 export const TicketFormSchema = object({
-  ticketType: enums([TicketKind.PICKUP, TicketKind.DELIVERY]),
+  ticketKind: enums([TicketKind.PICKUP, TicketKind.DELIVERY]),
   customerName: size(string(), 2, 40),
-  deliveryAddress: AddressSchema,
+  destinationAddress: AddressSchema,
   vehicleKey: string(),
   scheduledAt: date(),
   durationInMinutes: IntSchema,
