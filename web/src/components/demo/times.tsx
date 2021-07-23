@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { useWatch, Control } from 'react-hook-form'
+import { useWatch, Controller } from 'react-hook-form'
+import type { Control } from 'react-hook-form'
 import {
   FormLabel,
   FormControl,
@@ -12,7 +13,7 @@ interface TicketInput {
   zip: string
   truck: string
   duration: number
-  bookedAt: Date
+  bookedAtISO: string
 }
 
 interface TimesProps {
@@ -66,17 +67,28 @@ export const Times = ({ control }: TimesProps) => {
       {times.length > 0 ? (
         <FormControl as="fieldset" isRequired>
           <FormLabel as="legend">Pick a time:</FormLabel>
-          <RadioGroup id="scheduledAt">
-            <Stack>
-              {times.map(({ id, dateISO }) => {
-                return (
-                  <Radio key={id} value={dateISO}>
-                    {new Date(dateISO).toLocaleString()}
-                  </Radio>
-                )
-              })}
-            </Stack>
-          </RadioGroup>
+          <Controller
+            name="bookedAtISO"
+            control={control}
+            render={({ field: { onChange, value, ref } }) => (
+              <RadioGroup
+                name="bookedAtISO"
+                onChange={onChange}
+                value={value}
+                ref={ref}
+              >
+                <Stack>
+                  {times.map(({ id, dateISO }) => {
+                    return (
+                      <Radio key={id} value={dateISO}>
+                        {new Date(dateISO).toLocaleString()}
+                      </Radio>
+                    )
+                  })}
+                </Stack>
+              </RadioGroup>
+            )}
+          />
         </FormControl>
       ) : null}
     </>
