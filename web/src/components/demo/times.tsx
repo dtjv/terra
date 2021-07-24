@@ -39,10 +39,10 @@ const api = async (): Promise<TimesData[]> => {
     }))
 }
 
-export const Times = ({
+export const Times: React.FC<UseFormReturn<TicketInput>> = ({
   control,
   formState: { errors },
-}: UseFormReturn<TicketInput>) => {
+}) => {
   const duration = useWatch({
     control,
     name: 'duration',
@@ -61,7 +61,7 @@ export const Times = ({
         setTimes(results)
       }
     })()
-  }, [duration, truck])
+  }, [duration, truck, errors.duration, errors.truck])
 
   return (
     <>

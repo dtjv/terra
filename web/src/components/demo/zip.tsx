@@ -27,12 +27,12 @@ const api = async (): Promise<number> => {
   return 30 * rand()
 }
 
-export const Zip = ({
+export const Zip: React.FC<UseFormReturn<TicketInput>> = ({
   control,
   register,
   setValue,
   formState: { errors },
-}: UseFormReturn<TicketInput>) => {
+}) => {
   const zip = useWatch({
     control,
     name: 'zip',
@@ -46,7 +46,7 @@ export const Zip = ({
         setValue('duration', results)
       }
     })()
-  }, [zip])
+  }, [zip, errors.zip, setValue])
 
   return (
     <>
