@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { TicketForm } from '@/components/ticket-form'
+import { CreateTicketForm } from '@/components/ticket/create-form'
 
-const FormDemo: React.FC = () => {
-  return <TicketForm />
+const CreateTicketDemo: React.FC = () => {
+  return <CreateTicketForm />
 }
 
-export default FormDemo
+export default CreateTicketDemo
