@@ -16,7 +16,7 @@ export const makeTicket = async (): Promise<void> => {
       zip: '97301',
     },
     vehicleKey: '302',
-    scheduledAt: new Date('2021-06-05T16:00:00.000Z'),
+    scheduledAtISO: '2021-06-05T16:00:00.000Z',
     durationInMinutes: 30,
   }
 

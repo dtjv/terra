@@ -39,8 +39,8 @@ const ticketSchema = new Schema<Ticket, Model<Ticket>, Ticket>({
     type: Schema.Types.ObjectId,
     ref: 'Vehicle',
   },
-  scheduledAt: {
-    type: Schema.Types.Date,
+  scheduledAtISO: {
+    type: String,
     required: true,
   },
   durationInMinutes: {
@@ -51,16 +51,18 @@ const ticketSchema = new Schema<Ticket, Model<Ticket>, Ticket>({
 })
 
 ticketSchema.virtual('ticketRange').get(function (this: Ticket) {
-  const startTime = `${format(this.scheduledAt, 'h:mmaaa')}`
+  const scheduledAt = new Date(this.scheduledAtISO)
+  const startTime = `${format(scheduledAt, 'h:mmaaa')}`
   const endTime = `${format(
-    addMinutes(this.scheduledAt, this.durationInMinutes),
+    addMinutes(scheduledAt, this.durationInMinutes),
     'h:mmaaa'
   )}`
   return `${startTime} - ${endTime}`
 })
 
 ticketSchema.virtual('scheduledStartTime').get(function (this: Ticket) {
-  return format(this.scheduledAt, 'h:mm a')
+  const scheduledAt = new Date(this.scheduledAtISO)
+  return format(scheduledAt, 'h:mm a')
 })
 
 ticketSchema.pre<Ticket>('save', async function () {

@@ -86,7 +86,7 @@ export const ScheduleDataCell: React.FC<ScheduleDataCellProps> = ({
           updateTicket.mutate({
             ...dragTicket,
             vehicleKey: cell.colHeader.key,
-            scheduledAt: new Date(cell.rowHeader.scheduleTimeISO),
+            scheduledAtISO: cell.rowHeader.scheduleTimeISO,
           })
         }
       },
