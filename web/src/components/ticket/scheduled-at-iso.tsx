@@ -8,7 +8,7 @@ import {
   Radio,
   RadioGroup,
 } from '@chakra-ui/react'
-import type { TicketInput } from '@/types/types'
+import type { Vehicle, TicketInput } from '@/types/types'
 
 // TODO: remove
 interface TimesData {
@@ -27,7 +27,7 @@ const rand = (min = 3, max = 6): number => {
 }
 
 // TODO: remove
-const api = async (): Promise<TimesData[]> => {
+const getTimesAPI = async (): Promise<TimesData[]> => {
   console.log(`retrieving times...`)
   await wait(2000)
   return Array(rand())
@@ -38,6 +38,16 @@ const api = async (): Promise<TimesData[]> => {
     }))
 }
 
+const getVehiclesAPI = async (): Promise<Vehicle[]> => {
+  console.log(`retrieving vehicles...`)
+  await wait(2000)
+  return [
+    { id: 'A', key: '102', name: 'Truck 102' },
+    { id: 'B', key: '202', name: 'Truck 202' },
+    { id: 'C', key: '302', name: 'Truck 302' },
+  ]
+}
+
 export const ScheduleAtISO: React.FC<UseFormReturn<TicketInput>> = ({
   control,
   formState: { errors },
@@ -45,11 +55,28 @@ export const ScheduleAtISO: React.FC<UseFormReturn<TicketInput>> = ({
   const durationInMinutes = useWatch({ control, name: 'durationInMinutes' })
   const vehicleKey = useWatch({ control, name: 'vehicleKey' })
   const [timeChoices, setTimeChoices] = React.useState<TimesData[]>([])
+  const [vehicles, setVehicles] = React.useState<Vehicle[]>([])
+
+  const isValidVehicleKey = React.useCallback(
+    (key: string) => !!vehicles.find((data) => data.key === key),
+    [vehicles]
+  )
 
   React.useEffect(() => {
     ;(async () => {
-      if (!errors.durationInMinutes && !errors.vehicleKey) {
-        const choices = await api()
+      const vehicleData = await getVehiclesAPI()
+      setVehicles(vehicleData)
+    })()
+  }, [])
+
+  React.useEffect(() => {
+    ;(async () => {
+      if (
+        !errors.durationInMinutes &&
+        !errors.vehicleKey &&
+        isValidVehicleKey(vehicleKey)
+      ) {
+        const choices = await getTimesAPI()
         console.log(`-> time choices:`, choices)
         setTimeChoices(choices)
       }
@@ -59,6 +86,7 @@ export const ScheduleAtISO: React.FC<UseFormReturn<TicketInput>> = ({
     vehicleKey,
     errors.durationInMinutes,
     errors.vehicleKey,
+    isValidVehicleKey,
   ])
 
   return (
