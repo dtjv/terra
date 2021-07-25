@@ -33,13 +33,16 @@ export const DestinationAddress: React.FC<UseFormReturn<TicketInput>> = ({
 
   const api = React.useCallback(
     async (street: string, zip: string): Promise<number> => {
+      const factor =
+        zip === '97301' ? rand() : zip === '97302' ? rand(2, 6) : rand(3, 7)
+
       console.log(
         `calculating duration for: {street: ${street}, zip: ${zip}}...`
       )
       await wait(2000)
-      return 30 * rand()
+      return 30 * factor
     },
-    [street, zip]
+    []
   )
 
   React.useEffect(() => {
@@ -57,6 +60,7 @@ export const DestinationAddress: React.FC<UseFormReturn<TicketInput>> = ({
   }, [
     street,
     zip,
+    api,
     setValue,
     errors.destinationAddress?.street,
     errors.destinationAddress?.zip,
