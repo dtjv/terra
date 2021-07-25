@@ -7,13 +7,13 @@ export const IntSchema = coerce(number(), string(), (value) => parseInt(value))
 export const AddressSchema = object({
   // TODO:
   // - is size necessary?
-  street: size(string(), 2),
+  street: size(string(), 2, 50),
   zip: enums(oregon.map((location) => location.zip)),
 })
 
 export const TicketFormSchema = object({
   ticketKind: enums([TicketKind.PICKUP, TicketKind.DELIVERY]),
-  customerName: size(string(), 2),
+  customerName: size(string(), 2, 50),
 
   //TODO
   // - add phone
