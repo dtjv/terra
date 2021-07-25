@@ -6,11 +6,12 @@ import {
   useMutation,
   UseMutationResult,
 } from 'react-query'
+import {
+  TICKETS_QUERY_KEY,
+  TICKETS_API,
+  TICKETS_REFRESH_INTERVAL_IN_MS,
+} from '@/constants/constants'
 import type { Ticket, UpdatedTicket, TicketContext } from '@/types/types'
-
-const TICKETS_QUERY_KEY = 'tickets'
-const TICKETS_API = process.env['NEXT_PUBLIC_TICKETS_API'] ?? ''
-const TICKETS_REFRESH_INTERVAL = 1000 * 60 // 1 minute in ms
 
 type UseTicketsReturnType = {
   ticketsQuery: UseQueryResult<Ticket[]>
@@ -28,7 +29,7 @@ export const useTickets = (): UseTicketsReturnType => {
       return data
     },
     {
-      refetchInterval: TICKETS_REFRESH_INTERVAL,
+      refetchInterval: TICKETS_REFRESH_INTERVAL_IN_MS,
       refetchIntervalInBackground: true,
     }
   )

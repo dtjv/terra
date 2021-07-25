@@ -8,17 +8,17 @@ import {
   makeRowHeaders,
   makeColHeaders,
 } from '@/lib/utils'
+import {
+  SCHEDULE_START_HOUR_IN_24HR,
+  SCHEDULE_END_HOUR_IN_24HR,
+  SCHEDULE_TIME_BLOCK_IN_MINUTES,
+} from '@/constants/constants'
 import type { Row, Ticket, Vehicle, TicketContext } from '@/types/types'
 
-const startHour = process.env['NEXT_PUBLIC_SCHEDULE_START_HOUR_IN_24HR'] ?? '8'
-const endHour = process.env['NEXT_PUBLIC_SCHEDULE_END_HOUR_IN_24HR'] ?? '18'
-const timeBlockInMinutes =
-  process.env['NEXT_PUBLIC_SCHEDULE_TIME_BLOCK_IN_MINUTES'] ?? '30'
-
 const scheduleConfig = {
-  startHour: parseInt(startHour, 10),
-  endHour: parseInt(endHour, 10),
-  timeBlockInMinutes: parseInt(timeBlockInMinutes, 10),
+  startHour: SCHEDULE_START_HOUR_IN_24HR,
+  endHour: SCHEDULE_END_HOUR_IN_24HR,
+  timeBlockInMinutes: SCHEDULE_TIME_BLOCK_IN_MINUTES,
 }
 
 type UseScheduleReturnType = {

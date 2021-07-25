@@ -1,9 +1,7 @@
 import axios from 'axios'
 import { useQuery, UseQueryResult } from 'react-query'
+import { VEHICLES_QUERY_KEY, VEHICLES_API } from '@/constants/constants'
 import type { Vehicle } from '@/types/types'
-
-const VEHICLES_QUERY_KEY = 'vehicles'
-const VEHICLES_API = process.env['NEXT_PUBLIC_VEHICLES_API'] ?? ''
 
 type UseVehiclesReturnType<T> = {
   vehiclesQuery: UseQueryResult<T>
