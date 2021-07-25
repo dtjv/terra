@@ -20,13 +20,6 @@ const rand = (min = 1, max = 4): number => {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-// TODO: remove
-const api = async (): Promise<number> => {
-  console.log(`calculating duration...`)
-  await wait(2000)
-  return 30 * rand()
-}
-
 const isZipValid = (zip: string) => !!oregon.find((data) => data.zip === zip)
 
 export const DestinationAddress: React.FC<UseFormReturn<TicketInput>> = ({
@@ -38,6 +31,17 @@ export const DestinationAddress: React.FC<UseFormReturn<TicketInput>> = ({
   const street = useWatch({ control, name: 'destinationAddress.street' })
   const zip = useWatch({ control, name: 'destinationAddress.zip' })
 
+  const api = React.useCallback(
+    async (street: string, zip: string): Promise<number> => {
+      console.log(
+        `calculating duration for: {street: ${street}, zip: ${zip}}...`
+      )
+      await wait(2000)
+      return 30 * rand()
+    },
+    [street, zip]
+  )
+
   React.useEffect(() => {
     ;(async () => {
       if (
@@ -45,7 +49,7 @@ export const DestinationAddress: React.FC<UseFormReturn<TicketInput>> = ({
         !errors.destinationAddress?.zip &&
         isZipValid(zip)
       ) {
-        const duration = await api()
+        const duration = await api(street, zip)
         console.log(`-> duration:`, duration)
         setValue('durationInMinutes', duration)
       }
