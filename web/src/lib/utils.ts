@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { get, groupBy, keyBy } from 'lodash'
 import { set, format, addMinutes } from 'date-fns'
 import { CellKind } from '@/types/enums'
 import type {
@@ -87,12 +87,12 @@ export const groupTicketsBy = ({
 }: GroupTicketsByProps): {
   [key: string]: { [key: string]: Ticket }
 } => {
-  const ticketsByRow = _.groupBy(tickets, (ticket) => ticket[rowField])
+  const ticketsByRow = groupBy(tickets, (ticket) => ticket[rowField])
 
   return Object.keys(ticketsByRow).reduce(
     (result, rowKey) => ({
       ...result,
-      [rowKey]: _.keyBy(ticketsByRow[rowKey], colField),
+      [rowKey]: keyBy(ticketsByRow[rowKey], colField),
     }),
     {}
   )
@@ -151,10 +151,7 @@ export const makeRows = ({
           kind: CellKind.DATA_CELL,
           rowHeader,
           colHeader,
-          ticket: _.get(ticketHash, [
-            rowHeader.hourMinuteFormat,
-            colHeader.key,
-          ]),
+          ticket: get(ticketHash, [rowHeader.hourMinuteFormat, colHeader.key]),
         }
 
         return cell
