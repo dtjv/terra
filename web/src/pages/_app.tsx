@@ -1,8 +1,8 @@
 import * as React from 'react'
 import type { AppProps } from 'next/app'
-import { ChakraProvider } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Hydrate } from 'react-query/hydration'
+import { Chakra } from '@/Chakra'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   const queryClientRef = React.useRef<QueryClient | null>(null)
@@ -12,14 +12,15 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   }
 
   return (
-    <ChakraProvider>
+    <Chakra>
       <QueryClientProvider client={queryClientRef.current}>
         <Hydrate state={pageProps.dehydratedState}>
           <Component {...pageProps} />
         </Hydrate>
       </QueryClientProvider>
-    </ChakraProvider>
+    </Chakra>
   )
 }
 
 export default App
+export { getServerSideProps } from '@/Chakra'
