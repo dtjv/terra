@@ -1,13 +1,10 @@
-import * as React from 'react'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { Schedule } from '@/components/schedule'
+import { Flex, Heading } from '@chakra-ui/react'
 
-const Home: React.FC = () => {
+const Home = () => {
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Schedule />
-    </DndProvider>
+    <Flex alignItems="center" justifyContent="center">
+      <Heading> Terra Website </Heading>
+    </Flex>
   )
 }
 

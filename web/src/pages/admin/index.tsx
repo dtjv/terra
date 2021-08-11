@@ -1,4 +1,7 @@
 import * as React from 'react'
+import NextLink from 'next/link'
+import type { UrlObject } from 'url'
+import { useRouter } from 'next/router'
 import {
   Avatar,
   Button,
@@ -11,6 +14,7 @@ import {
   useColorMode,
   Icon,
   useColorModeValue,
+  Link as ChakraLink,
 } from '@chakra-ui/react'
 import {
   FaLeaf,
@@ -34,12 +38,36 @@ const ToggleColorMode: React.FC = () => {
   )
 }
 
-interface Props {
+// https://github.com/vercel/next.js/blob/canary/packages/next/client/link.tsx
+interface LinkProps {
+  href: string | UrlObject
+}
+
+const Link: React.FC<LinkProps> = (props) => {
+  const { children, href, ...rest } = props
+  const { pathname } = useRouter()
+  const isActive = pathname === href
+
+  return (
+    <NextLink passHref href={href}>
+      <ChakraLink
+        bg={isActive ? 'gray.700' : 'inherit'}
+        color={isActive ? 'white' : 'inherit'}
+        {...rest}
+      >
+        {children}
+      </ChakraLink>
+    </NextLink>
+  )
+}
+
+interface MenuItemProps {
   icon: any
+  href: string | UrlObject
   children?: React.ReactNode
 }
 
-const MenuItem: React.FC<Props> = ({ icon, children }) => (
+const MenuItem: React.FC<MenuItemProps> = ({ icon, href, children }) => (
   <HStack
     spacing={4}
     cursor="pointer"
@@ -53,7 +81,9 @@ const MenuItem: React.FC<Props> = ({ icon, children }) => (
     transition="all 0.3s ease 0s"
   >
     <Icon as={icon} fontSize="lg" opacity={0.64} />
-    <Text fontWeight="medium"> {children} </Text>
+    <Text fontWeight="medium">
+      <Link href={href}> {children} </Link>{' '}
+    </Text>
   </HStack>
 )
 
@@ -81,15 +111,29 @@ const Dashboard: React.FC = () => {
               spacing={6}
             >
               <Stack spacing={4}>
-                <MenuItem icon={FaHome}>Dashboard </MenuItem>
-                <MenuItem icon={FaDatabase}>Inventory </MenuItem>
-                <MenuItem icon={FaTruck}>Delivery </MenuItem>
-                <MenuItem icon={FaShoppingCart}>POS </MenuItem>
-                <MenuItem icon={FaUserFriends}>Customers </MenuItem>
+                <MenuItem icon={FaHome} href="/dashboard">
+                  Dashboard{' '}
+                </MenuItem>
+                <MenuItem icon={FaDatabase} href="/inventory">
+                  Inventory{' '}
+                </MenuItem>
+                <MenuItem icon={FaTruck} href="/delivery">
+                  Delivery{' '}
+                </MenuItem>
+                <MenuItem icon={FaShoppingCart} href="/pos">
+                  POS{' '}
+                </MenuItem>
+                <MenuItem icon={FaUserFriends} href="/customers">
+                  Customers{' '}
+                </MenuItem>
               </Stack>
               <Stack spacing={4}>
-                <MenuItem icon={FaBell}>Notifications</MenuItem>
-                <MenuItem icon={FaCog}>Settings </MenuItem>
+                <MenuItem icon={FaBell} href="/notifications">
+                  Notifications
+                </MenuItem>
+                <MenuItem icon={FaCog} href="/settings">
+                  Settings{' '}
+                </MenuItem>
               </Stack>
             </Stack>
           </Box>
