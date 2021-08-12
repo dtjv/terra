@@ -1,17 +1,7 @@
 import type { ReactElement } from 'react'
-import { Button, useColorMode } from '@chakra-ui/react'
-import { AdminLayout } from '@/components/layouts/admin-layout'
 
-const ToggleColorMode = () => {
-  const { colorMode, toggleColorMode } = useColorMode()
-  return (
-    <header>
-      <Button onClick={toggleColorMode}>
-        Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
-      </Button>
-    </header>
-  )
-}
+import { AdminLayout } from '@/components/layouts/admin-layout'
+import { ToggleColorMode } from '@/components/toggle-color-mode'
 
 const Admin = () => {
   return <ToggleColorMode />
