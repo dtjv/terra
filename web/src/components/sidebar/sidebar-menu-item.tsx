@@ -1,26 +1,26 @@
 import { useRouter } from 'next/router'
-import { Text, Icon, HStack } from '@chakra-ui/react'
+import NextLink from 'next/link'
+import { Text, Icon, HStack, Link as ChakraLink } from '@chakra-ui/react'
 import type { UrlObject } from 'url'
 import type { ReactNode } from 'react'
-import { SidebarLink } from '@/components/sidebar/sidebar-link'
 
-export interface SidebarMenuItemProps {
+interface SidebarMenuItemProps {
   icon: any
   href: string | UrlObject
-  children?: ReactNode
+  children: ReactNode
 }
 
 export const SidebarMenuItem = ({
   icon,
   href,
   children,
+  ...rest
 }: SidebarMenuItemProps) => {
   const { pathname } = useRouter()
   const isActive = pathname === href
-
   return (
-    <SidebarLink href={href}>
-      <HStack
+    <NextLink passHref href={href}>
+      <ChakraLink
         spacing={4}
         cursor="pointer"
         px={3}
@@ -31,12 +31,20 @@ export const SidebarMenuItem = ({
         _hover={{
           bg: 'gray.700',
           color: 'white',
+          textDecoration: 'none',
+        }}
+        _focus={{
+          bg: 'gray.700',
+          color: 'white',
         }}
         transition="all 0.3s ease 0s"
+        {...rest}
       >
-        <Icon as={icon} fontSize="lg" opacity={0.64} />
-        <Text fontWeight="medium">{children}</Text>
-      </HStack>
-    </SidebarLink>
+        <HStack>
+          <Icon as={icon} fontSize="lg" opacity={0.64} />
+          <Text fontWeight="medium">{children}</Text>
+        </HStack>
+      </ChakraLink>
+    </NextLink>
   )
 }
