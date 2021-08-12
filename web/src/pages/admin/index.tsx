@@ -38,14 +38,12 @@ const ToggleColorMode = () => {
   )
 }
 
-// https://github.com/vercel/next.js/blob/canary/packages/next/client/link.tsx
 interface LinkProps {
   href: string | UrlObject
   children: ReactNode
 }
 
-const Link = (props: LinkProps) => {
-  const { children, href, ...rest } = props
+const Link = ({ children, href, ...rest }: LinkProps) => {
   const { pathname } = useRouter()
   const isActive = pathname === href
 
