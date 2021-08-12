@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useWatch, Controller } from 'react-hook-form'
-import type { UseFormReturn } from 'react-hook-form'
 import {
   FormLabel,
   FormControl,
@@ -8,6 +7,7 @@ import {
   Radio,
   RadioGroup,
 } from '@chakra-ui/react'
+import type { UseFormReturn } from 'react-hook-form'
 import type { Vehicle, TicketInput } from '@/types/types'
 
 // TODO: remove

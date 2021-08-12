@@ -1,5 +1,4 @@
 import { useForm, SubmitHandler } from 'react-hook-form'
-import type { UseFormReturn } from 'react-hook-form'
 import {
   Input,
   Button,
@@ -9,6 +8,7 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react'
 import { superstructResolver } from '@hookform/resolvers/superstruct'
+import type { UseFormReturn } from 'react-hook-form'
 import { ScheduleAtISO, DestinationAddress } from '@/components/ticket'
 import { TicketFormSchema } from '@/schemas'
 import { TicketKind } from '@/types/enums'

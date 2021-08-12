@@ -1,12 +1,12 @@
 import { useCallback, useEffect } from 'react'
 import { useWatch } from 'react-hook-form'
-import type { UseFormReturn } from 'react-hook-form'
 import {
   Input,
   FormLabel,
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react'
+import type { UseFormReturn } from 'react-hook-form'
 import oregon from '@/data/oregon.json'
 import type { TicketInput } from '@/types/types'
 
