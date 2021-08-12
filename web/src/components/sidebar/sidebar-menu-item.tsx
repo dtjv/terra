@@ -21,7 +21,6 @@ export const SidebarMenuItem = ({
   return (
     <NextLink passHref href={href}>
       <ChakraLink
-        spacing={4}
         cursor="pointer"
         px={3}
         py={2}
@@ -41,8 +40,10 @@ export const SidebarMenuItem = ({
         {...rest}
       >
         <HStack>
-          <Icon as={icon} fontSize="lg" opacity={0.64} />
-          <Text fontWeight="medium">{children}</Text>
+          <Icon as={icon} fontSize="xl" opacity={0.64} />
+          <Text letterSpacing=".5px" fontWeight="medium">
+            {children}
+          </Text>
         </HStack>
       </ChakraLink>
     </NextLink>

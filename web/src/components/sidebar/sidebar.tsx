@@ -39,7 +39,7 @@ export const Sidebar = () => (
       </Box>
       <Box flex="1 1 0" pt={4} px={4}>
         <Stack divider={<StackDivider borderColor="purple.200" />} spacing={6}>
-          <Stack spacing={4}>
+          <Stack spacing={2}>
             <SidebarMenuItem icon={FaHome} href="/admin">
               Dashboard{' '}
             </SidebarMenuItem>
@@ -56,7 +56,7 @@ export const Sidebar = () => (
               Customers{' '}
             </SidebarMenuItem>
           </Stack>
-          <Stack spacing={4}>
+          <Stack spacing={2}>
             <SidebarMenuItem icon={FaBell} href="/admin/notifications">
               Notifications
             </SidebarMenuItem>
