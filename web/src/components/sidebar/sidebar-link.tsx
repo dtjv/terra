@@ -11,7 +11,9 @@ interface SidebarLinkProps {
 export const SidebarLink = ({ children, href, ...rest }: SidebarLinkProps) => {
   return (
     <NextLink passHref href={href}>
-      <ChakraLink {...rest}>{children}</ChakraLink>
+      <ChakraLink _hover={{ textDecoration: 'none' }} {...rest}>
+        {children}
+      </ChakraLink>
     </NextLink>
   )
 }
