@@ -17,14 +17,14 @@ export const getVehicles = async (): Promise<VehicleDocument[]> => {
 
 export const getTickets = async (): Promise<TicketDocument[]> => {
   await connectToDB()
-  return await TicketModel.find({}).populate('vehicle')
+  return await TicketModel.find({}).populate('vehicleDoc')
 }
 
 export const createTicket = async (
   newTicket: TicketInput
 ): Promise<TicketDocument> => {
   await connectToDB()
-  return await TicketModel.create<TicketInput>(newTicket)
+  return await TicketModel.create(newTicket)
 }
 
 export const updateTicket = async (
