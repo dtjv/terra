@@ -1,11 +1,11 @@
-import * as React from 'react'
-import type { AppProps } from 'next/app'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { useRef } from 'react'
 import { Hydrate } from 'react-query/hydration'
-import { Chakra } from '@/Chakra'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import type { AppProps } from 'next/app'
+import { Chakra } from '@/chakra'
 
-const App: React.FC<AppProps> = ({ Component, pageProps }) => {
-  const queryClientRef = React.useRef<QueryClient | null>(null)
+const App = ({ Component, pageProps }: AppProps) => {
+  const queryClientRef = useRef<QueryClient | null>(null)
 
   if (!queryClientRef.current) {
     queryClientRef.current = new QueryClient()
@@ -23,4 +23,4 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
 }
 
 export default App
-export { getServerSideProps } from '@/Chakra'
+export { getServerSideProps } from '@/chakra'

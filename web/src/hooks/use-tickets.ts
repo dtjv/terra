@@ -1,24 +1,13 @@
 import axios from 'axios'
-import {
-  useQueryClient,
-  useQuery,
-  UseQueryResult,
-  useMutation,
-  UseMutationResult,
-} from 'react-query'
+import { useQueryClient, useQuery, useMutation } from 'react-query'
 import {
   TICKETS_QUERY_KEY,
   TICKETS_API,
   TICKETS_REFRESH_INTERVAL_IN_MS,
-} from '@/constants/constants'
+} from '@/config'
 import type { Ticket, UpdatedTicket, TicketContext } from '@/types/types'
 
-type UseTicketsReturnType = {
-  ticketsQuery: UseQueryResult<Ticket[]>
-  updateTicketMutation: UseMutationResult<Ticket, Error, Ticket, TicketContext>
-}
-
-export const useTickets = (): UseTicketsReturnType => {
+export const useTickets = () => {
   const queryClient = useQueryClient()
 
   const ticketsQuery = useQuery<Ticket[], Error>(

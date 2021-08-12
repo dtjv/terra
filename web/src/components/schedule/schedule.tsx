@@ -1,13 +1,14 @@
-import * as React from 'react'
 import { Flex, Grid } from '@chakra-ui/react'
 import { useSchedule } from '@/hooks/use-schedule'
-import { ScheduleColHeader } from '@/components/schedule-col-header'
-import { ScheduleRowHeader } from '@/components/schedule-row-header'
-import { ScheduleDataCell } from '@/components//schedule-data-cell'
+import {
+  ScheduleColHeader,
+  ScheduleRowHeader,
+  ScheduleDataCell,
+} from '@/components/schedule'
 import { CellKind } from '@/types/enums'
-import { MIN_ROW_HEIGHT, MIN_COL_WIDTH } from '@/constants/constants'
+import { MIN_ROW_HEIGHT, MIN_COL_WIDTH } from '@/config'
 
-export const Schedule: React.FC = () => {
+export const Schedule = () => {
   const { isLoading, isError, rows, error, updateTicketMutation, data } =
     useSchedule()
 

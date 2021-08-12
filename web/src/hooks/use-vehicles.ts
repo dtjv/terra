@@ -1,13 +1,9 @@
 import axios from 'axios'
-import { useQuery, UseQueryResult } from 'react-query'
-import { VEHICLES_QUERY_KEY, VEHICLES_API } from '@/constants/constants'
+import { useQuery } from 'react-query'
+import { VEHICLES_QUERY_KEY, VEHICLES_API } from '@/config'
 import type { Vehicle } from '@/types/types'
 
-type UseVehiclesReturnType<T> = {
-  vehiclesQuery: UseQueryResult<T>
-}
-
-export const useVehicles = <T = Vehicle[]>(): UseVehiclesReturnType<T> => {
+export const useVehicles = <T = Vehicle[]>() => {
   const vehiclesQuery = useQuery<T, Error>(
     [VEHICLES_QUERY_KEY],
     async () => {

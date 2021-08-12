@@ -1,4 +1,4 @@
-import * as React from 'react'
+import type { ReactNode } from 'react'
 import NextLink from 'next/link'
 import type { UrlObject } from 'url'
 import { useRouter } from 'next/router'
@@ -27,7 +27,7 @@ import {
   FaShoppingCart,
 } from 'react-icons/fa'
 
-const ToggleColorMode: React.FC = () => {
+const ToggleColorMode = () => {
   const { colorMode, toggleColorMode } = useColorMode()
   return (
     <header>
@@ -41,9 +41,10 @@ const ToggleColorMode: React.FC = () => {
 // https://github.com/vercel/next.js/blob/canary/packages/next/client/link.tsx
 interface LinkProps {
   href: string | UrlObject
+  children: ReactNode
 }
 
-const Link: React.FC<LinkProps> = (props) => {
+const Link = (props: LinkProps) => {
   const { children, href, ...rest } = props
   const { pathname } = useRouter()
   const isActive = pathname === href
@@ -64,10 +65,10 @@ const Link: React.FC<LinkProps> = (props) => {
 interface MenuItemProps {
   icon: any
   href: string | UrlObject
-  children?: React.ReactNode
+  children?: ReactNode
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ icon, href, children }) => (
+const MenuItem = ({ icon, href, children }: MenuItemProps) => (
   <HStack
     spacing={4}
     cursor="pointer"
@@ -87,7 +88,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ icon, href, children }) => (
   </HStack>
 )
 
-const Dashboard: React.FC = () => {
+const Admin = () => {
   return (
     <Flex h="100vh" position="relative">
       <Box
@@ -163,4 +164,4 @@ const Dashboard: React.FC = () => {
   )
 }
 
-export default Dashboard
+export default Admin

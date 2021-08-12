@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { connectToDB } from '@/lib/db'
 import { VehicleModel } from '@/models/vehicle'
-import { vehicles } from '@/data/vehicles'
+import newVehicles from '@/data/vehicles.json'
 import type { VehicleInput } from '@/types/types'
 
 export const createVehicles = async (): Promise<void> => {
@@ -17,7 +17,7 @@ export const createVehicles = async (): Promise<void> => {
     process.exit(1)
   }
 
-  await VehicleModel.create<VehicleInput[]>(vehicles)
+  await VehicleModel.create<VehicleInput[]>(newVehicles as VehicleInput[])
 
   process.exit(0)
 }

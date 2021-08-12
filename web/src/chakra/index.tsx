@@ -3,7 +3,7 @@ import {
   cookieStorageManager,
   localStorageManager,
 } from '@chakra-ui/react'
-import { theme } from '@/theme'
+import { theme } from '@/chakra/theme'
 import type { ReactNode } from 'react'
 import type { GetServerSidePropsContext } from 'next'
 

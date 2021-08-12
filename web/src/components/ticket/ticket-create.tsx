@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import type { UseFormReturn } from 'react-hook-form'
 import {
@@ -9,14 +8,13 @@ import {
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react'
-import { ScheduleAtISO } from '@/components/ticket/scheduled-at-iso'
-import { DestinationAddress } from '@/components/ticket/destination-address'
 import { superstructResolver } from '@hookform/resolvers/superstruct'
-import { TicketFormSchema } from '@/schemas/schemas'
+import { ScheduleAtISO, DestinationAddress } from '@/components/ticket'
+import { TicketFormSchema } from '@/schemas'
 import { TicketKind } from '@/types/enums'
 import type { TicketInput } from '@/types/types'
 
-export const CreateTicketForm: React.FC = () => {
+export const CreateTicketForm = () => {
   const form: UseFormReturn<TicketInput> = useForm<TicketInput>({
     mode: 'onTouched',
     defaultValues: {

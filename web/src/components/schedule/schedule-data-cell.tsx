@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useDrop } from 'react-dnd'
 import { GridItem } from '@chakra-ui/react'
 import type { UseMutationResult } from 'react-query'
@@ -11,19 +10,19 @@ import {
 import { CellKind, DragItem } from '@/types/enums'
 import type { Cell, Row, Ticket, TicketContext } from '@/types/types'
 
-export type ScheduleDataCellProps = {
+export interface ScheduleDataCellProps {
   cell: Cell
   rows: Row[]
   timeBlockInMinutes: number
   updateTicket: UseMutationResult<Ticket, Error, Ticket, TicketContext>
 }
 
-export const ScheduleDataCell: React.FC<ScheduleDataCellProps> = ({
+export const ScheduleDataCell = ({
   cell,
   rows,
   updateTicket,
   timeBlockInMinutes,
-}) => {
+}: ScheduleDataCellProps) => {
   const numRows = rows.length
   const numCols = rows[0]?.cells.length ?? 0
   const [, dropRef] = useDrop(

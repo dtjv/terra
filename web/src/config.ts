@@ -1,4 +1,4 @@
-// css grid template settings
+// TODO: prefix with CSS_GRID_ to be more clear?
 export const MIN_ROW_HEIGHT = 100
 export const MIN_COL_WIDTH = 60
 

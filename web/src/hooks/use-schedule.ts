@@ -1,5 +1,4 @@
-import * as React from 'react'
-import type { UseMutationResult } from 'react-query'
+import { useMemo } from 'react'
 import { useTickets } from '@/hooks/use-tickets'
 import { useVehicles } from '@/hooks/use-vehicles'
 import {
@@ -12,8 +11,7 @@ import {
   SCHEDULE_START_HOUR_IN_24HR,
   SCHEDULE_END_HOUR_IN_24HR,
   SCHEDULE_TIME_BLOCK_IN_MINUTES,
-} from '@/constants/constants'
-import type { Row, Ticket, Vehicle, TicketContext } from '@/types/types'
+} from '@/config'
 
 const scheduleConfig = {
   startHour: SCHEDULE_START_HOUR_IN_24HR,
@@ -21,41 +19,24 @@ const scheduleConfig = {
   timeBlockInMinutes: SCHEDULE_TIME_BLOCK_IN_MINUTES,
 }
 
-type UseScheduleReturnType = {
-  isLoading: boolean
-  isError: boolean
-  error: Error | undefined
-  rows: Row[]
-  updateTicketMutation: UseMutationResult<Ticket, Error, Ticket, TicketContext>
-  data: {
-    tickets: Ticket[]
-    vehicles: Vehicle[]
-    scheduleConfig: {
-      startHour: number
-      endHour: number
-      timeBlockInMinutes: number
-    }
-  }
-}
-
-export const useSchedule = (): UseScheduleReturnType => {
+export const useSchedule = () => {
   const { ticketsQuery, updateTicketMutation } = useTickets()
   const { vehiclesQuery } = useVehicles()
 
-  const rowHeaders = React.useMemo(() => {
+  const rowHeaders = useMemo(() => {
     return makeRowHeaders({
       scheduleTimes: makeScheduleTimes(scheduleConfig),
       timeBlockInMinutes: scheduleConfig.timeBlockInMinutes,
     })
   }, [])
 
-  const colHeaders = React.useMemo(() => {
+  const colHeaders = useMemo(() => {
     return vehiclesQuery.isLoading || vehiclesQuery.isError
       ? []
       : makeColHeaders(vehiclesQuery.data ?? [])
   }, [vehiclesQuery])
 
-  const rows = React.useMemo(() => {
+  const rows = useMemo(() => {
     return ticketsQuery.isLoading || ticketsQuery.isError
       ? []
       : makeRows({

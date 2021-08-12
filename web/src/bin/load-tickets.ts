@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { connectToDB } from '@/lib/db'
 import { TicketModel } from '@/models/ticket'
-import { newTickets } from '@/data/tickets'
+import newTickets from '@/data/tickets.json'
 import type { TicketInput } from '@/types/types'
 
 export const createTickets = async (): Promise<void> => {
@@ -19,7 +19,7 @@ export const createTickets = async (): Promise<void> => {
     }
   }
 
-  await TicketModel.create<TicketInput[]>(newTickets)
+  await TicketModel.create<TicketInput[]>(newTickets as TicketInput[])
 
   process.exit(0)
 }

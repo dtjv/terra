@@ -1,20 +1,16 @@
-import * as React from 'react'
 import { useDrag } from 'react-dnd'
 import { Box, Flex } from '@chakra-ui/react'
 import { DragHandleIcon } from '@chakra-ui/icons'
 import { DragItem } from '@/types/enums'
-import { MIN_ROW_HEIGHT } from '@/constants/constants'
+import { MIN_ROW_HEIGHT } from '@/config'
 import type { Ticket } from '@/types/types'
 
-export type TicketViewProps = {
+export interface TicketViewProps {
   ticket: Ticket | undefined
   timeBlockInMinutes: number
 }
 
-export const TicketView: React.FC<TicketViewProps> = ({
-  ticket,
-  timeBlockInMinutes,
-}) => {
+export const TicketView = ({ ticket, timeBlockInMinutes }: TicketViewProps) => {
   const [{ isDragging }, dragRef, dragPreviewRef] = useDrag(
     () => ({
       type: DragItem.TICKET,

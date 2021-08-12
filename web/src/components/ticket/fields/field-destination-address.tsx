@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useCallback, useEffect } from 'react'
 import { useWatch } from 'react-hook-form'
 import type { UseFormReturn } from 'react-hook-form'
 import {
@@ -22,16 +22,16 @@ const rand = (min = 1, max = 4): number => {
 
 const isZipValid = (zip: string) => !!oregon.find((data) => data.zip === zip)
 
-export const DestinationAddress: React.FC<UseFormReturn<TicketInput>> = ({
+export const DestinationAddress = ({
   control,
   register,
   setValue,
   formState: { errors },
-}) => {
+}: UseFormReturn<TicketInput>) => {
   const street = useWatch({ control, name: 'destinationAddress.street' })
   const zip = useWatch({ control, name: 'destinationAddress.zip' })
 
-  const api = React.useCallback(
+  const api = useCallback(
     async (street: string, zip: string): Promise<number> => {
       const factor =
         zip === '97301' ? rand() : zip === '97302' ? rand(2, 6) : rand(3, 7)
@@ -45,7 +45,7 @@ export const DestinationAddress: React.FC<UseFormReturn<TicketInput>> = ({
     []
   )
 
-  React.useEffect(() => {
+  useEffect(() => {
     ;(async () => {
       if (
         !errors.destinationAddress?.street &&

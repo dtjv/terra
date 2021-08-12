@@ -2,9 +2,7 @@ import type { Document, PopulatedDoc } from 'mongoose'
 import { CellKind, TicketKind } from '@/types/enums'
 
 //-----------------------------------------------------------------------------
-//
 // Vehicle types
-//
 //-----------------------------------------------------------------------------
 export interface VehicleInput {
   key: string
@@ -18,7 +16,6 @@ export interface Vehicle extends VehicleInput {
 export interface VehicleDocument extends VehicleInput, Document {}
 
 //-----------------------------------------------------------------------------
-//
 // Ticket types
 //
 // - `durationInMinutes` is computed on the client side. its value depends on
@@ -55,9 +52,7 @@ export type UpdatedTicket = Pick<Ticket, 'id'> & Partial<Ticket>
 export type TicketContext = { previousTickets: Ticket[] }
 
 //-----------------------------------------------------------------------------
-//
 // UI schedule types
-//
 //-----------------------------------------------------------------------------
 export type RowHeader = {
   scheduleTimeISO: string

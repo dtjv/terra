@@ -1,19 +1,18 @@
-import * as React from 'react'
 import { Box, Flex, GridItem } from '@chakra-ui/react'
 import { CellKind } from '@/types/enums'
 import type { Cell } from '@/types/types'
 
-export type ScheduleRowHeaderProps = {
+export interface ScheduleRowHeaderProps {
   cell: Cell
   numRows: number
   numCols: number
 }
 
-export const ScheduleRowHeader: React.FC<ScheduleRowHeaderProps> = ({
+export const ScheduleRowHeader = ({
   cell,
   numRows,
   numCols,
-}) => {
+}: ScheduleRowHeaderProps) => {
   if (cell.kind !== CellKind.ROW_HEADER) return null
 
   return (

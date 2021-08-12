@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useWatch, Controller } from 'react-hook-form'
 import type { UseFormReturn } from 'react-hook-form'
 import {
@@ -48,28 +48,28 @@ const getVehiclesAPI = async (): Promise<Vehicle[]> => {
   ]
 }
 
-export const ScheduleAtISO: React.FC<UseFormReturn<TicketInput>> = ({
+export const ScheduleAtISO = ({
   control,
   formState: { errors },
-}) => {
+}: UseFormReturn<TicketInput>) => {
   const durationInMinutes = useWatch({ control, name: 'durationInMinutes' })
   const vehicleKey = useWatch({ control, name: 'vehicleKey' })
-  const [timeChoices, setTimeChoices] = React.useState<TimesData[]>([])
-  const [vehicles, setVehicles] = React.useState<Vehicle[]>([])
+  const [timeChoices, setTimeChoices] = useState<TimesData[]>([])
+  const [vehicles, setVehicles] = useState<Vehicle[]>([])
 
-  const isValidVehicleKey = React.useCallback(
+  const isValidVehicleKey = useCallback(
     (key: string) => !!vehicles.find((data) => data.key === key),
     [vehicles]
   )
 
-  React.useEffect(() => {
+  useEffect(() => {
     ;(async () => {
       const vehicleData = await getVehiclesAPI()
       setVehicles(vehicleData)
     })()
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     ;(async () => {
       if (
         !errors.durationInMinutes &&
