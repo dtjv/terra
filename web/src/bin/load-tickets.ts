@@ -19,7 +19,7 @@ export const createTickets = async (): Promise<void> => {
     }
   }
 
-  await TicketModel.create<TicketInput[]>(newTickets as TicketInput[])
+  await TicketModel.create(newTickets as TicketInput[])
 
   process.exit(0)
 }

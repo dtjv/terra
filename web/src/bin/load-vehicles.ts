@@ -17,7 +17,7 @@ export const createVehicles = async (): Promise<void> => {
     process.exit(1)
   }
 
-  await VehicleModel.create<VehicleInput[]>(newVehicles as VehicleInput[])
+  await VehicleModel.create(newVehicles as VehicleInput[])
 
   process.exit(0)
 }
