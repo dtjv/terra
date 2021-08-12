@@ -1,5 +1,5 @@
 import { format, addMinutes } from 'date-fns'
-import { Schema, model } from 'mongoose'
+import { Schema, model, models } from 'mongoose'
 import type { Model } from 'mongoose'
 import oregon from '@/data/oregon.json'
 import { VehicleModel } from '@/models/vehicle'
@@ -78,4 +78,5 @@ ticketSchema.pre<Ticket>('save', async function () {
   this.vehicleDoc = vehicle._id
 })
 
-export const TicketModel = model<Ticket, Model<Ticket>>('Ticket', ticketSchema)
+export const TicketModel =
+  models['Ticket'] ?? model<Ticket, Model<Ticket>>('Ticket', ticketSchema)
