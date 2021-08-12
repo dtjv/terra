@@ -40,27 +40,27 @@ export const Sidebar = () => (
       <Box flex="1 1 0" pt={4} px={4}>
         <Stack divider={<StackDivider borderColor="purple.200" />} spacing={6}>
           <Stack spacing={4}>
-            <SidebarMenuItem icon={FaHome} href="/dashboard">
+            <SidebarMenuItem icon={FaHome} href="/admin">
               Dashboard{' '}
             </SidebarMenuItem>
-            <SidebarMenuItem icon={FaDatabase} href="/inventory">
+            <SidebarMenuItem icon={FaDatabase} href="/admin/inventory">
               Inventory{' '}
             </SidebarMenuItem>
-            <SidebarMenuItem icon={FaTruck} href="/delivery">
+            <SidebarMenuItem icon={FaTruck} href="/admin/delivery">
               Delivery{' '}
             </SidebarMenuItem>
-            <SidebarMenuItem icon={FaShoppingCart} href="/pos">
+            <SidebarMenuItem icon={FaShoppingCart} href="/admin/pos">
               POS{' '}
             </SidebarMenuItem>
-            <SidebarMenuItem icon={FaUserFriends} href="/customers">
+            <SidebarMenuItem icon={FaUserFriends} href="/admin/customers">
               Customers{' '}
             </SidebarMenuItem>
           </Stack>
           <Stack spacing={4}>
-            <SidebarMenuItem icon={FaBell} href="/notifications">
+            <SidebarMenuItem icon={FaBell} href="/admin/notifications">
               Notifications
             </SidebarMenuItem>
-            <SidebarMenuItem icon={FaCog} href="/settings">
+            <SidebarMenuItem icon={FaCog} href="/admin/settings">
               Settings{' '}
             </SidebarMenuItem>
           </Stack>

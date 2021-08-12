@@ -1,8 +1,7 @@
-import { useRouter } from 'next/router'
 import NextLink from 'next/link'
 import { Link as ChakraLink } from '@chakra-ui/react'
-import type { ReactNode } from 'react'
 import type { UrlObject } from 'url'
+import type { ReactNode } from 'react'
 
 interface SidebarLinkProps {
   href: string | UrlObject
@@ -10,18 +9,9 @@ interface SidebarLinkProps {
 }
 
 export const SidebarLink = ({ children, href, ...rest }: SidebarLinkProps) => {
-  const { pathname } = useRouter()
-  const isActive = pathname === href
-
   return (
     <NextLink passHref href={href}>
-      <ChakraLink
-        bg={isActive ? 'gray.700' : 'inherit'}
-        color={isActive ? 'white' : 'inherit'}
-        {...rest}
-      >
-        {children}
-      </ChakraLink>
+      <ChakraLink {...rest}>{children}</ChakraLink>
     </NextLink>
   )
 }
