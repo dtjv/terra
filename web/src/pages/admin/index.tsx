@@ -1,5 +1,4 @@
 import type { ReactElement } from 'react'
-
 import { AdminLayout } from '@/components/layouts/admin-layout'
 import { ToggleColorMode } from '@/components/toggle-color-mode'
 
