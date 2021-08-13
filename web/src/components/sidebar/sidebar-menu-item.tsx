@@ -39,7 +39,7 @@ export const SidebarMenuItem = ({
         transition="all 0.3s ease 0s"
         {...rest}
       >
-        <HStack>
+        <HStack spacing={4}>
           <Icon as={icon} fontSize="xl" opacity={0.64} />
           <Text letterSpacing=".5px" fontWeight="medium">
             {children}

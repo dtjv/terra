@@ -31,7 +31,11 @@ export const Sidebar = () => (
     <Flex direction="column" h="100%">
       <Box px={8} py={6}>
         <HStack spacing={4}>
-          <Icon fontSize="4xl" color="teal.500" as={FaLeaf} />
+          <Icon
+            fontSize="4xl"
+            color={useColorModeValue('teal.500', 'teal.200')}
+            as={FaLeaf}
+          />
           <Text fontSize="3xl" fontWeight="extrabold">
             Terra
           </Text>
