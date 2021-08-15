@@ -1,11 +1,10 @@
-// TODO: prefix with CSS_GRID_ to be more clear?
-export const MIN_ROW_HEIGHT = 100
-export const MIN_COL_WIDTH = 60
+export const SCHEDULE_ROW_N_MIN_HEIGHT = 35
+export const SCHEDULE_COL_0_WIDTH = 80
+export const SCHEDULE_COL_N_MIN_WIDTH = 100
 
 export const TICKETS_QUERY_KEY = 'tickets'
 export const TICKETS_API =
   process.env['NEXT_PUBLIC_TICKETS_API'] ?? 'api/tickets'
-// TODO: what's my MongoDB Atlas limit?
 export const TICKETS_REFRESH_INTERVAL_IN_MS = 1000 * 60
 
 export const VEHICLES_QUERY_KEY = 'vehicles'
