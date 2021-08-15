@@ -2,10 +2,10 @@ import type { ReactElement } from 'react'
 import { AdminLayout } from '@/components/layouts/admin-layout'
 import { NotReadyYet } from '@/components/not-ready'
 
-const Inventory = () => <NotReadyYet />
+const Pos = () => <NotReadyYet />
 
-export default Inventory
+export default Pos
 
-Inventory.getLayout = function getLayout(page: ReactElement) {
+Pos.getLayout = function getLayout(page: ReactElement) {
   return <AdminLayout>{page}</AdminLayout>
 }
