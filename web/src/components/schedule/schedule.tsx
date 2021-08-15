@@ -9,6 +9,8 @@ import {
 } from '@chakra-ui/react'
 import { useSchedule } from '@/hooks/use-schedule'
 import {
+  ScheduleNav,
+  ScheduleToolbar,
   ScheduleColHeader,
   ScheduleRowHeader,
   ScheduleDataCell,
@@ -42,7 +44,9 @@ export const Schedule = () => {
 
   return (
     <Box h="100%" bg={backgroundColor}>
+      <ScheduleNav />
       <Box px={16} mx="auto" maxW="6xl">
+        <ScheduleToolbar />
         {/* schedule header container */}
         <Box>
           <SimpleGrid templateColumns={templateCols} rows={2} spacing={0}>
@@ -86,7 +90,7 @@ export const Schedule = () => {
             overscrollBehavior: 'contain',
           }}
           overflowY="auto"
-          h="calc(100vh - 10rem)"
+          h="calc(100vh - 15rem)"
         >
           <Grid templateRows={templateRows} templateColumns={templateCols}>
             {/* row spacer 0 */}
