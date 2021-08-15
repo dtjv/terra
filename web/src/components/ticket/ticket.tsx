@@ -2,7 +2,7 @@ import { useDrag } from 'react-dnd'
 import { Box, Flex } from '@chakra-ui/react'
 import { DragHandleIcon } from '@chakra-ui/icons'
 import { DragItem } from '@/types/enums'
-import { MIN_ROW_HEIGHT } from '@/config'
+import { SCHEDULE_ROW_N_MIN_HEIGHT } from '@/config'
 import type { Ticket } from '@/types/types'
 
 export interface TicketViewProps {
@@ -25,35 +25,40 @@ export const TicketView = ({ ticket, timeBlockInMinutes }: TicketViewProps) => {
   if (!ticket) return null
 
   const height =
-    (ticket.durationInMinutes / timeBlockInMinutes) * MIN_ROW_HEIGHT - 5
+    (ticket.durationInMinutes / timeBlockInMinutes) *
+      SCHEDULE_ROW_N_MIN_HEIGHT -
+    5
 
   return (
     <Box
       ref={dragPreviewRef}
       position="absolute"
-      bg="papayawhip"
-      w="85%"
+      bg="gray.700"
+      w="90%"
       h={`${height}px`}
-      color="gray.900"
+      color="white"
       borderRadius="4px"
+      overflow="hidden"
       opacity={isDragging ? 0.5 : 1}
       zIndex={isDragging ? -10 : 10}
     >
-      <Box px={1} pt={1.5} lineHeight="1">
+      <Box px={1} pt={1.5}>
         <Flex
           align="start"
           justify="space-between"
           fontSize="xs"
           fontWeight="bold"
         >
-          {ticket.id}
+          {ticket.customerName}
           <div ref={dragRef}>
-            <DragHandleIcon color="gray.900" cursor="grab" />
+            <DragHandleIcon color="white" cursor="grab" />
           </div>
         </Flex>
-        <Box fontSize="xs" color="gray.700">
-          {ticket.ticketRange}
-        </Box>
+        {ticket.durationInMinutes > timeBlockInMinutes ? (
+          <Box fontSize="xs" color="white">
+            {ticket.ticketRange}
+          </Box>
+        ) : null}
       </Box>
     </Box>
   )

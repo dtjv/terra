@@ -1,8 +1,9 @@
 import { useDrop } from 'react-dnd'
-import { GridItem } from '@chakra-ui/react'
+import { GridItem, useColorModeValue } from '@chakra-ui/react'
 import type { UseMutationResult } from 'react-query'
 import { TicketView } from '@/components/ticket'
 import {
+  isMultipleOf,
   getPreviousCellWithTicket,
   isCellCoveredByTicket,
   isSpaceForTicketAtCell,
@@ -23,8 +24,10 @@ export const ScheduleDataCell = ({
   updateTicket,
   timeBlockInMinutes,
 }: ScheduleDataCellProps) => {
-  const numRows = rows.length
+  const numRows = rows.length + 1
   const numCols = rows[0]?.cells.length ?? 0
+  const borderColor = useColorModeValue('gray.300', 'whiteAlpha.400')
+  const showLineInGrid = isMultipleOf(cell.rowIdx, 60 / timeBlockInMinutes)
   const [, dropRef] = useDrop(
     () => ({
       accept: DragItem.TICKET,
@@ -103,16 +106,15 @@ export const ScheduleDataCell = ({
       ref={dropRef}
       sx={{
         position: 'relative',
-        ...(cell.rowIdx % 2 === 0 && cell.rowIdx < numRows - 1
+        ...{ borderColor },
+        ...(showLineInGrid && cell.rowIdx < numRows - 2
           ? {
               borderBottomWidth: '1px',
-              borderBottomColor: 'gray.600',
             }
           : {}),
         ...(cell.colIdx < numCols - 1
           ? {
               borderRightWidth: '1px',
-              borderRightColor: 'gray.600',
             }
           : {}),
       }}
