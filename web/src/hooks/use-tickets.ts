@@ -3,7 +3,7 @@ import { useQueryClient, useQuery, useMutation } from 'react-query'
 import {
   TICKETS_QUERY_KEY,
   TICKETS_API,
-  TICKETS_REFRESH_INTERVAL_IN_MS,
+  //TICKETS_REFRESH_INTERVAL_IN_MS,
 } from '@/config'
 import type { Ticket, UpdatedTicket, TicketContext } from '@/types/types'
 
@@ -18,7 +18,7 @@ export const useTickets = () => {
       return data
     },
     {
-      refetchInterval: TICKETS_REFRESH_INTERVAL_IN_MS,
+      //refetchInterval: TICKETS_REFRESH_INTERVAL_IN_MS,
       refetchIntervalInBackground: true,
     }
   )
