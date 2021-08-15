@@ -10,6 +10,8 @@ import type {
   ColHeader,
 } from '@/types/types'
 
+export const isMultipleOf = (num: number, factor: number) => num % factor === 0
+
 export interface MakeScheduleTimesProps {
   startHour: number
   endHour: number
@@ -64,7 +66,9 @@ export const makeRowHeaders = ({
       return {
         scheduleTimeISO: scheduleTime.toISOString(),
         hourMinuteFormat: format(scheduleTime, 'h:mm a'),
-        hourFormat: idx % timeFactor !== 0 ? '' : format(scheduleTime, 'h a'),
+        hourFormat: isMultipleOf(idx, timeFactor)
+          ? format(scheduleTime, 'h a')
+          : '',
       }
     }),
   ]
