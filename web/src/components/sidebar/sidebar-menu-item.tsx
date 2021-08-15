@@ -1,6 +1,12 @@
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
-import { Text, Icon, HStack, Link as ChakraLink } from '@chakra-ui/react'
+import {
+  Text,
+  Icon,
+  HStack,
+  Link as ChakraLink,
+  useColorModeValue,
+} from '@chakra-ui/react'
 import type { UrlObject } from 'url'
 import type { ReactNode } from 'react'
 
@@ -40,7 +46,11 @@ export const SidebarMenuItem = ({
         {...rest}
       >
         <HStack spacing={4}>
-          <Icon as={icon} fontSize="xl" opacity={0.64} />
+          <Icon
+            as={icon}
+            fontSize="xl"
+            opacity={useColorModeValue('0.75', '1')}
+          />
           <Text letterSpacing=".5px" fontWeight="medium">
             {children}
           </Text>
