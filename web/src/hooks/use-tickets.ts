@@ -44,6 +44,11 @@ export const useTickets = () => {
         const previousTickets =
           queryClient.getQueryData<Ticket[]>(TICKETS_QUERY_KEY) ?? []
 
+        // TODO: optimistically updates the cache, allowing ui to render ticket
+        // in new position.
+        // the updated ticket's computed fields are not valid until server
+        // response comes thru. the window of inconsistency is short, as the
+        // server response is almost instant.
         queryClient.setQueryData<Ticket[]>(
           TICKETS_QUERY_KEY,
           (previousTickets = []) => {

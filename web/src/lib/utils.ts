@@ -115,7 +115,7 @@ export const makeRows = ({
 }: MakeRowsProps): Row[] => {
   const ticketHash = groupTicketsBy({
     tickets,
-    rowField: 'scheduledStartTime',
+    rowField: 'scheduledStartTime', //TODO: a virtual. not the best choice?
     colField: 'vehicleKey',
   })
 

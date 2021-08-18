@@ -57,6 +57,8 @@ export const ScheduleAtISO = ({
   const [timeChoices, setTimeChoices] = useState<TimesData[]>([])
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
 
+  // TODO: this cannot be necessary! a vehicleKey being watched is coming from
+  // the form and that field must be a set of selected, valid values.
   const isValidVehicleKey = useCallback(
     (key: string) => !!vehicles.find((data) => data.key === key),
     [vehicles]

@@ -67,7 +67,8 @@ export const CreateTicketForm = () => {
 
       <DestinationAddress {...form} />
 
-      {/*TODO: pull vehicle choices from db*/}
+      {/* TODO: pull vehicle choices from db!! exactly. then i don't have to
+        validate in <ScheduleAtISO /> component.*/}
       <FormControl isInvalid={!!errors.vehicleKey} isRequired>
         <FormLabel htmlFor="vehicleKey">Vehicle</FormLabel>
         <Select
