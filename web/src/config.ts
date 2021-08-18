@@ -4,12 +4,12 @@ export const SCHEDULE_COL_N_MIN_WIDTH = 100
 
 export const TICKETS_QUERY_KEY = 'tickets'
 export const TICKETS_API =
-  process.env['NEXT_PUBLIC_TICKETS_API'] ?? 'api/tickets'
+  process.env['NEXT_PUBLIC_TICKETS_API'] ?? '/api/tickets'
 export const TICKETS_REFRESH_INTERVAL_IN_MS = 1000 * 60
 
 export const VEHICLES_QUERY_KEY = 'vehicles'
 export const VEHICLES_API =
-  process.env['NEXT_PUBLIC_VEHICLES_API'] ?? 'api/vehicles'
+  process.env['NEXT_PUBLIC_VEHICLES_API'] ?? '/api/vehicles'
 
 export const SCHEDULE_START_HOUR_IN_24HR = parseInt(
   process.env['NEXT_PUBLIC_SCHEDULE_START_HOUR_IN_24HR'] ?? '8',
