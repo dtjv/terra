@@ -16,7 +16,7 @@ export const NotReadyYet = () => (
       <Icon as={FaTools} boxSize={16} />
     </Flex>
     <VStack spacing={2}>
-      <Heading>This page isn't ready yet</Heading>
+      <Heading>This page isn&apos;t ready yet</Heading>
       <Text color="gray.500">
         Check back later to see what we built for you.
       </Text>
