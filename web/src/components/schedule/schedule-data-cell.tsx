@@ -1,4 +1,5 @@
 import { useDrop } from 'react-dnd'
+import { format } from 'date-fns'
 import { GridItem, useColorModeValue } from '@chakra-ui/react'
 import type { UseMutationResult } from 'react-query'
 import { TicketView } from '@/components/ticket'
@@ -85,10 +86,22 @@ export const ScheduleDataCell = ({
       },
       drop: (dragTicket: Ticket) => {
         if (cell.kind === CellKind.DATA_CELL) {
+          // TODO: update makes all computed values inconsistent. what to do?
           updateTicket.mutate({
             ...dragTicket,
             vehicleKey: cell.colHeader.key,
             scheduledAtISO: cell.rowHeader.scheduleTimeISO,
+            // drag ticket has been moved, so we need to update its values.
+            // the field below is a virtual value, only computed when pulled
+            // from db. but, in hooks/use-tickets, i optimistically update
+            // ticket cache (kinda like a backdoor). so i must manually update
+            // the computed fields. why? in lib/utils, as i construct the `rows`
+            // data structure, i check for the existence of a ticket for a cell
+            // by `vehicleKey` and `scheduledStartTime`.
+            scheduledStartTime: format(
+              new Date(cell.rowHeader.scheduleTimeISO),
+              'h:mm a'
+            ),
           })
         }
       },
