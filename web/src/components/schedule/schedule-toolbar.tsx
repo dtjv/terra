@@ -26,10 +26,9 @@ export const ScheduleToolbar = () => {
           Create
         </Button>
         <InputGroup>
-          <InputLeftElement
-            pointerEvents="none"
-            children={<SearchIcon color="gray.400" />}
-          />
+          <InputLeftElement pointerEvents="none">
+            <SearchIcon color="gray.400" />
+          </InputLeftElement>
           <Input
             type="text"
             placeholder="Search"
