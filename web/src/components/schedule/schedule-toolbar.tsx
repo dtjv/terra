@@ -6,10 +6,13 @@ import {
   InputGroup,
   InputLeftElement,
   useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { AddIcon, SearchIcon } from '@chakra-ui/icons'
+import { TicketCreateModal } from '@/components/ticket/ticket-create-modal'
 
 export const ScheduleToolbar = () => {
+  const { onOpen, isOpen, onClose } = useDisclosure()
   const backgroundColor = useColorModeValue('whiteAlpha.900', 'gray.600')
   const placeholderColor = useColorModeValue('gray.400', 'whiteAlpha.700')
 
@@ -22,6 +25,7 @@ export const ScheduleToolbar = () => {
           leftIcon={<AddIcon />}
           colorScheme="teal"
           variant="solid"
+          onClick={onOpen}
         >
           Create
         </Button>
@@ -40,6 +44,7 @@ export const ScheduleToolbar = () => {
           />
         </InputGroup>
       </HStack>
+      <TicketCreateModal isOpen={isOpen} onClose={onClose} />
     </Box>
   )
 }
