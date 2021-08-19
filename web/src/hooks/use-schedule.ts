@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { useTickets } from '@/hooks/use-tickets'
-import { useVehicles } from '@/hooks/use-vehicles'
 import {
   makeScheduleTimes,
   makeRows,
@@ -12,6 +11,7 @@ import {
   SCHEDULE_END_HOUR_IN_24HR,
   SCHEDULE_TIME_BLOCK_IN_MINUTES,
 } from '@/config'
+import type { Vehicle } from '@/types/types'
 
 const scheduleConfig = {
   startHour: SCHEDULE_START_HOUR_IN_24HR,
@@ -19,9 +19,10 @@ const scheduleConfig = {
   timeBlockInMinutes: SCHEDULE_TIME_BLOCK_IN_MINUTES,
 }
 
-export const useSchedule = () => {
+export const useSchedule = (vehicles: Vehicle[]) => {
   const { ticketsQuery, updateTicketMutation } = useTickets()
-  const { vehiclesQuery } = useVehicles()
+
+  const colHeaders = makeColHeaders(vehicles)
 
   const rowHeaders = useMemo(() => {
     return makeRowHeaders({
@@ -29,12 +30,6 @@ export const useSchedule = () => {
       timeBlockInMinutes: scheduleConfig.timeBlockInMinutes,
     })
   }, [])
-
-  const colHeaders = useMemo(() => {
-    return vehiclesQuery.isLoading || vehiclesQuery.isError
-      ? []
-      : makeColHeaders(vehiclesQuery.data ?? [])
-  }, [vehiclesQuery])
 
   const rows = useMemo(() => {
     return ticketsQuery.isLoading || ticketsQuery.isError
@@ -47,19 +42,15 @@ export const useSchedule = () => {
   }, [ticketsQuery, rowHeaders, colHeaders])
 
   return {
-    isLoading: ticketsQuery.isLoading || vehiclesQuery.isLoading,
-    isError: ticketsQuery.isError || vehiclesQuery.isError,
-    error: ticketsQuery.isError
-      ? (ticketsQuery.error as Error)
-      : vehiclesQuery.isError
-      ? (vehiclesQuery.error as Error)
-      : undefined,
+    isLoading: ticketsQuery.isLoading,
+    isError: ticketsQuery.isError,
+    error: ticketsQuery.isError ? (ticketsQuery.error as Error) : undefined,
     rows,
     updateTicketMutation,
     data: {
       scheduleConfig,
+      vehicles,
       tickets: ticketsQuery.data ?? [],
-      vehicles: vehiclesQuery.data ?? [],
     },
   }
 }

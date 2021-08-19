@@ -21,10 +21,15 @@ import {
   SCHEDULE_COL_0_WIDTH,
   SCHEDULE_COL_N_MIN_WIDTH,
 } from '@/config'
+import type { Vehicle } from '@/types/types'
 
-export const Schedule = () => {
+interface ScheduleProps {
+  vehicles: Vehicle[]
+}
+
+export const Schedule = ({ vehicles }: ScheduleProps) => {
   const { isLoading, isError, rows, error, updateTicketMutation, data } =
-    useSchedule()
+    useSchedule(vehicles)
   const numRows = rows.length + 1
   const numCols = rows[0]?.cells.length ?? 0
   const templateRows = `repeat(${numRows}, minmax(${SCHEDULE_ROW_N_MIN_HEIGHT}px, 1fr))`
