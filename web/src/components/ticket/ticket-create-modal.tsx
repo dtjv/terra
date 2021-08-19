@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { superstructResolver } from '@hookform/resolvers/superstruct'
 import type { UseFormReturn } from 'react-hook-form'
-import { ScheduleAtISO, DestinationAddress } from '@/components/ticket'
+import { ScheduleAt, DestinationAddress } from '@/components/ticket'
 import { TicketFormSchema } from '@/schemas'
 import { TicketKind } from '@/types/enums'
 import type { TicketInput } from '@/types/types'
@@ -28,7 +28,7 @@ import type { TicketInput } from '@/types/types'
 // delivery logic (duration is doubled for round trip, add load and dump
 // buffer).
 //
-// 'scheduledAtISO' is set from a select field. the choices are computed and
+// 'scheduledAt' is set from a select field. the choices are computed and
 // dependent on 'durationInMinutes' and 'vehicleKey'. if either dependent field
 // changes, an api is called to scan schedule for available slot (day/time) for
 // the selected vehicle and duration of ticket. the scan needs a cursor to start
@@ -51,11 +51,7 @@ export const TicketCreateModal = ({
 }: TicketCreateModalProps) => {
   const form: UseFormReturn<TicketInput> = useForm<TicketInput>({
     mode: 'onTouched',
-    defaultValues: {
-      ticketKind: TicketKind.DELIVERY,
-      scheduledAtISO: '',
-      durationInMinutes: 30,
-    },
+    defaultValues: { ticketKind: TicketKind.DELIVERY },
     resolver: superstructResolver(TicketFormSchema, { coerce: true }),
   })
   const {
@@ -116,7 +112,7 @@ export const TicketCreateModal = ({
 
             {/*
               TODO: pull vehicle choices from db!! exactly.then i don't have to
-                    validate in <ScheduleAtISO /> component.
+                    validate in <ScheduleAt /> component.
             */}
             <FormControl isInvalid={!!errors.vehicleKey} isRequired>
               <FormLabel htmlFor="vehicleKey">Vehicle</FormLabel>
@@ -133,7 +129,7 @@ export const TicketCreateModal = ({
               </FormErrorMessage>
             </FormControl>
 
-            <ScheduleAtISO {...form} />
+            <ScheduleAt {...form} />
 
             {/*TODO: test enable/disable on demo*/}
             <Button

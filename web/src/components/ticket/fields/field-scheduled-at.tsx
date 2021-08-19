@@ -33,7 +33,7 @@ const useTime = () => {
   return { getTimesAPI }
 }
 
-export const ScheduleAtISO = ({
+export const ScheduleAt = ({
   control,
   formState: { errors },
 }: UseFormReturn<TicketInput>) => {
@@ -42,6 +42,7 @@ export const ScheduleAtISO = ({
   const [timeChoices, setTimeChoices] = useState<TimesData[]>([])
   const { getTimesAPI } = useTime()
 
+  // TODO: replace
   const isVehicleKeyValid = (vehicleKey: string) =>
     ['102', '202', '302'].includes(vehicleKey)
 
@@ -76,13 +77,13 @@ export const ScheduleAtISO = ({
         <FormControl as="fieldset" isRequired>
           <FormLabel as="legend">Pick a time:</FormLabel>
           <Controller
-            name="scheduledAtISO"
+            name="scheduledAt"
             control={control}
             render={({ field: { onChange, value, ref } }) => (
               <RadioGroup
-                name="scheduledAtISO"
+                name="scheduledAt"
                 onChange={onChange}
-                value={value}
+                value={value ? value.toString() : ''}
                 ref={ref}
               >
                 <Stack>

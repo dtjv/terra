@@ -26,6 +26,8 @@ export const useSchedule = (vehicles: Vehicle[]) => {
 
   const rowHeaders = useMemo(() => {
     return makeRowHeaders({
+      // TODO: right now, schedule times are based off 'today'. but we need to
+      // pass in the date the user wants - not always today.
       scheduleTimes: makeScheduleTimes(scheduleConfig),
       timeBlockInMinutes: scheduleConfig.timeBlockInMinutes,
     })

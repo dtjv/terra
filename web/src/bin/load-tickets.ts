@@ -19,7 +19,15 @@ export const createTickets = async (): Promise<void> => {
     }
   }
 
-  await TicketModel.create(newTickets as TicketInput[])
+  const tickets = newTickets.map((ticket) => {
+    const { scheduledAtISO, ...newTicket } = ticket
+    return {
+      ...newTicket,
+      scheduledAt: new Date(scheduledAtISO),
+    }
+  })
+
+  await TicketModel.create(tickets as TicketInput[])
 
   process.exit(0)
 }

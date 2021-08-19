@@ -56,7 +56,7 @@ export const TicketView = ({ ticket, timeBlockInMinutes }: TicketViewProps) => {
         </Flex>
         {ticket.durationInMinutes > timeBlockInMinutes ? (
           <Box fontSize="xs" color="white">
-            {ticket.ticketRange}
+            {ticket.scheduledTimeRange}
           </Box>
         ) : null}
       </Box>

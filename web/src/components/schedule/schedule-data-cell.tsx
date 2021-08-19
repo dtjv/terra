@@ -90,7 +90,13 @@ export const ScheduleDataCell = ({
           updateTicket.mutate({
             ...dragTicket,
             vehicleKey: cell.colHeader.key,
-            scheduledAtISO: cell.rowHeader.scheduleTimeISO,
+            // TODO: ugh!!!
+            // if we move the ticket, we gotta know what day is displayed.
+            // this rowHeader is storing a date+time, and that date means
+            // nothing! - right now!
+            // but technically, when i build the schedule, i can set the
+            // rowHeader scheduleTime to be the date that's being displayed.
+            scheduledAt: new Date(cell.rowHeader.scheduleTimeISO),
             // drag ticket has been moved, so we need to update its values.
             // the field below is a virtual value, only computed when pulled
             // from db. but, in hooks/use-tickets, i optimistically update

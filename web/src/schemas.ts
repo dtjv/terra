@@ -1,4 +1,13 @@
-import { enums, number, object, size, refine, string } from 'superstruct'
+import {
+  coerce,
+  enums,
+  date,
+  number,
+  object,
+  size,
+  refine,
+  string,
+} from 'superstruct'
 import oregon from '@/data/oregon.json'
 import { TicketKind } from '@/types/enums'
 import { SCHEDULE_TIME_BLOCK_IN_MINUTES } from '@/config'
@@ -14,11 +23,13 @@ export const AddressSchema = object({
   zip: enums(oregon.map((location) => location.zip)),
 })
 
+export const DateSchema = coerce(date(), string(), (value) => new Date(value))
+
 export const TicketFormSchema = object({
   ticketKind: enums([TicketKind.PICKUP, TicketKind.DELIVERY]),
   customerName: size(string(), 2, 50),
   destinationAddress: AddressSchema,
   vehicleKey: string(),
-  scheduledAtISO: string(),
+  scheduledAt: DateSchema,
   durationInMinutes: DurationSchema,
 })

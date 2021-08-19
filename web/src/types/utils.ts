@@ -17,10 +17,10 @@ export const toTicket = (ticketDoc: TicketDocument): Ticket => {
     customerName,
     destinationAddress,
     vehicleKey,
-    scheduledAtISO,
+    scheduledAt,
     durationInMinutes,
     vehicleDoc,
-    ticketRange,
+    scheduledTimeRange,
     scheduledStartTime,
   } = ticketDoc
 
@@ -30,10 +30,10 @@ export const toTicket = (ticketDoc: TicketDocument): Ticket => {
     customerName,
     destinationAddress,
     vehicleKey,
-    scheduledAtISO,
+    scheduledAt,
     durationInMinutes,
     vehicleDoc,
-    ticketRange,
+    scheduledTimeRange,
     scheduledStartTime,
   }
 }
