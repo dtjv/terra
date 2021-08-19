@@ -1,4 +1,5 @@
-import { useCallback, useEffect } from 'react'
+import axios from 'axios'
+import { useEffect } from 'react'
 import { useWatch } from 'react-hook-form'
 import {
   Input,
@@ -10,17 +11,24 @@ import type { UseFormReturn } from 'react-hook-form'
 import oregon from '@/data/oregon.json'
 import type { TicketInput } from '@/types/types'
 
-// TODO: remove
-const wait = (ms: number) => new Promise((success) => setTimeout(success, ms))
-
-// TODO: remove
-const rand = (min = 1, max = 4): number => {
-  min = Math.ceil(min)
-  max = Math.floor(max)
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
 const isZipValid = (zip: string) => !!oregon.find((data) => data.zip === zip)
+
+const useDuration = () => {
+  const axiosSource = axios.CancelToken.source()
+  const getDurationAPI = async (street: string, zip: string) => {
+    console.log(`calculating duration for: {street: ${street}, zip: ${zip}}...`)
+    return (
+      await axios.post(
+        '/api/demo/duration',
+        { zip },
+        { cancelToken: axiosSource.token }
+      )
+    ).data
+  }
+  getDurationAPI.cancel = () => axiosSource.cancel()
+  getDurationAPI.isCanceled = (error: any) => axios.isCancel(error)
+  return { getDurationAPI }
+}
 
 export const DestinationAddress = ({
   control,
@@ -30,20 +38,7 @@ export const DestinationAddress = ({
 }: UseFormReturn<TicketInput>) => {
   const street = useWatch({ control, name: 'destinationAddress.street' })
   const zip = useWatch({ control, name: 'destinationAddress.zip' })
-
-  const api = useCallback(
-    async (street: string, zip: string): Promise<number> => {
-      const factor =
-        zip === '97301' ? rand() : zip === '97302' ? rand(2, 6) : rand(3, 7)
-
-      console.log(
-        `calculating duration for: {street: ${street}, zip: ${zip}}...`
-      )
-      await wait(2000)
-      return 30 * factor
-    },
-    []
-  )
+  const { getDurationAPI } = useDuration()
 
   useEffect(() => {
     ;(async () => {
@@ -52,15 +47,21 @@ export const DestinationAddress = ({
         !errors.destinationAddress?.zip &&
         isZipValid(zip)
       ) {
-        const duration = await api(street, zip)
-        console.log(`-> duration:`, duration)
-        setValue('durationInMinutes', duration)
+        try {
+          const duration = await getDurationAPI(street, zip)
+          console.log(`-> duration:`, duration)
+          setValue('durationInMinutes', duration)
+        } catch (error) {
+          if (getDurationAPI.isCanceled(error)) {
+            console.log(`getDurationAPI is cancelled`)
+          } else throw error
+        }
       }
     })()
+    return () => getDurationAPI.cancel()
   }, [
     street,
     zip,
-    api,
     setValue,
     errors.destinationAddress?.street,
     errors.destinationAddress?.zip,

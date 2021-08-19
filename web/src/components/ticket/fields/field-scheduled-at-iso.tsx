@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { useWatch, Controller } from 'react-hook-form'
 import {
   FormLabel,
@@ -8,7 +9,7 @@ import {
   RadioGroup,
 } from '@chakra-ui/react'
 import type { UseFormReturn } from 'react-hook-form'
-import type { Vehicle, TicketInput } from '@/types/types'
+import type { TicketInput } from '@/types/types'
 
 // TODO: remove
 interface TimesData {
@@ -16,36 +17,20 @@ interface TimesData {
   dateISO: string
 }
 
-// TODO: remove
-const wait = (ms: number) => new Promise((success) => setTimeout(success, ms))
-
-// TODO: remove
-const rand = (min = 3, max = 6): number => {
-  min = Math.ceil(min)
-  max = Math.floor(max)
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
-// TODO: remove
-const getTimesAPI = async (): Promise<TimesData[]> => {
-  console.log(`retrieving times...`)
-  await wait(2000)
-  return Array(rand())
-    .fill({})
-    .map((_, i) => ({
-      id: i + 1,
-      dateISO: `2021-09-05T0${i + 1}:00:00.000Z`,
-    }))
-}
-
-const getVehiclesAPI = async (): Promise<Vehicle[]> => {
-  console.log(`retrieving vehicles...`)
-  await wait(2000)
-  return [
-    { id: 'A', key: '102', name: 'Truck 102' },
-    { id: 'B', key: '202', name: 'Truck 202' },
-    { id: 'C', key: '302', name: 'Truck 302' },
-  ]
+// TODO: use a hook or something else?
+const useTime = () => {
+  const axiosSource = axios.CancelToken.source()
+  const getTimesAPI = async () => {
+    console.log(`retrieving times...`)
+    return (
+      await axios.get('/api/demo/times', {
+        cancelToken: axiosSource.token,
+      })
+    ).data
+  }
+  getTimesAPI.cancel = () => axiosSource.cancel()
+  getTimesAPI.isCanceled = (error: any) => axios.isCancel(error)
+  return { getTimesAPI }
 }
 
 export const ScheduleAtISO = ({
@@ -55,40 +40,34 @@ export const ScheduleAtISO = ({
   const durationInMinutes = useWatch({ control, name: 'durationInMinutes' })
   const vehicleKey = useWatch({ control, name: 'vehicleKey' })
   const [timeChoices, setTimeChoices] = useState<TimesData[]>([])
-  const [vehicles, setVehicles] = useState<Vehicle[]>([])
+  const { getTimesAPI } = useTime()
 
-  // TODO: this cannot be necessary! a vehicleKey being watched is coming from
-  // the form and that field must be a set of selected, valid values.
-  const isValidVehicleKey = useCallback(
-    (key: string) => !!vehicles.find((data) => data.key === key),
-    [vehicles]
-  )
-
-  useEffect(() => {
-    ;(async () => {
-      const vehicleData = await getVehiclesAPI()
-      setVehicles(vehicleData)
-    })()
-  }, [])
+  const isVehicleKeyValid = (vehicleKey: string) =>
+    ['102', '202', '302'].includes(vehicleKey)
 
   useEffect(() => {
     ;(async () => {
       if (
         !errors.durationInMinutes &&
         !errors.vehicleKey &&
-        isValidVehicleKey(vehicleKey)
+        isVehicleKeyValid(vehicleKey)
       ) {
-        const choices = await getTimesAPI()
-        console.log(`-> time choices:`, choices)
-        setTimeChoices(choices)
+        try {
+          const choices: TimesData[] = await getTimesAPI()
+          setTimeChoices(choices)
+        } catch (error) {
+          if (getTimesAPI.isCanceled(error)) {
+            console.log(`getTimesAPI is cancelled`)
+          } else throw error
+        }
       }
     })()
+    return () => getTimesAPI.cancel()
   }, [
     durationInMinutes,
     vehicleKey,
     errors.durationInMinutes,
     errors.vehicleKey,
-    isValidVehicleKey,
   ])
 
   return (
