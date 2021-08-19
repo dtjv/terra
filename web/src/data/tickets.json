@@ -6,7 +6,7 @@
       "street": "123 Main St.",
       "zip": "97301"
     },
-    "scheduledAtISO": "2021-07-05T15:00:00.000Z",
+    "scheduledAtISO": "2021-08-19T15:00:00.000Z",
     "vehicleKey": "102",
     "durationInMinutes": 30
   },
@@ -17,7 +17,7 @@
       "street": "456 Elm St.",
       "zip": "97302"
     },
-    "scheduledAtISO": "2021-07-05T15:30:00.000Z",
+    "scheduledAtISO": "2021-08-19T15:30:00.000Z",
     "vehicleKey": "102",
     "durationInMinutes": 30
   },
@@ -28,8 +28,8 @@
       "street": "555 Fruit St.",
       "zip": "97301"
     },
-    "scheduledAtISO": "2021-06-05T17:00:00.000Z",
-    "vehicleKey": "102",
+    "scheduledAtISO": "2021-08-19T17:00:00.000Z",
+    "vehicleKey": "202",
     "durationInMinutes": 60
   },
   {
@@ -39,8 +39,8 @@
       "street": "321 Mac St.",
       "zip": "97303"
     },
-    "scheduledAtISO": "2021-06-05T15:00:00.000Z",
-    "vehicleKey": "202",
+    "scheduledAtISO": "2021-08-19T15:00:00.000Z",
+    "vehicleKey": "302",
     "durationInMinutes": 90
   },
   {
@@ -50,8 +50,8 @@
       "street": "999 Nakatomi St.",
       "zip": "97301"
     },
-    "scheduledAtISO": "2021-07-05T17:30:00.000Z",
-    "vehicleKey": "202",
+    "scheduledAtISO": "2021-08-20T17:30:00.000Z",
+    "vehicleKey": "102",
     "durationInMinutes": 30
   },
   {
@@ -61,7 +61,7 @@
       "street": "765 Tree St.",
       "zip": "97301"
     },
-    "scheduledAtISO": "2021-07-05T18:00:00.000Z",
+    "scheduledAtISO": "2021-08-20T18:00:00.000Z",
     "vehicleKey": "202",
     "durationInMinutes": 30
   },
@@ -72,8 +72,19 @@
       "street": "987 Hazel St.",
       "zip": "97305"
     },
-    "scheduledAtISO": "2021-07-05T15:00:00.000Z",
+    "scheduledAtISO": "2021-08-20T15:00:00.000Z",
     "vehicleKey": "302",
     "durationInMinutes": 60
+  },
+  {
+    "ticketKind": "DELIVERY",
+    "customerName": "Ms. Sally",
+    "destinationAddress": {
+      "street": "812 Parkview St.",
+      "zip": "97301"
+    },
+    "scheduledAtISO": "2021-08-20T17:30:00.000Z",
+    "vehicleKey": "302",
+    "durationInMinutes": 90
   }
 ]

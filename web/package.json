@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "cli": "DOTENV_CONFIG_PATH=./.env.development.local ts-node -r dotenv/config -r tsconfig-paths/register src/bin",
+    "cli": "DOTENV_CONFIG_PATH=./.env.development.local ts-node -r dotenv/config -r tsconfig-paths/register",
     "dev": "next dev",
     "lint": "next lint --dir src",
     "build": "next build",
