@@ -1,2 +1,2 @@
-export { Sidebar } from '@/components/sidebar/sidebar'
-export { SidebarMenuItem } from '@/components/sidebar/sidebar-menu-item'
+export { Sidebar } from './sidebar'
+export { SidebarMenuItem } from './sidebar-menu-item'
