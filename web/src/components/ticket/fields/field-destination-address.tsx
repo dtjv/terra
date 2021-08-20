@@ -8,11 +8,9 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react'
 import type { UseFormReturn } from 'react-hook-form'
-import oregon from '@/data/oregon.json'
 import type { TicketInput } from '@/types/types'
 
-const isZipValid = (zip: string) => !!oregon.find((data) => data.zip === zip)
-
+// TODO: use react-query so we're not always call api on re-renders.
 const useDuration = () => {
   const axiosSource = axios.CancelToken.source()
   const getDurationAPI = async (street: string, zip: string) => {
@@ -43,9 +41,10 @@ export const DestinationAddress = ({
   useEffect(() => {
     ;(async () => {
       if (
-        !errors.destinationAddress?.street &&
+        zip &&
+        street &&
         !errors.destinationAddress?.zip &&
-        isZipValid(zip)
+        !errors.destinationAddress?.street
       ) {
         try {
           const duration = await getDurationAPI(street, zip)
@@ -63,6 +62,7 @@ export const DestinationAddress = ({
     street,
     zip,
     setValue,
+    getDurationAPI,
     errors.destinationAddress?.street,
     errors.destinationAddress?.zip,
   ])

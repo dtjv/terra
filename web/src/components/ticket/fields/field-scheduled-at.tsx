@@ -17,7 +17,7 @@ interface TimesData {
   dateISO: string
 }
 
-// TODO: use a hook or something else?
+// TODO: use react-query so we're not always calling api on re-render
 const useTime = () => {
   const axiosSource = axios.CancelToken.source()
   const getTimesAPI = async () => {
@@ -42,16 +42,13 @@ export const ScheduleAt = ({
   const [timeChoices, setTimeChoices] = useState<TimesData[]>([])
   const { getTimesAPI } = useTime()
 
-  // TODO: replace
-  const isVehicleKeyValid = (vehicleKey: string) =>
-    ['102', '202', '302'].includes(vehicleKey)
-
   useEffect(() => {
     ;(async () => {
       if (
-        !errors.durationInMinutes &&
+        vehicleKey &&
+        durationInMinutes &&
         !errors.vehicleKey &&
-        isVehicleKeyValid(vehicleKey)
+        !errors.durationInMinutes
       ) {
         try {
           const choices: TimesData[] = await getTimesAPI()
