@@ -1,9 +1,10 @@
-import { set, format, addMinutes } from 'date-fns'
+import { format, addMinutes } from 'date-fns'
 import { Schema, model, models } from 'mongoose'
 import type { Model } from 'mongoose'
 import oregon from '@/data/oregon.json'
 import { VehicleModel } from '@/models/vehicle'
 import { TicketKind } from '@/types/enums'
+import { combineDateTime } from '@/lib/utils'
 import type { Ticket } from '@/types/types'
 
 const ticketSchema = new Schema<Ticket, Model<Ticket>, Ticket>({
@@ -58,29 +59,18 @@ const ticketSchema = new Schema<Ticket, Model<Ticket>, Ticket>({
  * @returns {string} time range in 12-hour clock format (eg: '8:00am - 8:30am')
  */
 ticketSchema.virtual('scheduledTimeRange').get(function (this: Ticket) {
-  const [hour, minute] = this.scheduledTime.split(':')
-  const scheduledAtFull = set(this.scheduledAt, {
-    hours: parseInt(hour ?? '0', 10),
-    minutes: parseInt(minute ?? '0', 10),
-    seconds: 0,
-    milliseconds: 0,
-  })
+  const scheduledAtFull = combineDateTime(this.scheduledAt, this.scheduledTime)
   const startTime = `${format(scheduledAtFull, 'h:mmaaa')}`
   const endTime = `${format(
     addMinutes(scheduledAtFull, this.durationInMinutes),
     'h:mmaaa'
   )}`
-
   return `${startTime} - ${endTime}`
 })
 
 /**
- * @returns {string} start time in 12-hour clock format (eg: '6:30 PM')
+ * Sets 'vehicle' property based on 'vehicleKey'
  */
-ticketSchema.virtual('scheduledStartTime').get(function (this: Ticket) {
-  return format(this.scheduledAt, 'h:mm a')
-})
-
 ticketSchema.pre<Ticket>('save', async function () {
   const vehicles = await VehicleModel.find({})
   const vehicle = vehicles.find(
