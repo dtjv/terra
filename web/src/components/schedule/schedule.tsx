@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { set } from 'date-fns'
 import {
   Grid,
   GridItem,
@@ -29,7 +30,9 @@ interface ScheduleProps {
 }
 
 export const Schedule = ({ vehicles }: ScheduleProps) => {
-  const [scheduledAt] = useState(new Date())
+  const [scheduledAt, setScheduledAt] = useState(
+    set(new Date(), { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 })
+  )
   const { rows, data, error, isLoading, isError, updateTicketMutation } =
     useSchedule({ vehicles, scheduledAt })
   const numRows = rows.length + 1
@@ -51,7 +54,10 @@ export const Schedule = ({ vehicles }: ScheduleProps) => {
 
   return (
     <Box h="100%" bg={backgroundColor}>
-      <ScheduleNav />
+      <ScheduleNav
+        scheduledAt={scheduledAt}
+        setScheduledAt={(date: Date) => setScheduledAt(date)}
+      />
       <Box px={16} mx="auto" maxW="6xl">
         <ScheduleToolbar />
         {/* schedule header container */}

@@ -1,3 +1,4 @@
+import { add, sub, format } from 'date-fns'
 import {
   Box,
   Flex,
@@ -10,7 +11,15 @@ import {
 } from '@chakra-ui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 
-export const ScheduleNav = () => {
+export interface ScheduleNavProps {
+  scheduledAt: Date
+  setScheduledAt: (date: Date) => void
+}
+
+export const ScheduleNav = ({
+  scheduledAt,
+  setScheduledAt,
+}: ScheduleNavProps) => {
   const backgroundColor = useColorModeValue('whiteAlpha.700', 'gray.800')
   const borderColor = useColorModeValue('gray.200', 'whiteAlpha.400')
 
@@ -33,16 +42,18 @@ export const ScheduleNav = () => {
                 fontSize="1.5rem"
                 aria-label="Previous Day"
                 icon={<ChevronLeftIcon />}
+                onClick={() => setScheduledAt(sub(scheduledAt, { days: 1 }))}
               />
               <IconButton
                 variant="ghost"
                 fontSize="1.5rem"
                 aria-label="Next Day"
                 icon={<ChevronRightIcon />}
+                onClick={() => setScheduledAt(add(scheduledAt, { days: 1 }))}
               />
             </Flex>
             <Heading as="h3" size="md">
-              August 13, 2021{' '}
+              {format(scheduledAt, 'MMMM d, yyyy')}
             </Heading>
           </HStack>
         </Flex>
