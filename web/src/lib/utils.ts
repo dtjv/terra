@@ -1,5 +1,5 @@
 import { get, groupBy, keyBy } from 'lodash'
-import { set, format, addMinutes } from 'date-fns'
+import { set, format, add } from 'date-fns'
 import { CellKind } from '@/types/enums'
 import type {
   Ticket,
@@ -10,27 +10,34 @@ import type {
   ColHeader,
 } from '@/types/types'
 
-export const isMultipleOf = (num: number, factor: number) => num % factor === 0
+export const isMultiple = (num: number, factor: number) => num % factor === 0
+/*
+hourFormat: isMultipleOf(idx, timeFactor) ? format(scheduleTime, 'h a') : '',
+*/
 
 export interface MakeScheduleTimesProps {
   startHour: number
   endHour: number
-  date?: Date
   timeBlockInMinutes: number
 }
 
+/**
+ * @returns {Array} An array of times, every `timeBlockInMinutes`.
+ * @example
+ *   // returns:
+ *   // [ '08:00:00.000', '08:30:00.000',
+ *   //   '09:00:00.000', '09:30:00.000',
+ *   //   '10:00:00.000', '10:30:00.000' ]
+ *   makeScheduleTimes({ startHour: 8, endHour: 11 })
+ */
 export const makeScheduleTimes = ({
   startHour,
   endHour,
-  date = new Date(Date.now()),
   timeBlockInMinutes,
-}: MakeScheduleTimesProps): Date[] => {
-  const scheduleTimes: Date[] = []
+}: MakeScheduleTimesProps): string[] => {
+  const times: string[] = []
 
-  let scheduleTime = set(date, {
-    year: date.getFullYear(),
-    month: date.getMonth(),
-    date: date.getDay(),
+  let date = set(new Date(), {
     hours: startHour,
     minutes: 0,
     seconds: 0,
@@ -38,44 +45,69 @@ export const makeScheduleTimes = ({
   })
 
   while (startHour < endHour) {
-    scheduleTimes.push(scheduleTime)
-    scheduleTime = addMinutes(scheduleTime, timeBlockInMinutes)
-    startHour = scheduleTime.getHours()
+    times.push(format(date, 'HH:mm:ss.SSS'))
+    date = add(date, { minutes: timeBlockInMinutes })
+    startHour = date.getHours()
   }
 
-  return scheduleTimes
+  return times
 }
 
 export interface MakeRowHeadersProps {
-  scheduleTimes: Date[]
-  timeBlockInMinutes?: number
+  scheduleTimes: string[]
 }
 
+/**
+ * @returns {Array} An array of row headers. Includes an empty row header for
+ *                  the column header row.
+ * @example
+ *   // returns:
+ *   // [
+ *   //   { time: '',
+ *   //     timeHour: '',
+ *   //     timeHourMinute: ''
+ *   //   },
+ *   //   {
+ *   //     time: '08:00:00.000',
+ *   //     timeHour: '8 AM',
+ *   //     timeHourMinute: '8:00 AM',
+ *   //   },
+ *   //   {
+ *   //     time: '08:30:00.000',
+ *   //     timeHour: '8 AM',
+ *   //     timeHourMinute: '8:30 AM',
+ *   //   },
+ *   // ]
+ *   const scheduleTimes = makeScheduleTimes({ startHour: 8, endHour: 9 })
+ *   makeRowHeaders({ scheduleTimes })
+ */
 export const makeRowHeaders = ({
   scheduleTimes,
-  timeBlockInMinutes = 30,
 }: MakeRowHeadersProps): RowHeader[] => {
   return [
     {
-      scheduleTimeISO: '',
-      hourFormat: '',
-      hourMinuteFormat: '',
+      time: '',
+      timeHour: '',
+      timeHourMinute: '',
     },
-    ...scheduleTimes.map((scheduleTime, idx) => {
-      const timeFactor = 60 / timeBlockInMinutes
+    ...scheduleTimes.map((time) => {
+      const [hour, minutes] = time.split(':')
+      const date = set(new Date(), {
+        hours: parseInt(hour ?? '0', 10),
+        minutes: parseInt(minutes ?? '0', 10),
+      })
+
       return {
-        scheduleTimeISO: scheduleTime.toISOString(),
-        hourMinuteFormat: format(scheduleTime, 'h:mm a'),
-        hourFormat: isMultipleOf(idx, timeFactor)
-          ? format(scheduleTime, 'h a')
-          : '',
+        time,
+        timeHour: format(date, 'h a'),
+        timeHourMinute: format(date, 'h:mm a'),
       }
     }),
   ]
 }
 
 export const makeColHeaders = (vehicles: Vehicle[]): ColHeader[] => {
-  return [{ id: '', key: '', name: '' }, ...vehicles]
+  return [{ id: '', vehicleKey: '', vehicleName: '' }, ...vehicles]
 }
 
 export interface GroupTicketsByProps {
@@ -84,6 +116,25 @@ export interface GroupTicketsByProps {
   colField: keyof Ticket
 }
 
+/**
+ * @returns {Object} A two-level hash of `tickets`. (see example below)
+ * @example
+ *   // returns:
+ *   // {
+ *   //   '08:00:00.000': {
+ *   //     '102': { ticket goes here }
+ *   //     '202': { ticket goes here }
+ *   //   },
+ *   //   '09:30:00.000': {
+ *   //     '202': { ticket goes here }
+ *   //   },
+ *   // }
+ *   groupTicketsBy({
+ *     tickets,
+ *     rowField: 'scheduledTime',
+ *     colField:'vehicleKey'
+ *   })
+ */
 export const groupTicketsBy = ({
   tickets,
   rowField,
@@ -106,18 +157,24 @@ export interface MakeRowsProps {
   tickets: Ticket[]
   rowHeaders: RowHeader[]
   colHeaders: ColHeader[]
+  timeBlockInMinutes: number
 }
 
+/**
+ * TODO: include example output
+ */
 export const makeRows = ({
   tickets,
   rowHeaders,
   colHeaders,
+  timeBlockInMinutes,
 }: MakeRowsProps): Row[] => {
   const ticketHash = groupTicketsBy({
     tickets,
-    rowField: 'scheduledStartTime', //TODO: a virtual. not the best choice?
+    rowField: 'scheduledTime',
     colField: 'vehicleKey',
   })
+  const timeFactor = 60 / timeBlockInMinutes
 
   return rowHeaders.map((rowHeader, rowIdx) => {
     const row: Row = {
@@ -135,7 +192,7 @@ export const makeRows = ({
             ...defaultFields,
             ...colHeader,
             kind: CellKind.COL_HEADER,
-            display: colHeader.name,
+            display: colHeader.vehicleName,
           }
           return cell
         }
@@ -145,7 +202,7 @@ export const makeRows = ({
             ...defaultFields,
             ...rowHeader,
             kind: CellKind.ROW_HEADER,
-            display: rowHeader.hourFormat,
+            display: isMultiple(rowIdx, timeFactor) ? rowHeader.timeHour : '',
           }
           return cell
         }
@@ -155,7 +212,7 @@ export const makeRows = ({
           kind: CellKind.DATA_CELL,
           rowHeader,
           colHeader,
-          ticket: get(ticketHash, [rowHeader.hourMinuteFormat, colHeader.key]),
+          ticket: get(ticketHash, [rowHeader.time, colHeader.vehicleKey]),
         }
 
         return cell
