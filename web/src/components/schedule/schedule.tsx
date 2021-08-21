@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Grid,
   GridItem,
@@ -28,8 +29,9 @@ interface ScheduleProps {
 }
 
 export const Schedule = ({ vehicles }: ScheduleProps) => {
-  const { isLoading, isError, rows, error, updateTicketMutation, data } =
-    useSchedule(vehicles)
+  const [scheduledAt] = useState(new Date())
+  const { rows, data, error, isLoading, isError, updateTicketMutation } =
+    useSchedule({ vehicles, scheduledAt })
   const numRows = rows.length + 1
   const numCols = rows[0]?.cells.length ?? 0
   const templateRows = `repeat(${numRows}, minmax(${SCHEDULE_ROW_N_MIN_HEIGHT}px, 1fr))`

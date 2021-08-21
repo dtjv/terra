@@ -6,7 +6,7 @@ import {
   GridItem,
   useColorModeValue,
 } from '@chakra-ui/react'
-import { isMultipleOf } from '@/lib/utils'
+import { isMultiple } from '@/lib/utils'
 import { CellKind } from '@/types/enums'
 import type { Cell } from '@/types/types'
 
@@ -21,8 +21,8 @@ export const ScheduleRowHeader = ({
   numRows,
   timeBlockInMinutes,
 }: ScheduleRowHeaderProps) => {
-  const showLineInGrid = isMultipleOf(cell.rowIdx, 60 / timeBlockInMinutes)
   const borderColor = useColorModeValue('gray.300', 'whiteAlpha.400')
+  const showLineInGrid = isMultiple(cell.rowIdx, 60 / timeBlockInMinutes)
 
   if (cell.kind !== CellKind.ROW_HEADER) return null
 
