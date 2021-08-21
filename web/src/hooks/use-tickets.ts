@@ -13,9 +13,8 @@ export interface useTicketsProps {
 
 export const useTickets = ({ scheduledAt }: useTicketsProps) => {
   const queryClient = useQueryClient()
-
   const ticketsQuery = useQuery<Ticket[], Error>(
-    [TICKETS_QUERY_KEY],
+    [TICKETS_QUERY_KEY, scheduledAt],
     async () => {
       const scheduledAtEncoded = encodeURIComponent(scheduledAt.toISOString())
       // TODO: handle axios errors
