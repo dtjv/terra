@@ -10,10 +10,26 @@ import type {
   ColHeader,
 } from '@/types/types'
 
+/**
+ * @returns {boolean} True if 'num' is a multiple of 'factor'; false otherwise.
+ */
 export const isMultiple = (num: number, factor: number) => num % factor === 0
-/*
-hourFormat: isMultipleOf(idx, timeFactor) ? format(scheduleTime, 'h a') : '',
-*/
+
+/**
+ * @param {string} time - Time format: 'HH.mm.ss.SSS' (see date-fns/format).
+ * @returns {Date} Sets 'time' to 'date' and returns a new Date object.
+ */
+export const combineDateTime = (date: Date, time: string): Date => {
+  const [hour, minute, rest] = time.split(':')
+  const [seconds, milliseconds] = rest?.split('.') ?? []
+
+  return set(date, {
+    hours: parseInt(hour ?? '0', 10),
+    minutes: parseInt(minute ?? '0', 10),
+    seconds: parseInt(seconds ?? '0', 10),
+    milliseconds: parseInt(milliseconds ?? '0', 10),
+  })
+}
 
 export interface MakeScheduleTimesProps {
   startHour: number
@@ -91,12 +107,7 @@ export const makeRowHeaders = ({
       timeHourMinute: '',
     },
     ...scheduleTimes.map((time) => {
-      const [hour, minutes] = time.split(':')
-      const date = set(new Date(), {
-        hours: parseInt(hour ?? '0', 10),
-        minutes: parseInt(minutes ?? '0', 10),
-      })
-
+      const date = combineDateTime(new Date(), time)
       return {
         time,
         timeHour: format(date, 'h a'),
@@ -106,7 +117,13 @@ export const makeRowHeaders = ({
   ]
 }
 
-export const makeColHeaders = (vehicles: Vehicle[]): ColHeader[] => {
+export interface MakeColHeadersProps {
+  vehicles: Vehicle[]
+}
+
+export const makeColHeaders = ({
+  vehicles,
+}: MakeColHeadersProps): ColHeader[] => {
   return [{ id: '', vehicleKey: '', vehicleName: '' }, ...vehicles]
 }
 
