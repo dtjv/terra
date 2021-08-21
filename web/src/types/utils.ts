@@ -6,8 +6,8 @@ import type {
 } from '@/types/types'
 
 export const toVehicle = (vehicleDoc: VehicleDocument): Vehicle => {
-  const { id, key, name } = vehicleDoc
-  return { id, key, name }
+  const { id, vehicleKey, vehicleName } = vehicleDoc
+  return { id, vehicleKey, vehicleName }
 }
 
 export const toTicket = (ticketDoc: TicketDocument): Ticket => {
@@ -22,7 +22,6 @@ export const toTicket = (ticketDoc: TicketDocument): Ticket => {
     durationInMinutes,
     vehicleDoc,
     scheduledTimeRange,
-    scheduledStartTime,
   } = ticketDoc
 
   return {
@@ -36,6 +35,5 @@ export const toTicket = (ticketDoc: TicketDocument): Ticket => {
     durationInMinutes,
     vehicleDoc,
     scheduledTimeRange,
-    scheduledStartTime,
   }
 }

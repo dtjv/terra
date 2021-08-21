@@ -17,11 +17,6 @@ export interface VehicleDocument extends VehicleInput, Document {}
 
 //-----------------------------------------------------------------------------
 // Ticket types
-//
-// - `durationInMinutes` is set on the client side. its value depends on
-//   `destinationAddress.street` and `destinationAddress.zip`.
-// - `scheduledAt` is set on the client side. its value depends on `vehicleKey`
-//    and `durationInMinutes`.
 //-----------------------------------------------------------------------------
 export interface TicketInput {
   ticketKind: TicketKind
@@ -39,7 +34,6 @@ export interface TicketInput {
 interface TicketExtended extends TicketInput {
   vehicleDoc: PopulatedDoc<VehicleDocument>
   scheduledTimeRange: string
-  scheduledStartTime: string
 }
 
 export interface Ticket extends TicketExtended {
