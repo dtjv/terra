@@ -178,7 +178,7 @@ export interface MakeRowsProps {
 }
 
 /**
- * TODO: include example output
+ * TODO: document makeRows()
  */
 export const makeRows = ({
   tickets,
@@ -219,7 +219,9 @@ export const makeRows = ({
             ...defaultFields,
             ...rowHeader,
             kind: CellKind.ROW_HEADER,
-            display: isMultiple(rowIdx, timeFactor) ? rowHeader.timeHour : '',
+            display: isMultiple(rowIdx - 1, timeFactor)
+              ? rowHeader.timeHour
+              : '',
           }
           return cell
         }
