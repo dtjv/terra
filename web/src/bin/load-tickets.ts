@@ -19,11 +19,14 @@ export const createTickets = async (): Promise<void> => {
     }
   }
 
-  const tickets = newTickets.map((ticket) => {
-    const { scheduledAtISO, ...newTicket } = ticket
+  const tickets = newTickets.map((newTicket) => {
+    const { scheduledDate, ...ticket } = newTicket
+    const d = new Date(scheduledDate)
+    const [year, month, date] = [d.getFullYear(), d.getMonth(), d.getUTCDate()]
+
     return {
-      ...newTicket,
-      scheduledAt: new Date(scheduledAtISO),
+      ...ticket,
+      scheduledAt: new Date(year, month, date),
     }
   })
 

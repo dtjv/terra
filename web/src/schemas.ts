@@ -23,6 +23,8 @@ export const AddressSchema = object({
   zip: enums(oregon.map((location) => location.zip)),
 })
 
+// TODO: the string coming in.. what's its format? it must be: 'YYYY-MM-DD'
+// this i can parse it out like load-tickets.ts and create the valid UTC date.
 export const DateSchema = coerce(date(), string(), (value) => new Date(value))
 
 export const TicketFormSchema = object({
@@ -31,5 +33,6 @@ export const TicketFormSchema = object({
   destinationAddress: AddressSchema,
   vehicleKey: string(),
   scheduledAt: DateSchema,
+  scheduledTime: string(),
   durationInMinutes: DurationSchema,
 })

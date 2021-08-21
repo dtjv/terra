@@ -1,5 +1,5 @@
 [
-  { "key": "102", "name": "Truck 102" },
-  { "key": "202", "name": "Truck 202" },
-  { "key": "302", "name": "Truck 302" }
+  { "vehicleKey": "102", "vehicleName": "Truck 102" },
+  { "vehicleKey": "202", "vehicleName": "Truck 202" },
+  { "vehicleKey": "302", "vehicleName": "Truck 302" }
 ]

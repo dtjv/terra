@@ -3,12 +3,12 @@ import type { Model } from 'mongoose'
 import type { Vehicle } from '@/types/types'
 
 const vehicleSchema = new Schema<Vehicle, Model<Vehicle>, Vehicle>({
-  key: {
+  vehicleKey: {
     type: String,
     unique: true,
     required: true,
   },
-  name: {
+  vehicleName: {
     type: String,
     required: true,
   },

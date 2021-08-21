@@ -5,8 +5,8 @@ import { CellKind, TicketKind } from '@/types/enums'
 // Vehicle types
 //-----------------------------------------------------------------------------
 export interface VehicleInput {
-  key: string
-  name: string
+  vehicleKey: string
+  vehicleName: string
 }
 
 export interface Vehicle extends VehicleInput {
@@ -32,6 +32,7 @@ export interface TicketInput {
   }
   vehicleKey: string
   scheduledAt: Date
+  scheduledTime: string
   durationInMinutes: number
 }
 
@@ -55,12 +56,15 @@ export type TicketContext = { previousTickets: Ticket[] }
 // UI schedule types
 //-----------------------------------------------------------------------------
 export type RowHeader = {
-  scheduleTimeISO: string
-  hourFormat: string
-  hourMinuteFormat: string
+  time: string
+  timeHour: string
+  timeHourMinute: string
 }
 
-export type ColHeader = Vehicle
+export type ColHeader = {
+  vehicleKey: string
+  vehicleName: string
+}
 
 interface BaseCell<Kind extends CellKind> {
   kind: Kind
