@@ -48,12 +48,11 @@ export const DestinationAddress = ({
       ) {
         try {
           const duration = await getDurationAPI(street, zip)
-          console.log(`-> duration:`, duration)
           setValue('durationInMinutes', duration)
         } catch (error) {
-          if (getDurationAPI.isCanceled(error)) {
-            console.log(`getDurationAPI is cancelled`)
-          } else throw error
+          if (!getDurationAPI.isCanceled(error)) {
+            throw error // TODO: correct?
+          }
         }
       }
     })()

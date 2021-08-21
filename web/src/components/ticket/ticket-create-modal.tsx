@@ -20,26 +20,6 @@ import { TicketFormSchema } from '@/schemas'
 import { TicketKind } from '@/types/enums'
 import type { TicketInput } from '@/types/types'
 
-//-----------------------------------------------------------------------------
-// rules
-//
-// 'durationInMinutes' is dependent on 'destinationAddress`. if any part of
-// 'destinationAddress' changes, google api is called, its result added to
-// delivery logic (duration is doubled for round trip, add load and dump
-// buffer).
-//
-// 'scheduledAt' is set from a select field. the choices are computed and
-// dependent on 'durationInMinutes' and 'vehicleKey'. if either dependent field
-// changes, an api is called to scan schedule for available slot (day/time) for
-// the selected vehicle and duration of ticket. the scan needs a cursor to start
-// and a parameter to tell how many results to return.
-//
-// TODO
-// when a user selects a schedule day/time, call an api to mark that slot as
-// pending. if user saves, changes scheduled slot or deletes the ticket, i need
-// logic to deal with that placeholder.
-//-----------------------------------------------------------------------------
-
 interface TicketCreateModalProps {
   isOpen: boolean
   onClose: () => void
@@ -85,7 +65,7 @@ export const TicketCreateModal = ({
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create New Ticket</ModalHeader>
+        <ModalHeader>New Ticket</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <form onSubmit={handleSubmit(handleFormSubmit)}>
