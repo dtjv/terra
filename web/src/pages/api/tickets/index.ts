@@ -11,8 +11,18 @@ const handler: NextApiHandler = async (
   res: NextApiResponse
 ) => {
   if (req.method === 'GET') {
+    const { scheduledAt } = req.query
+
+    if (!scheduledAt || Array.isArray(scheduledAt)) {
+      return res
+        .status(400)
+        .json({ message: `Missing/Invalid query parameter 'scheduledAt'` })
+    }
+
     try {
-      const ticketDocs: TicketDocument[] = await getTickets()
+      const ticketDocs: TicketDocument[] = await getTickets(
+        new Date(scheduledAt)
+      )
       const tickets: Ticket[] = ticketDocs.map((ticketDoc) =>
         toTicket(ticketDoc)
       )

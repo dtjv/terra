@@ -7,19 +7,26 @@ import {
 } from '@/config'
 import type { Ticket, UpdatedTicket, TicketContext } from '@/types/types'
 
-export const useTickets = () => {
+export interface useTicketsProps {
+  scheduledAt: Date
+}
+
+export const useTickets = ({ scheduledAt }: useTicketsProps) => {
   const queryClient = useQueryClient()
 
   const ticketsQuery = useQuery<Ticket[], Error>(
     [TICKETS_QUERY_KEY],
     async () => {
+      const scheduledAtEncoded = encodeURIComponent(scheduledAt.toISOString())
       // TODO: handle axios errors
-      const { data } = await axios.get(TICKETS_API)
+      const { data } = await axios.get(
+        `${TICKETS_API}?scheduledAt=${scheduledAtEncoded}`
+      )
       return data
     },
     {
       //refetchInterval: TICKETS_REFRESH_INTERVAL_IN_MS,
-      refetchIntervalInBackground: true,
+      //refetchIntervalInBackground: true,
     }
   )
 
@@ -44,11 +51,10 @@ export const useTickets = () => {
         const previousTickets =
           queryClient.getQueryData<Ticket[]>(TICKETS_QUERY_KEY) ?? []
 
-        // TODO: optimistically updates the cache, allowing ui to render ticket
-        // in new position.
-        // the updated ticket's computed fields are not valid until server
-        // response comes thru. the window of inconsistency is short, as the
-        // server response is almost instant.
+        // Optimistically updates the cache, allowing UI to render ticket
+        // in new position. NOTE: the updated ticket is in an inconsistent
+        // state (i.e., vehicleKey doesn't match vehicle, scheduledTimeRange
+        // might not match scheduledTime.
         queryClient.setQueryData<Ticket[]>(
           TICKETS_QUERY_KEY,
           (previousTickets = []) => {

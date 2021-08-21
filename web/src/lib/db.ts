@@ -15,9 +15,11 @@ export const getVehicles = async (): Promise<VehicleDocument[]> => {
   return await VehicleModel.find({})
 }
 
-export const getTickets = async (): Promise<TicketDocument[]> => {
+export const getTickets = async (
+  scheduledAt: Date
+): Promise<TicketDocument[]> => {
   await connectToDB()
-  return await TicketModel.find({}).populate('vehicleDoc')
+  return await TicketModel.find({ scheduledAt }).populate('vehicleDoc')
 }
 
 export const createTicket = async (
