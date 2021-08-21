@@ -19,19 +19,23 @@ const scheduleConfig = {
   timeBlockInMinutes: SCHEDULE_TIME_BLOCK_IN_MINUTES,
 }
 
-export const useSchedule = (vehicles: Vehicle[]) => {
-  const { ticketsQuery, updateTicketMutation } = useTickets()
+export interface useScheduleProps {
+  vehicles: Vehicle[]
+  scheduledAt: Date
+}
 
-  const colHeaders = makeColHeaders(vehicles)
+export const useSchedule = ({ vehicles, scheduledAt }: useScheduleProps) => {
+  const { ticketsQuery, updateTicketMutation } = useTickets({ scheduledAt })
 
-  const rowHeaders = useMemo(() => {
-    return makeRowHeaders({
-      // TODO: right now, schedule times are based off 'today'. but we need to
-      // pass in the date the user wants - not always today.
-      scheduleTimes: makeScheduleTimes(scheduleConfig),
-      timeBlockInMinutes: scheduleConfig.timeBlockInMinutes,
-    })
-  }, [])
+  const colHeaders = makeColHeaders({ vehicles })
+
+  const rowHeaders = useMemo(
+    () =>
+      makeRowHeaders({
+        scheduleTimes: makeScheduleTimes({ ...scheduleConfig }),
+      }),
+    []
+  )
 
   const rows = useMemo(() => {
     return ticketsQuery.isLoading || ticketsQuery.isError
@@ -40,6 +44,7 @@ export const useSchedule = (vehicles: Vehicle[]) => {
           tickets: ticketsQuery.data ?? [],
           rowHeaders,
           colHeaders,
+          timeBlockInMinutes: scheduleConfig.timeBlockInMinutes,
         })
   }, [ticketsQuery, rowHeaders, colHeaders])
 
