@@ -19,16 +19,10 @@ export const createTickets = async (): Promise<void> => {
     }
   }
 
-  const tickets = newTickets.map((newTicket) => {
-    const { scheduledDate, ...ticket } = newTicket
-    const d = new Date(scheduledDate)
-    const [year, month, date] = [d.getFullYear(), d.getMonth(), d.getUTCDate()]
-
-    return {
-      ...ticket,
-      scheduledAt: new Date(year, month, date),
-    }
-  })
+  const tickets = newTickets.map(({ scheduledDate, ...ticket }) => ({
+    ...ticket,
+    scheduledAt: new Date(scheduledDate),
+  }))
 
   await TicketModel.create(tickets as TicketInput[])
 

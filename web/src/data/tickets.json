@@ -6,7 +6,7 @@
     "vehicleKey": "102",
     "durationInMinutes": 30,
     "scheduledTime": "08:00:00.000",
-    "scheduledDate": "2021-08-19"
+    "scheduledDate": "2021-8-19"
   },
   {
     "ticketKind": "DELIVERY",
@@ -15,7 +15,7 @@
     "vehicleKey": "102",
     "durationInMinutes": 30,
     "scheduledTime": "09:30:00.000",
-    "scheduledDate": "2021-08-19"
+    "scheduledDate": "2021-8-19"
   },
   {
     "ticketKind": "DELIVERY",
@@ -24,7 +24,7 @@
     "vehicleKey": "202",
     "durationInMinutes": 60,
     "scheduledTime": "09:00:00.000",
-    "scheduledDate": "2021-08-19"
+    "scheduledDate": "2021-8-19"
   },
   {
     "ticketKind": "DELIVERY",
@@ -33,7 +33,7 @@
     "vehicleKey": "302",
     "durationInMinutes": 90,
     "scheduledTime": "13:00:00.000",
-    "scheduledDate": "2021-08-19"
+    "scheduledDate": "2021-8-19"
   },
   {
     "ticketKind": "DELIVERY",
@@ -42,7 +42,7 @@
     "vehicleKey": "102",
     "durationInMinutes": 30,
     "scheduledTime": "10:00:00.000",
-    "scheduledDate": "2021-08-20"
+    "scheduledDate": "2021-8-20"
   },
   {
     "ticketKind": "DELIVERY",
@@ -51,7 +51,7 @@
     "vehicleKey": "202",
     "durationInMinutes": 30,
     "scheduledTime": "08:00:00.000",
-    "scheduledDate": "2021-08-20"
+    "scheduledDate": "2021-8-20"
   },
   {
     "ticketKind": "DELIVERY",
@@ -60,7 +60,7 @@
     "vehicleKey": "302",
     "durationInMinutes": 60,
     "scheduledTime": "10:00:00.000",
-    "scheduledDate": "2021-08-20"
+    "scheduledDate": "2021-8-20"
   },
   {
     "ticketKind": "DELIVERY",
@@ -69,6 +69,6 @@
     "vehicleKey": "302",
     "durationInMinutes": 90,
     "scheduledTime": "11:30:00.000",
-    "scheduledDate": "2021-08-20"
+    "scheduledDate": "2021-8-20"
   }
 ]
