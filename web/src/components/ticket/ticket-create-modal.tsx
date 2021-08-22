@@ -31,7 +31,7 @@ export const TicketCreateModal = ({
 }: TicketCreateModalProps) => {
   const form: UseFormReturn<TicketInput> = useForm<TicketInput>({
     mode: 'onTouched',
-    defaultValues: { ticketKind: TicketKind.DELIVERY },
+    defaultValues: { ticketKind: TicketKind.DELIVERY, scheduledTime: '' },
     resolver: superstructResolver(TicketFormSchema, { coerce: true }),
   })
   const {

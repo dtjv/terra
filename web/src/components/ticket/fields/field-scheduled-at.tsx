@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { format } from 'date-fns'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useWatch, Controller } from 'react-hook-form'
 import {
   FormLabel,
@@ -24,14 +24,12 @@ interface AvailableSlot {
 
 // TODO: use react-query so we're not always calling api on re-render
 // TODO: this is a generic useAPI hook!
-const useTime = () => {
+const useTimesAPI = () => {
   const axiosSource = axios.CancelToken.source()
   const getTimesAPI = async () => {
     console.log(`retrieving times...`)
     return (
-      await axios.get('/api/demo/times', {
-        cancelToken: axiosSource.token,
-      })
+      await axios.post('/api/demo/times', { cancelToken: axiosSource.token })
     ).data
   }
   getTimesAPI.cancel = () => axiosSource.cancel()
@@ -41,13 +39,23 @@ const useTime = () => {
 
 export const ScheduleAt = ({
   control,
-  //setValue,
+  setValue,
   formState: { errors },
 }: UseFormReturn<TicketInput>) => {
   const durationInMinutes = useWatch({ control, name: 'durationInMinutes' })
   const vehicleKey = useWatch({ control, name: 'vehicleKey' })
   const [availableSlots, setAvailableSlots] = useState<AvailableSlot[]>([])
-  const { getTimesAPI } = useTime()
+  const { getTimesAPI } = useTimesAPI()
+
+  const api = useCallback(
+    async () => getTimesAPI(),
+    [getTimesAPI, vehicleKey, durationInMinutes]
+  )
+  const isApiCanceled = useCallback(
+    (error) => getTimesAPI.isCanceled(error),
+    [getTimesAPI]
+  )
+  const cancelApi = useCallback(() => getTimesAPI.cancel(), [getTimesAPI])
 
   useEffect(() => {
     ;(async () => {
@@ -60,19 +68,20 @@ export const ScheduleAt = ({
         let slots: AvailableSlot[] = []
 
         try {
-          slots = await getTimesAPI()
+          slots = await api()
+          setAvailableSlots(slots)
         } catch (error) {
-          if (!getTimesAPI.isCanceled(error)) {
+          if (!isApiCanceled(error)) {
             throw error // TODO: should i throw?
           }
         }
-
-        setAvailableSlots(slots)
       }
     })()
-    return () => getTimesAPI.cancel()
+    return () => cancelApi()
   }, [
-    getTimesAPI,
+    api,
+    cancelApi,
+    isApiCanceled,
     durationInMinutes,
     vehicleKey,
     errors.durationInMinutes,
@@ -82,9 +91,8 @@ export const ScheduleAt = ({
   // TODO:
   //
   // 1. custom 'onChange' will call 'setValue' to update form state.
-  // 3. 'scheduledAt' is hooked up to DateSchema for coercion, but it won't
-  //    create the date correctly - i need to split the incoming string and
-  //    construct date as 'new Date(year, month, date)'
+  // 3. 'scheduledAt' is hooked up to DateSchema and coerced into a Date. may
+  //    need to change if the value of option is gonna be some special format.
   //
   // TODO: ugh!!!
   // availableSlots should be display by time -> by truck
@@ -108,29 +116,37 @@ export const ScheduleAt = ({
             render={({ field: { onChange, value, ref } }) => (
               <RadioGroup
                 name="scheduledAt"
-                onChange={(e) => {
-                  console.log(`event: `, e)
-                  onChange(e)
+                onChange={(value) => {
+                  onChange(value)
+                  const { scheduledTime } = JSON.parse(value)
+                  setValue('scheduledTime', scheduledTime)
                 }}
                 value={value ? value.toString() : ''}
                 ref={ref}
               >
                 <Stack>
-                  {availableSlots.map((slot) => {
-                    // TODO: the value must hold 'scheduledAt' and
-                    // 'scheduledTime', so the onChange handler can set
-                    // scheduledTime.
-                    // can't do onSubmit, 'cause this field has been coerced
-                    return (
-                      <Radio key={slot.key} value={JSON.stringify(slot)}>
-                        {format(new Date(slot.scheduledAtFull), 'PPPPpp')}
-                        <Text as="span" fontWeight="bold">
-                          {' '}
-                          ({slot.vehicleKey}){' '}
-                        </Text>
-                      </Radio>
-                    )
-                  })}
+                  {availableSlots.map(
+                    ({
+                      key,
+                      vehicleKey,
+                      scheduledAt,
+                      scheduledTime,
+                      scheduledAtFull,
+                    }) => {
+                      return (
+                        <Radio
+                          key={key}
+                          value={JSON.stringify({ scheduledAt, scheduledTime })}
+                        >
+                          {format(new Date(scheduledAtFull), 'PPPPpp')}
+                          <Text as="span" fontWeight="bold">
+                            {' '}
+                            ({vehicleKey}){' '}
+                          </Text>
+                        </Radio>
+                      )
+                    }
+                  )}
                 </Stack>
               </RadioGroup>
             )}

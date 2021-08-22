@@ -14,7 +14,7 @@ import type { TicketInput } from '@/types/types'
 const useDuration = () => {
   const axiosSource = axios.CancelToken.source()
   const getDurationAPI = async (street: string, zip: string) => {
-    console.log(`calculating duration for: {street: ${street}, zip: ${zip}}...`)
+    console.log(`calc duration: ${street} ${zip}...`)
     return (
       await axios.post(
         '/api/demo/duration',
