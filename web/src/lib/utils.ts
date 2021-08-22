@@ -10,13 +10,10 @@ import type {
   ColHeader,
 } from '@/types/types'
 
-/**
- * @returns {boolean} True if 'num' is a multiple of 'factor'; false otherwise.
- */
 export const isMultiple = (num: number, factor: number) => num % factor === 0
 
 /**
- * @param {string} time - Time format: 'HH.mm.ss.SSS' (see date-fns/format).
+ * @param {string} time - Format: 'HH.mm.ss.SSS' (see date-fns/format).
  * @returns {Date} Sets 'time' to 'date' and returns a new Date object.
  */
 export const combineDateTime = (date: Date, time: string): Date => {
@@ -40,11 +37,10 @@ export interface MakeScheduleTimesProps {
 /**
  * @returns {Array} An array of times, every `timeBlockInMinutes`.
  * @example
- *   // returns:
+ *   makeScheduleTimes({ startHour: 8, endHour: 11 })
  *   // [ '08:00:00.000', '08:30:00.000',
  *   //   '09:00:00.000', '09:30:00.000',
  *   //   '10:00:00.000', '10:30:00.000' ]
- *   makeScheduleTimes({ startHour: 8, endHour: 11 })
  */
 export const makeScheduleTimes = ({
   startHour,
@@ -74,10 +70,10 @@ export interface MakeRowHeadersProps {
 }
 
 /**
- * @returns {Array} An array of row headers. Includes an empty row header for
- *                  the column header row.
+ * @returns {Array} Row headers, prepended with an empty one for column headers.
  * @example
- *   // returns:
+ *   const scheduleTimes = makeScheduleTimes({ startHour: 8, endHour: 9 })
+ *   makeRowHeaders({ scheduleTimes })
  *   // [
  *   //   { time: '',
  *   //     timeHour: '',
@@ -94,8 +90,6 @@ export interface MakeRowHeadersProps {
  *   //     timeHourMinute: '8:30 AM',
  *   //   },
  *   // ]
- *   const scheduleTimes = makeScheduleTimes({ startHour: 8, endHour: 9 })
- *   makeRowHeaders({ scheduleTimes })
  */
 export const makeRowHeaders = ({
   scheduleTimes,
@@ -121,6 +115,9 @@ export interface MakeColHeadersProps {
   vehicles: Vehicle[]
 }
 
+/**
+ * @returns {Array} Column headers, prepended with an empty one for row headers.
+ */
 export const makeColHeaders = ({
   vehicles,
 }: MakeColHeadersProps): ColHeader[] => {
@@ -134,9 +131,13 @@ export interface GroupTicketsByProps {
 }
 
 /**
- * @returns {Object} A two-level hash of `tickets`. (see example below)
+ * @returns {Object} A two-level hash of `tickets`.
  * @example
- *   // returns:
+ *   groupTicketsBy({
+ *     tickets,
+ *     rowField: 'scheduledTime',
+ *     colField:'vehicleKey'
+ *   })
  *   // {
  *   //   '08:00:00.000': {
  *   //     '102': { ticket goes here }
@@ -146,11 +147,6 @@ export interface GroupTicketsByProps {
  *   //     '202': { ticket goes here }
  *   //   },
  *   // }
- *   groupTicketsBy({
- *     tickets,
- *     rowField: 'scheduledTime',
- *     colField:'vehicleKey'
- *   })
  */
 export const groupTicketsBy = ({
   tickets,
