@@ -12,9 +12,10 @@ export interface useTicketsProps {
 }
 
 export const useTickets = ({ scheduledAt }: useTicketsProps) => {
+  const QUERY_KEYS = [TICKETS_QUERY_KEY, scheduledAt]
   const queryClient = useQueryClient()
   const ticketsQuery = useQuery<Ticket[], Error>(
-    [TICKETS_QUERY_KEY, scheduledAt],
+    QUERY_KEYS,
     async () => {
       const scheduledAtEncoded = encodeURIComponent(scheduledAt.toISOString())
       // TODO: handle axios errors
@@ -45,17 +46,17 @@ export const useTickets = ({ scheduledAt }: useTicketsProps) => {
     },
     {
       onMutate: async (updatedTicket: UpdatedTicket) => {
-        await queryClient.cancelQueries(TICKETS_QUERY_KEY)
+        await queryClient.cancelQueries(QUERY_KEYS)
 
         const previousTickets =
-          queryClient.getQueryData<Ticket[]>(TICKETS_QUERY_KEY) ?? []
+          queryClient.getQueryData<Ticket[]>(QUERY_KEYS) ?? []
 
         // Optimistically updates the cache, allowing UI to render ticket
         // in new position. NOTE: the updated ticket is in an inconsistent
         // state (i.e., vehicleKey doesn't match vehicle, scheduledTimeRange
         // might not match scheduledTime.
         queryClient.setQueryData<Ticket[]>(
-          TICKETS_QUERY_KEY,
+          QUERY_KEYS,
           (previousTickets = []) => {
             return previousTickets.map((prevTicket) => {
               return prevTicket.id === updatedTicket.id
@@ -68,13 +69,10 @@ export const useTickets = ({ scheduledAt }: useTicketsProps) => {
         return { previousTickets }
       },
       onError: (_, __, context) => {
-        queryClient.setQueryData(
-          TICKETS_QUERY_KEY,
-          context?.previousTickets ?? []
-        )
+        queryClient.setQueryData(QUERY_KEYS, context?.previousTickets ?? [])
       },
       onSettled: () => {
-        queryClient.invalidateQueries(TICKETS_QUERY_KEY)
+        queryClient.invalidateQueries(QUERY_KEYS)
       },
     }
   )
