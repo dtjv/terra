@@ -5,18 +5,19 @@ import {
   HStack,
   IconButton,
   Heading,
-  Spacer,
-  Select,
   useColorModeValue,
+  Skeleton,
 } from '@chakra-ui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 
 export interface ScheduleNavProps {
+  isLoading: boolean
   scheduledAt: Date
   setScheduledAt: (date: Date) => void
 }
 
 export const ScheduleNav = ({
+  isLoading,
   scheduledAt,
   setScheduledAt,
 }: ScheduleNavProps) => {
@@ -37,32 +38,33 @@ export const ScheduleNav = ({
         <Flex>
           <HStack spacing={4}>
             <Flex>
-              <IconButton
-                variant="ghost"
-                fontSize="1.5rem"
-                aria-label="Previous Day"
-                icon={<ChevronLeftIcon />}
-                onClick={() => setScheduledAt(sub(scheduledAt, { days: 1 }))}
-              />
-              <IconButton
-                variant="ghost"
-                fontSize="1.5rem"
-                aria-label="Next Day"
-                icon={<ChevronRightIcon />}
-                onClick={() => setScheduledAt(add(scheduledAt, { days: 1 }))}
-              />
+              <Skeleton isLoaded={!isLoading}>
+                <IconButton
+                  variant="ghost"
+                  fontSize="1.5rem"
+                  aria-label="Previous Day"
+                  icon={<ChevronLeftIcon />}
+                  onClick={() => setScheduledAt(sub(scheduledAt, { days: 1 }))}
+                />
+              </Skeleton>
+              <Skeleton isLoaded={!isLoading}>
+                <IconButton
+                  ml={2}
+                  variant="ghost"
+                  fontSize="1.5rem"
+                  aria-label="Next Day"
+                  icon={<ChevronRightIcon />}
+                  onClick={() => setScheduledAt(add(scheduledAt, { days: 1 }))}
+                />
+              </Skeleton>
             </Flex>
-            <Heading as="h3" size="md">
-              {format(scheduledAt, 'MMMM d, yyyy')}
-            </Heading>
+            <Skeleton isLoaded={!isLoading}>
+              <Heading as="h3" size="md">
+                {format(scheduledAt, 'MMMM d, yyyy')}
+              </Heading>
+            </Skeleton>
           </HStack>
         </Flex>
-        <Spacer />
-        <Box>
-          <Select placeholder="Day" variant="outline">
-            <option value="week">Week</option>
-          </Select>
-        </Box>
       </Flex>
     </Box>
   )
