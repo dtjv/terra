@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic'
 import {
   Box,
   HStack,
@@ -10,7 +11,11 @@ import {
   Skeleton,
 } from '@chakra-ui/react'
 import { AddIcon, SearchIcon } from '@chakra-ui/icons'
-import { TicketCreateModal } from '@/components/ticket/ticket-create-modal'
+
+const TicketCreateModal = dynamic(async () => {
+  const m = await import('../../components/ticket/ticket-create-modal')
+  return m.TicketCreateModal
+})
 
 export interface ScheduleToolbarProps {
   isLoading: boolean
