@@ -57,7 +57,10 @@ export const Schedule = ({ vehicles }: ScheduleProps) => {
         setScheduledAt={(date: Date) => setScheduledAt(date)}
       />
       <Box px={16} mx="auto" maxW="6xl">
-        <ScheduleToolbar isLoading={isLoading} scheduledAt={scheduledAt} />
+        <ScheduleToolbar
+          isLoading={isLoading}
+          isPastSchedule={data.isPastSchedule}
+        />
         {/* schedule header container */}
         <Skeleton isLoaded={!isLoading}>
           <Box>
@@ -169,6 +172,7 @@ export const Schedule = ({ vehicles }: ScheduleProps) => {
                           cell={cell}
                           rows={rows}
                           updateTicket={updateTicketMutation}
+                          isPastSchedule={data.isPastSchedule}
                           timeBlockInMinutes={
                             data.scheduleConfig.timeBlockInMinutes
                           }

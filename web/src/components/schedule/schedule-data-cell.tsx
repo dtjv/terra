@@ -15,6 +15,7 @@ export interface ScheduleDataCellProps {
   cell: Cell
   rows: Row[]
   timeBlockInMinutes: number
+  isPastSchedule: boolean
   updateTicket: UseMutationResult<Ticket, Error, Ticket, TicketContext>
 }
 
@@ -22,6 +23,7 @@ export const ScheduleDataCell = ({
   cell,
   rows,
   updateTicket,
+  isPastSchedule,
   timeBlockInMinutes,
 }: ScheduleDataCellProps) => {
   const numRows = rows.length + 1
@@ -33,6 +35,10 @@ export const ScheduleDataCell = ({
       accept: DragItem.TICKET,
       canDrop: (dragTicket: Ticket, monitor) => {
         if (cell.kind !== CellKind.DATA_CELL) {
+          return false
+        }
+
+        if (isPastSchedule) {
           return false
         }
 
@@ -122,6 +128,7 @@ export const ScheduleDataCell = ({
     >
       <TicketView
         ticket={cell.ticket}
+        isPastSchedule
         timeBlockInMinutes={timeBlockInMinutes}
       />
     </GridItem>

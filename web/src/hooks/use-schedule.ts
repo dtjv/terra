@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { set, isBefore } from 'date-fns'
 import { useTickets } from '@/hooks/use-tickets'
 import {
   makeScheduleTimes,
@@ -26,9 +27,14 @@ export interface useScheduleProps {
 
 export const useSchedule = ({ vehicles, scheduledAt }: useScheduleProps) => {
   const { ticketsQuery, updateTicketMutation } = useTickets({ scheduledAt })
-
+  const today = set(new Date(), {
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    milliseconds: 0,
+  })
+  const isPastSchedule = isBefore(scheduledAt, today)
   const colHeaders = makeColHeaders({ vehicles })
-
   const rowHeaders = useMemo(
     () =>
       makeRowHeaders({
@@ -36,7 +42,6 @@ export const useSchedule = ({ vehicles, scheduledAt }: useScheduleProps) => {
       }),
     []
   )
-
   const rows = useMemo(() => {
     return ticketsQuery.isLoading || ticketsQuery.isError
       ? []
@@ -58,6 +63,7 @@ export const useSchedule = ({ vehicles, scheduledAt }: useScheduleProps) => {
       scheduleConfig,
       vehicles,
       tickets: ticketsQuery.data ?? [],
+      isPastSchedule,
     },
   }
 }

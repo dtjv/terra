@@ -1,4 +1,3 @@
-import { set, isBefore } from 'date-fns'
 import {
   Box,
   HStack,
@@ -15,22 +14,16 @@ import { TicketCreateModal } from '@/components/ticket/ticket-create-modal'
 
 export interface ScheduleToolbarProps {
   isLoading: boolean
-  scheduledAt: Date
+  isPastSchedule: boolean
 }
 
 export const ScheduleToolbar = ({
   isLoading,
-  scheduledAt,
+  isPastSchedule,
 }: ScheduleToolbarProps) => {
   const { onOpen, isOpen, onClose } = useDisclosure()
   const backgroundColor = useColorModeValue('whiteAlpha.900', 'gray.600')
   const placeholderColor = useColorModeValue('gray.400', 'whiteAlpha.700')
-  const today = set(new Date(), {
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    milliseconds: 0,
-  })
 
   return (
     <Box py={8}>
@@ -43,7 +36,7 @@ export const ScheduleToolbar = ({
             colorScheme="teal"
             variant="solid"
             onClick={onOpen}
-            isDisabled={isBefore(scheduledAt, today)}
+            isDisabled={isPastSchedule}
           >
             Create
           </Button>

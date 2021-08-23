@@ -7,16 +7,22 @@ import type { Ticket } from '@/types/types'
 
 export interface TicketViewProps {
   ticket: Ticket | undefined
+  isPastSchedule: boolean
   timeBlockInMinutes: number
 }
 
-export const TicketView = ({ ticket, timeBlockInMinutes }: TicketViewProps) => {
-  const [{ isDragging }, dragRef, dragPreviewRef] = useDrag(
+export const TicketView = ({
+  ticket,
+  isPastSchedule,
+  timeBlockInMinutes,
+}: TicketViewProps) => {
+  const [{ canDrag, isDragging }, dragRef, dragPreviewRef] = useDrag(
     () => ({
       type: DragItem.TICKET,
       item: ticket,
       collect: (monitor) => ({
         isDragging: !!monitor.isDragging(),
+        canDrag: !isPastSchedule,
       }),
     }),
     [ticket]
@@ -51,7 +57,7 @@ export const TicketView = ({ ticket, timeBlockInMinutes }: TicketViewProps) => {
         >
           {ticket.customerName}
           <div ref={dragRef}>
-            <DragHandleIcon color="white" cursor="grab" />
+            {canDrag && <DragHandleIcon color="white" cursor="grab" />}
           </div>
         </Flex>
         {ticket.durationInMinutes > timeBlockInMinutes ? (
