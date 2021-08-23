@@ -57,7 +57,7 @@ export const Schedule = ({ vehicles }: ScheduleProps) => {
         setScheduledAt={(date: Date) => setScheduledAt(date)}
       />
       <Box px={16} mx="auto" maxW="6xl">
-        <ScheduleToolbar isLoading={isLoading} />
+        <ScheduleToolbar isLoading={isLoading} scheduledAt={scheduledAt} />
         {/* schedule header container */}
         <Skeleton isLoaded={!isLoading}>
           <Box>
