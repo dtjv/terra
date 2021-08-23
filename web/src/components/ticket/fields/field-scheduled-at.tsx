@@ -13,28 +13,13 @@ import {
 import type { UseFormReturn } from 'react-hook-form'
 import type { TicketInput } from '@/types/types'
 
-// TODO: remove
+// TODO: remove?
 interface AvailableSlot {
   key: number
   vehicleKey: string
   scheduledAt: string
   scheduledTime: string
   scheduledAtFull: string
-}
-
-// TODO: use react-query so we're not always calling api on re-render
-// TODO: this is a generic useAPI hook!
-const useTimesAPI = () => {
-  const axiosSource = axios.CancelToken.source()
-  const getTimesAPI = async () => {
-    console.log(`retrieving times...`)
-    return (
-      await axios.post('/api/demo/times', { cancelToken: axiosSource.token })
-    ).data
-  }
-  getTimesAPI.cancel = () => axiosSource.cancel()
-  getTimesAPI.isCanceled = (error: any) => axios.isCancel(error)
-  return { getTimesAPI }
 }
 
 export const ScheduleAt = ({
@@ -45,19 +30,10 @@ export const ScheduleAt = ({
   const durationInMinutes = useWatch({ control, name: 'durationInMinutes' })
   const vehicleKey = useWatch({ control, name: 'vehicleKey' })
   const [availableSlots, setAvailableSlots] = useState<AvailableSlot[]>([])
-  const { getTimesAPI } = useTimesAPI()
-
-  const api = useCallback(
-    async () => getTimesAPI(),
-    [getTimesAPI, vehicleKey, durationInMinutes]
-  )
-  const isApiCanceled = useCallback(
-    (error) => getTimesAPI.isCanceled(error),
-    [getTimesAPI]
-  )
-  const cancelApi = useCallback(() => getTimesAPI.cancel(), [getTimesAPI])
 
   useEffect(() => {
+    const axiosSource = axios.CancelToken.source()
+
     ;(async () => {
       if (
         vehicleKey &&
@@ -65,23 +41,22 @@ export const ScheduleAt = ({
         !errors.vehicleKey &&
         !errors.durationInMinutes
       ) {
-        let slots: AvailableSlot[] = []
+        console.log(`retrieving times...`)
 
         try {
-          slots = await api()
-          setAvailableSlots(slots)
+          const { data } = await axios.post('/api/demo/times', {
+            cancelToken: axiosSource.token,
+          })
+          setAvailableSlots(data as AvailableSlot[])
         } catch (error) {
-          if (!isApiCanceled(error)) {
-            throw error // TODO: should i throw?
+          if (axios.isCancel(error)) {
+            throw error
           }
         }
       }
     })()
-    return () => cancelApi()
+    return () => axiosSource.cancel()
   }, [
-    api,
-    cancelApi,
-    isApiCanceled,
     durationInMinutes,
     vehicleKey,
     errors.durationInMinutes,
