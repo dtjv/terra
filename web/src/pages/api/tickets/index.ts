@@ -20,9 +20,9 @@ const handler: NextApiHandler = async (
     }
 
     try {
-      const ticketDocs: TicketDocument[] = await getTickets(
-        new Date(scheduledAt)
-      )
+      const ticketDocs: TicketDocument[] = await getTickets({
+        scheduledAt: new Date(scheduledAt),
+      })
       const tickets: Ticket[] = ticketDocs.map((ticketDoc) =>
         toTicket(ticketDoc)
       )

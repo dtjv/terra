@@ -1,7 +1,9 @@
 import mongoose from 'mongoose'
+import type { FilterQuery } from 'mongoose'
 import { TicketModel } from '@/models/ticket'
 import { VehicleModel } from '@/models/vehicle'
 import type {
+  Ticket,
   TicketInput,
   UpdatedTicket,
   TicketDocument,
@@ -16,11 +18,19 @@ export const getVehicles = async (): Promise<VehicleDocument[]> => {
 }
 
 export const getTickets = async (
+  filters: FilterQuery<Ticket>
+): Promise<TicketDocument[]> => {
+  await connectToDB()
+  return await TicketModel.find(filters).populate('vehicleDoc')
+}
+/*
+export const getTickets = async (
   scheduledAt: Date
 ): Promise<TicketDocument[]> => {
   await connectToDB()
   return await TicketModel.find({ scheduledAt }).populate('vehicleDoc')
 }
+*/
 
 export const createTicket = async (
   newTicket: TicketInput
