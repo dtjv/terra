@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { format } from 'date-fns'
-import { useEffect, useState, useCallback } from 'react'
+import { set, format } from 'date-fns'
+import { useEffect, useState } from 'react'
 import { useWatch, Controller } from 'react-hook-form'
 import {
   FormLabel,
@@ -43,10 +43,35 @@ export const ScheduleAt = ({
       ) {
         console.log(`retrieving times...`)
 
+        // const currentDate = new Date()
+        // TODO: seed Date() that allows retrieval of 8/19 tickets. remove!
+        const today = new Date('2021-08-19T15:23:00.000Z')
+        const currentDate = set(today, {
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+          milliseconds: 0,
+        })
+        const currentTime = format(today, 'kk:mm:ss.SSS')
+
+        // TODO: add a requestDate to ui and form
+        // TODO: remove vehicle selection from ui!!! the default should be all
+        // vehicles, unless one has been eliminated by a usage rule.
         try {
-          const { data } = await axios.post('/api/demo/times', {
-            cancelToken: axiosSource.token,
-          })
+          const { data } = await axios.post(
+            '/api/schedule',
+            {
+              vehicleKeys: ['102', '202'],
+              currentDate,
+              currentTime,
+              //requestDate: new Date('2021-8-20'), // optional
+              requestDate: undefined,
+              durationInMinutes: 30,
+            },
+            {
+              cancelToken: axiosSource.token,
+            }
+          )
           setAvailableSlots(data as AvailableSlot[])
         } catch (error) {
           if (axios.isCancel(error)) {
@@ -63,23 +88,6 @@ export const ScheduleAt = ({
     errors.vehicleKey,
   ])
 
-  // TODO:
-  //
-  // 1. custom 'onChange' will call 'setValue' to update form state.
-  // 3. 'scheduledAt' is hooked up to DateSchema and coerced into a Date. may
-  //    need to change if the value of option is gonna be some special format.
-  //
-  // TODO: ugh!!!
-  // availableSlots should be display by time -> by truck
-  //   Fri, 8.21 at 8am
-  //     truck 102
-  //     truck 202
-  //   Fri, 8.21 at 9am
-  //     truck 102
-  //   Sat, 8.22 at 9am
-  //     truck 102
-  //     truck 202
-  //     truck 302
   return (
     <>
       {availableSlots.length > 0 ? (
