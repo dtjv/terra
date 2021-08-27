@@ -2,7 +2,6 @@ import { useDrag } from 'react-dnd'
 import { Box, Flex } from '@chakra-ui/react'
 import { DragHandleIcon } from '@chakra-ui/icons'
 import { DragItem } from '@/types/enums'
-import { SCHEDULE_ROW_N_MIN_HEIGHT } from '@/config'
 import type { Ticket } from '@/types/types'
 
 export interface TicketViewProps {
@@ -30,10 +29,7 @@ export const TicketView = ({
 
   if (!ticket) return null
 
-  const height =
-    (ticket.durationInMinutes / timeBlockInMinutes) *
-      SCHEDULE_ROW_N_MIN_HEIGHT -
-    5
+  const height = (ticket.durationInMinutes / timeBlockInMinutes) * 35 - 5
 
   return (
     <Box

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, createContext } from 'react'
 import { set, isBefore } from 'date-fns'
 import { useTickets } from '@/hooks/use-tickets'
 import {
@@ -19,6 +19,12 @@ const scheduleConfig = {
   endHour: SCHEDULE_END_HOUR_IN_24HR,
   timeBlockInMinutes: SCHEDULE_TIME_BLOCK_IN_MINUTES,
 }
+
+interface Context {
+  vehicles: Vehicle[]
+}
+
+export const ScheduleContext = createContext<Context>({ vehicles: [] })
 
 export interface useScheduleProps {
   vehicles: Vehicle[]
@@ -52,12 +58,16 @@ export const useSchedule = ({ vehicles, scheduledAt }: useScheduleProps) => {
           timeBlockInMinutes: scheduleConfig.timeBlockInMinutes,
         })
   }, [ticketsQuery, rowHeaders, colHeaders])
+  const numRows = rows.length + 1 // TODO: why +1?
+  const numCols = rows[0]?.cells.length ?? 0
 
   return {
     isLoading: ticketsQuery.isLoading,
     isError: ticketsQuery.isError,
     error: ticketsQuery.isError ? (ticketsQuery.error as Error) : undefined,
     rows,
+    numRows,
+    numCols,
     updateTicketMutation,
     data: {
       scheduleConfig,

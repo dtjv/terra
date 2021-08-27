@@ -20,7 +20,7 @@ import { TicketFormSchema } from '@/schemas'
 import { TicketKind } from '@/types/enums'
 import type { TicketInput } from '@/types/types'
 
-interface TicketCreateModalProps {
+export interface TicketCreateModalProps {
   isOpen: boolean
   onClose: () => void
 }
@@ -38,18 +38,14 @@ export const TicketCreateModal = ({
     register,
     handleSubmit,
     reset,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isSubmitting },
   } = form
-
   const handleFormSubmit: SubmitHandler<TicketInput> = (fields) => {
     // TODO: POST /api/tickets
     console.log(`input fields: `, fields)
     onClose()
     reset()
   }
-
-  console.log(`errors: `, errors)
-  console.log(`isValid: `, isValid)
 
   return (
     <Modal
@@ -90,33 +86,14 @@ export const TicketCreateModal = ({
 
             <DestinationAddress {...form} />
 
-            {/*
-              TODO: pull vehicle choices from db!! exactly.then i don't have to
-                    validate in <ScheduleAt /> component.
-            */}
-            <FormControl isInvalid={!!errors.vehicleKey} isRequired>
-              <FormLabel htmlFor="vehicleKey">Vehicle</FormLabel>
-              <Select
-                id="vehicleKey"
-                placeholder="Select a vehicle"
-                {...register('vehicleKey')}
-              >
-                <option value="102">Truck 102</option>
-                <option value="202">Truck 202</option>
-              </Select>
-              <FormErrorMessage>
-                {errors?.vehicleKey?.message ?? ''}
-              </FormErrorMessage>
-            </FormControl>
-
             <ScheduleAt {...form} />
 
-            {/*TODO: test enable/disable on demo*/}
             <Button
               mt={4}
               colorScheme="teal"
               isLoading={isSubmitting}
               type="submit"
+              isDisabled={isSubmitting}
             >
               Submit
             </Button>

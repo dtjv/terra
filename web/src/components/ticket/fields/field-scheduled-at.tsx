@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { set, format } from 'date-fns'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { useWatch, Controller } from 'react-hook-form'
 import {
   FormLabel,
@@ -11,9 +11,10 @@ import {
   RadioGroup,
 } from '@chakra-ui/react'
 import type { UseFormReturn } from 'react-hook-form'
+import { ScheduleContext } from '@/hooks/use-schedule'
 import type { TicketInput } from '@/types/types'
 
-// TODO: remove?
+// TODO: move to types?
 interface AvailableSlot {
   key: number
   vehicleKey: string
@@ -27,24 +28,16 @@ export const ScheduleAt = ({
   setValue,
   formState: { errors },
 }: UseFormReturn<TicketInput>) => {
+  const { vehicles } = useContext(ScheduleContext)
   const durationInMinutes = useWatch({ control, name: 'durationInMinutes' })
-  const vehicleKey = useWatch({ control, name: 'vehicleKey' })
   const [availableSlots, setAvailableSlots] = useState<AvailableSlot[]>([])
 
   useEffect(() => {
     const axiosSource = axios.CancelToken.source()
 
     ;(async () => {
-      if (
-        vehicleKey &&
-        durationInMinutes &&
-        !errors.vehicleKey &&
-        !errors.durationInMinutes
-      ) {
-        console.log(`retrieving times...`)
-
-        // const currentDate = new Date()
-        // TODO: seed Date() that allows retrieval of 8/19 tickets. remove!
+      if (durationInMinutes && !errors.durationInMinutes) {
+        // TODO: remove Date param
         const today = new Date('2021-08-19T15:23:00.000Z')
         const currentDate = set(today, {
           hours: 0,
@@ -52,16 +45,14 @@ export const ScheduleAt = ({
           seconds: 0,
           milliseconds: 0,
         })
-        const currentTime = format(today, 'kk:mm:ss.SSS')
+        const currentTime = format(today, 'HH:mm:ss.SSS')
 
         // TODO: add a requestDate to ui and form
-        // TODO: remove vehicle selection from ui!!! the default should be all
-        // vehicles, unless one has been eliminated by a usage rule.
         try {
           const { data } = await axios.post(
             '/api/schedule',
             {
-              vehicleKeys: ['102', '202'],
+              vehicleKeys: vehicles.map((v) => v.vehicleKey),
               currentDate,
               currentTime,
               //requestDate: new Date('2021-8-20'), // optional
@@ -81,13 +72,9 @@ export const ScheduleAt = ({
       }
     })()
     return () => axiosSource.cancel()
-  }, [
-    durationInMinutes,
-    vehicleKey,
-    errors.durationInMinutes,
-    errors.vehicleKey,
-  ])
+  }, [durationInMinutes, errors.durationInMinutes])
 
+  // TODO: improve UI
   return (
     <>
       {availableSlots.length > 0 ? (
@@ -101,8 +88,9 @@ export const ScheduleAt = ({
                 name="scheduledAt"
                 onChange={(value) => {
                   onChange(value)
-                  const { scheduledTime } = JSON.parse(value)
+                  const { scheduledTime, vehicleKey } = JSON.parse(value)
                   setValue('scheduledTime', scheduledTime)
+                  setValue('vehicleKey', vehicleKey)
                 }}
                 value={value ? value.toString() : ''}
                 ref={ref}
@@ -119,7 +107,11 @@ export const ScheduleAt = ({
                       return (
                         <Radio
                           key={key}
-                          value={JSON.stringify({ scheduledAt, scheduledTime })}
+                          value={JSON.stringify({
+                            vehicleKey,
+                            scheduledAt,
+                            scheduledTime,
+                          })}
                         >
                           {format(new Date(scheduledAtFull), 'PPPPpp')}
                           <Text as="span" fontWeight="bold">
