@@ -23,7 +23,7 @@ export const AddressSchema = object({
   zip: enums(oregon.map((location) => location.zip)),
 })
 
-export const DateSchema = coerce(date(), string(), (value) => {
+export const ScheduledAtSchema = coerce(date(), string(), (value) => {
   const { scheduledAt } = JSON.parse(value)
   return new Date(scheduledAt)
 })
@@ -33,7 +33,7 @@ export const TicketFormSchema = object({
   customerName: size(string(), 2, 50),
   destinationAddress: AddressSchema,
   vehicleKey: string(),
-  scheduledAt: DateSchema,
+  scheduledAt: ScheduledAtSchema,
   scheduledTime: string(),
   durationInMinutes: DurationSchema,
 })

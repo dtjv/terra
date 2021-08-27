@@ -14,13 +14,12 @@ import type { UseFormReturn } from 'react-hook-form'
 import { ScheduleContext } from '@/hooks/use-schedule'
 import type { TicketInput } from '@/types/types'
 
-// TODO: move to types?
 interface AvailableSlot {
   key: number
   vehicleKey: string
-  scheduledAt: string
+  scheduledAt: Date
   scheduledTime: string
-  scheduledAtFull: string
+  scheduledAtFull: Date
 }
 
 export const ScheduleAt = ({
@@ -37,8 +36,7 @@ export const ScheduleAt = ({
 
     ;(async () => {
       if (durationInMinutes && !errors.durationInMinutes) {
-        // TODO: remove Date param
-        const today = new Date('2021-08-19T15:23:00.000Z')
+        const today = new Date()
         const currentDate = set(today, {
           hours: 0,
           minutes: 0,
@@ -47,7 +45,6 @@ export const ScheduleAt = ({
         })
         const currentTime = format(today, 'HH:mm:ss.SSS')
 
-        // TODO: add a requestDate to ui and form
         try {
           const { data } = await axios.post(
             '/api/schedule',
@@ -55,8 +52,7 @@ export const ScheduleAt = ({
               vehicleKeys: vehicles.map((v) => v.vehicleKey),
               currentDate,
               currentTime,
-              //requestDate: new Date('2021-8-20'), // optional
-              requestDate: undefined,
+              requestDate: undefined, // not used now. future feature.
               durationInMinutes: 30,
             },
             {
