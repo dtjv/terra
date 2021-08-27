@@ -68,7 +68,7 @@ export const ScheduleAt = ({
       }
     })()
     return () => axiosSource.cancel()
-  }, [durationInMinutes, errors.durationInMinutes])
+  }, [vehicles, durationInMinutes, errors.durationInMinutes])
 
   // TODO: improve UI
   return (
