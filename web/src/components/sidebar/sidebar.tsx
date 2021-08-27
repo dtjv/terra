@@ -19,11 +19,11 @@ import {
   FaUserFriends,
   FaShoppingCart,
 } from 'react-icons/fa'
-import { SidebarMenuItem } from '@/components/sidebar'
+import { SidebarMenuLink } from '@/components/sidebar'
 
 export const Sidebar = () => (
   <Box
-    w="280px"
+    minW="280px"
     fontSize="sm"
     bg={useColorModeValue('purple.100', 'purple.700')}
     h="100%"
@@ -44,29 +44,29 @@ export const Sidebar = () => (
       <Box flex="1 1 0" pt={4} px={4}>
         <Stack divider={<StackDivider borderColor="purple.200" />} spacing={6}>
           <Stack spacing={2}>
-            <SidebarMenuItem icon={FaHome} href="/admin">
-              Dashboard{' '}
-            </SidebarMenuItem>
-            <SidebarMenuItem icon={FaDatabase} href="/admin/inventory">
-              Inventory{' '}
-            </SidebarMenuItem>
-            <SidebarMenuItem icon={FaTruck} href="/admin/delivery">
-              Delivery{' '}
-            </SidebarMenuItem>
-            <SidebarMenuItem icon={FaShoppingCart} href="/admin/pos">
-              POS{' '}
-            </SidebarMenuItem>
-            <SidebarMenuItem icon={FaUserFriends} href="/admin/customers">
-              Customers{' '}
-            </SidebarMenuItem>
+            <SidebarMenuLink icon={FaHome} href="/admin">
+              Dashboard
+            </SidebarMenuLink>
+            <SidebarMenuLink icon={FaDatabase} href="/admin/inventory">
+              Inventory
+            </SidebarMenuLink>
+            <SidebarMenuLink icon={FaTruck} href="/admin/delivery">
+              Delivery
+            </SidebarMenuLink>
+            <SidebarMenuLink icon={FaShoppingCart} href="/admin/pos">
+              POS
+            </SidebarMenuLink>
+            <SidebarMenuLink icon={FaUserFriends} href="/admin/customers">
+              Customers
+            </SidebarMenuLink>
           </Stack>
           <Stack spacing={2}>
-            <SidebarMenuItem icon={FaBell} href="/admin/notifications">
+            <SidebarMenuLink icon={FaBell} href="/admin/notifications">
               Notifications
-            </SidebarMenuItem>
-            <SidebarMenuItem icon={FaCog} href="/admin/settings">
-              Settings{' '}
-            </SidebarMenuItem>
+            </SidebarMenuLink>
+            <SidebarMenuLink icon={FaCog} href="/admin/settings">
+              Settings
+            </SidebarMenuLink>
           </Stack>
         </Stack>
       </Box>

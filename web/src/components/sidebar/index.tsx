@@ -1,2 +1,2 @@
 export { Sidebar } from './sidebar'
-export { SidebarMenuItem } from './sidebar-menu-item'
+export { SidebarMenuLink } from './sidebar-menu-link'
