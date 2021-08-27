@@ -116,7 +116,6 @@ const handler: NextApiHandler = async (
     const shiftCount = scheduleTimeBlockCount - ticketTimeBlockCount
     const availableTimes = Object.entries(vehicleHash)
       .map(([vehicleKey, scheduleTimesMask]) => {
-        console.log(vehicleKey, scheduleTimesMask.toString(2))
         const times: string[] = []
 
         // +1 to accommodate first bit
@@ -142,7 +141,6 @@ const handler: NextApiHandler = async (
         }
       })
       .flatMap(({ vehicleKey, availableTimes }, i) => {
-        console.log(vehicleKey, availableTimes)
         return availableTimes.map((time, j) => {
           const scheduledAt = new Date(requestDate ?? currentDate)
           return {
