@@ -1,8 +1,17 @@
 [
   {
     "ticketKind": "DELIVERY",
-    "customerName": "Mr. White",
-    "destinationAddress": { "street": "123 Main St.", "zip": "97301" },
+    "firstName": "Tom",
+    "lastName": "White",
+    "email": "",
+    "phone": "5034751243",
+    "destinationAddress": {
+      "street": "123 Main St.",
+      "unit": "",
+      "city": "",
+      "state": "OR",
+      "zip": "97301"
+    },
     "vehicleKey": "102",
     "durationInMinutes": 30,
     "scheduledTime": "08:00:00.000",
@@ -10,8 +19,17 @@
   },
   {
     "ticketKind": "DELIVERY",
-    "customerName": "Mr. Black",
-    "destinationAddress": { "street": "456 Elm St.", "zip": "97302" },
+    "firstName": "Joe",
+    "lastName": "Black",
+    "email": "",
+    "phone": "5034751243",
+    "destinationAddress": {
+      "street": "456 Elm St.",
+      "unit": "",
+      "city": "",
+      "state": "OR",
+      "zip": "97302"
+    },
     "vehicleKey": "102",
     "durationInMinutes": 30,
     "scheduledTime": "09:30:00.000",
@@ -19,8 +37,17 @@
   },
   {
     "ticketKind": "DELIVERY",
-    "customerName": "Mr. Peach",
-    "destinationAddress": { "street": "555 Fruit St.", "zip": "97301" },
+    "firstName": "Sal",
+    "lastName": "Peach",
+    "email": "",
+    "phone": "5034751243",
+    "destinationAddress": {
+      "street": "555 Fruit St.",
+      "unit": "",
+      "city": "",
+      "state": "OR",
+      "zip": "97301"
+    },
     "vehicleKey": "202",
     "durationInMinutes": 60,
     "scheduledTime": "09:00:00.000",
@@ -28,8 +55,17 @@
   },
   {
     "ticketKind": "DELIVERY",
-    "customerName": "Mr. Apple",
-    "destinationAddress": { "street": "321 Mac St.", "zip": "97303" },
+    "firstName": "Tim",
+    "lastName": "Apple",
+    "email": "",
+    "phone": "5034751243",
+    "destinationAddress": {
+      "street": "321 Mac St.",
+      "unit": "",
+      "city": "",
+      "state": "OR",
+      "zip": "97303"
+    },
     "vehicleKey": "302",
     "durationInMinutes": 90,
     "scheduledTime": "13:00:00.000",
@@ -37,8 +73,17 @@
   },
   {
     "ticketKind": "DELIVERY",
-    "customerName": "Mr. Gruber",
-    "destinationAddress": { "street": "999 Nakatomi St.", "zip": "97301" },
+    "firstName": "Jon",
+    "lastName": "Gruber",
+    "email": "",
+    "phone": "5034751243",
+    "destinationAddress": {
+      "street": "999 Nakatomi St.",
+      "unit": "",
+      "city": "",
+      "state": "OR",
+      "zip": "97301"
+    },
     "vehicleKey": "102",
     "durationInMinutes": 30,
     "scheduledTime": "10:00:00.000",
@@ -46,8 +91,17 @@
   },
   {
     "ticketKind": "DELIVERY",
-    "customerName": "Mr. Smith",
-    "destinationAddress": { "street": "765 Tree St.", "zip": "97301" },
+    "firstName": "Abe",
+    "lastName": "Smith",
+    "email": "",
+    "phone": "5034751243",
+    "destinationAddress": {
+      "street": "765 Tree St.",
+      "unit": "",
+      "city": "",
+      "state": "OR",
+      "zip": "97301"
+    },
     "vehicleKey": "202",
     "durationInMinutes": 30,
     "scheduledTime": "08:00:00.000",
@@ -55,8 +109,17 @@
   },
   {
     "ticketKind": "DELIVERY",
-    "customerName": "Mr. Jones",
-    "destinationAddress": { "street": "987 Hazel St.", "zip": "97305" },
+    "firstName": "Nic",
+    "lastName": "Jones",
+    "email": "",
+    "phone": "5034751243",
+    "destinationAddress": {
+      "street": "987 Hazel St.",
+      "unit": "",
+      "city": "",
+      "state": "OR",
+      "zip": "97305"
+    },
     "vehicleKey": "302",
     "durationInMinutes": 60,
     "scheduledTime": "10:00:00.000",
@@ -64,8 +127,17 @@
   },
   {
     "ticketKind": "DELIVERY",
-    "customerName": "Ms. Sally",
-    "destinationAddress": { "street": "812 Parkview St.", "zip": "97301" },
+    "firstName": "Sue",
+    "lastName": "Fields",
+    "email": "",
+    "phone": "5034751243",
+    "destinationAddress": {
+      "street": "812 Parkview St.",
+      "unit": "",
+      "city": "",
+      "state": "OR",
+      "zip": "97301"
+    },
     "vehicleKey": "302",
     "durationInMinutes": 90,
     "scheduledTime": "11:30:00.000",

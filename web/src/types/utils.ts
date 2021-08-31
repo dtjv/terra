@@ -14,7 +14,10 @@ export const toTicket = (ticketDoc: TicketDocument): Ticket => {
   const {
     id,
     ticketKind,
-    customerName,
+    firstName,
+    lastName,
+    email,
+    phone,
     destinationAddress,
     vehicleKey,
     scheduledAt,
@@ -27,7 +30,10 @@ export const toTicket = (ticketDoc: TicketDocument): Ticket => {
   return {
     id,
     ticketKind,
-    customerName,
+    firstName,
+    lastName,
+    email,
+    phone,
     destinationAddress,
     vehicleKey,
     scheduledAt,

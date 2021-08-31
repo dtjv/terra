@@ -13,18 +13,38 @@ const ticketSchema = new Schema<Ticket, Model<Ticket>, Ticket>({
     enum: Object.values(TicketKind),
     required: true,
   },
-  customerName: {
+  firstName: {
     type: String,
-    minLength: 2,
-    maxLength: 40,
+    required: true,
+  },
+  lastName: {
+    type: String,
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
     required: true,
   },
   destinationAddress: {
     street: {
       type: String,
-      minLength: 2,
-      maxLength: 40,
       required: true,
+    },
+    unit: {
+      type: String,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      required: true,
+      min: 2,
+      max: 2,
+      default: 'OR',
     },
     zip: {
       type: String,

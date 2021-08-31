@@ -20,9 +20,15 @@ export interface VehicleDocument extends VehicleInput, Document {}
 //-----------------------------------------------------------------------------
 export interface TicketInput {
   ticketKind: TicketKind
-  customerName: string
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
   destinationAddress: {
     street: string
+    unit: string
+    city: string
+    state: string
     zip: string
   }
   vehicleKey: string
