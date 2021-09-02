@@ -26,12 +26,12 @@ interface Context {
 
 export const ScheduleContext = createContext<Context>({ vehicles: [] })
 
-export interface useScheduleProps {
+export interface UseScheduleProps {
   vehicles: Vehicle[]
   scheduledAt: Date
 }
 
-export const useSchedule = ({ vehicles, scheduledAt }: useScheduleProps) => {
+export const useSchedule = ({ vehicles, scheduledAt }: UseScheduleProps) => {
   const { ticketsQuery, updateTicketMutation } = useTickets({ scheduledAt })
   const today = set(new Date(), {
     hours: 0,
