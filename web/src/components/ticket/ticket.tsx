@@ -51,7 +51,7 @@ export const TicketView = ({
           fontSize="xs"
           fontWeight="bold"
         >
-          {ticket.customerName}
+          {`${ticket.firstName} ${ticket.lastName}`}
           <div ref={dragRef}>
             {canDrag && <DragHandleIcon color="white" cursor="grab" />}
           </div>

@@ -2,11 +2,13 @@ import axios from 'axios'
 import { useEffect } from 'react'
 import { useWatch } from 'react-hook-form'
 import {
+  HStack,
   Input,
   FormLabel,
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react'
+import oregon from '@/data/oregon.json'
 import type { UseFormReturn } from 'react-hook-form'
 import type { TicketInput } from '@/types/types'
 
@@ -39,6 +41,13 @@ export const DestinationAddress = ({
   const { getDurationAPI } = useDuration()
 
   useEffect(() => {
+    const area = oregon.find((area) => area.zip === zip)
+    if (area) {
+      setValue('destinationAddress.city', area.city)
+    }
+  }, [zip])
+
+  useEffect(() => {
     ;(async () => {
       if (
         zip &&
@@ -68,29 +77,56 @@ export const DestinationAddress = ({
 
   return (
     <>
-      <FormControl isInvalid={!!errors.destinationAddress?.street} isRequired>
-        <FormLabel htmlFor="destinationAddress.street">
-          Street address
-        </FormLabel>
-        <Input
-          id="destinationAddress.street"
-          {...register('destinationAddress.street')}
-        />
-        <FormErrorMessage>
-          {errors?.destinationAddress?.street?.message ?? ''}
-        </FormErrorMessage>
-      </FormControl>
-
-      <FormControl isInvalid={!!errors.destinationAddress?.zip} isRequired>
-        <FormLabel htmlFor="destinationAddress.zip">ZIP / Postal</FormLabel>
-        <Input
-          id="destinationAddress.zip"
-          {...register('destinationAddress.zip')}
-        />
-        <FormErrorMessage>
-          {errors?.destinationAddress?.zip?.message ?? ''}
-        </FormErrorMessage>
-      </FormControl>
+      <HStack spacing={4} w="100%">
+        <FormControl isInvalid={!!errors.destinationAddress?.street} isRequired>
+          <FormLabel htmlFor="destinationAddress.street" fontSize="sm">
+            Street address
+          </FormLabel>
+          <Input
+            id="destinationAddress.street"
+            {...register('destinationAddress.street')}
+          />
+          <FormErrorMessage>
+            {errors?.destinationAddress?.street?.message ?? ''}
+          </FormErrorMessage>
+        </FormControl>
+        <FormControl w="25%">
+          <FormLabel fontSize="sm">Unit No.</FormLabel>
+          <Input
+            id="destinationAddress.unit"
+            {...register('destinationAddress.unit')}
+          />
+        </FormControl>
+      </HStack>
+      <HStack spacing={4} w="100%">
+        <FormControl>
+          <FormLabel fontSize="sm">City</FormLabel>
+          <Input
+            id="destinationAddress.city"
+            {...register('destinationAddress.city')}
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel fontSize="sm">State / Province</FormLabel>
+          <Input
+            id="destinationAddress.state"
+            {...register('destinationAddress.state')}
+            value="OR"
+          />
+        </FormControl>
+        <FormControl isInvalid={!!errors.destinationAddress?.zip} isRequired>
+          <FormLabel htmlFor="destinationAddress.zip" fontSize="sm">
+            ZIP / Postal
+          </FormLabel>
+          <Input
+            id="destinationAddress.zip"
+            {...register('destinationAddress.zip')}
+          />
+          <FormErrorMessage>
+            {errors?.destinationAddress?.zip?.message ?? ''}
+          </FormErrorMessage>
+        </FormControl>
+      </HStack>
     </>
   )
 }
