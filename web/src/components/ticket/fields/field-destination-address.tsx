@@ -45,7 +45,7 @@ export const DestinationAddress = ({
     if (area) {
       setValue('destinationAddress.city', area.city)
     }
-  }, [zip])
+  }, [zip, setValue])
 
   useEffect(() => {
     ;(async () => {

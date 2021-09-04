@@ -149,7 +149,7 @@ export const ScheduleAt = ({
 
   return (
     <Tooltip
-      isDisabled={!Boolean(errors.scheduledAt)}
+      isDisabled={!errors.scheduledAt}
       label={errors.scheduledAt?.message}
       bg="red.500"
     >
