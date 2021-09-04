@@ -1,27 +1,118 @@
-import { useForm, SubmitHandler } from 'react-hook-form'
+import * as React from 'react'
 import {
-  Box,
-  Text,
+  Divider,
   VStack,
-  HStack,
-  Heading,
-  Input,
-  Button,
-  Select,
-  FormLabel,
-  FormControl,
   Tooltip,
+  Text,
+  HStack,
+  Icon,
+  Button,
+  Tabs,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Flex,
   Modal,
   ModalOverlay,
   ModalHeader,
   ModalBody,
   ModalContent,
   ModalCloseButton,
+  chakra,
+  useTab,
+  useStyles,
 } from '@chakra-ui/react'
-import type { UseFormReturn } from 'react-hook-form'
-import { ScheduleAt, DestinationAddress } from '@/components/ticket'
-import { TicketKind } from '@/types/enums'
-import type { TicketInput } from '@/types/types'
+import {
+  FaTicketAlt,
+  FaRegCalendarCheck,
+  FaLeaf,
+  FaUser,
+  FaArrowLeft,
+} from 'react-icons/fa'
+
+interface TabHeaderProps {
+  label: string
+  tabId: number
+  tabCount: number
+  tabSelected: number
+  children?: React.ReactNode
+}
+
+const TabHeader = React.forwardRef<HTMLButtonElement, TabHeaderProps>(
+  (props, ref) => {
+    const tabProps = useTab({ ...props, ref })
+    const styles = useStyles()
+    const isSelected = !!tabProps['aria-selected']
+    const renderTabHeader = isSelected ? (
+      <HStack spacing={4}>
+        <Flex
+          p={3}
+          align="center"
+          justify="center"
+          color="white"
+          bg="purple.600"
+          borderRadius="full"
+        >
+          {tabProps.children}
+        </Flex>
+        <Flex direction="column" align="flex-start">
+          <Text fontSize="xs" fontWeight="medium" color="purple.600">
+            Step {`${props.tabId + 1}/${props.tabCount}`}
+          </Text>
+          <Text fontWeight="semibold">{props.label}</Text>
+        </Flex>
+      </HStack>
+    ) : (
+      <Tooltip
+        px={3}
+        py={2}
+        label={props.label}
+        placement="top"
+        bg="gray.600"
+        color="white"
+        borderRadius="2xl"
+      >
+        <Flex
+          p={3}
+          sx={{
+            ...(props.tabId < props.tabSelected
+              ? { color: 'purple.500', bg: 'purple.50' }
+              : { color: 'gray.500' }),
+          }}
+          borderRadius="full"
+          _hover={{ bg: 'gray.200' }}
+        >
+          {tabProps.children}
+        </Flex>
+      </Tooltip>
+    )
+
+    return (
+      <chakra.button
+        __css={styles['tab']}
+        p={0}
+        {...tabProps}
+        _focus={{}}
+        flex={isSelected ? 1 : 0}
+      >
+        <HStack h="100%">
+          {props.tabId > 0 && <Divider orientation="vertical" />}
+          <Flex
+            style={{
+              marginRight: '0.5rem',
+              ...(props.tabId === 0 ? { marginLeft: '0.5rem' } : {}),
+            }}
+            px={4}
+            align="center"
+            justify="center"
+          >
+            {renderTabHeader}
+          </Flex>
+        </HStack>
+      </chakra.button>
+    )
+  }
+)
 
 export interface TicketCreateModalProps {
   isOpen: boolean
@@ -32,21 +123,9 @@ export const TicketCreateModal = ({
   isOpen,
   onClose,
 }: TicketCreateModalProps) => {
-  const form: UseFormReturn<TicketInput> = useForm<TicketInput>({
-    mode: 'onTouched',
-    defaultValues: { ticketKind: TicketKind.DELIVERY, scheduledTime: '' },
-  })
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = form
-  const handleFormSubmit: SubmitHandler<TicketInput> = (fields) => {
-    // TODO: POST /api/tickets
-    console.log(`input fields: `, fields)
-    onClose()
-    reset()
+  const [tabIndex, setTabIndex] = React.useState(0)
+  const handleTabsChange = (index: number) => {
+    setTabIndex(index)
   }
 
   return (
@@ -55,151 +134,128 @@ export const TicketCreateModal = ({
       isOpen={isOpen}
       onClose={() => {
         onClose()
-        reset()
+        setTabIndex(0)
       }}
     >
       <ModalOverlay />
-      <ModalContent bg="gray.50">
+      <ModalContent bg="gray.50" borderRadius="xl">
         <ModalHeader fontSize="2xl">New Ticket</ModalHeader>
         <ModalCloseButton />
         <ModalBody color="gray.700">
-          <form onSubmit={handleSubmit(handleFormSubmit)}>
-            <VStack align="flex-start" spacing={8}>
-              <VStack w="100%" align="flex-start" spacing={4}>
-                <FormControl isInvalid={!!errors.ticketKind} isRequired>
-                  <FormLabel htmlFor="ticketKind">Ticket type</FormLabel>
-                  <Select id="ticketKind" {...register('ticketKind')}>
-                    <option value={TicketKind.DELIVERY}>Delivery</option>
-                    <option value={TicketKind.PICKUP}>Pickup</option>
-                  </Select>
-                </FormControl>
-              </VStack>
-              <VStack w="100%" align="flex-start" spacing={4}>
-                <Heading size="md">Personal Information</Heading>
-                <Box p={4} bg="white" borderRadius="md" boxShadow="base">
-                  <VStack align="flex-start" spacing={4}>
-                    <HStack spacing={4} w="100%">
-                      <FormControl isInvalid={!!errors.firstName}>
-                        <FormLabel htmlFor="firstName" fontSize="sm">
-                          First name
-                        </FormLabel>
-                        <Tooltip
-                          isDisabled={!Boolean(errors.firstName)}
-                          label={errors.firstName?.message}
-                          bg="red.500"
-                        >
-                          <Input
-                            id="firstName"
-                            sx={{
-                              ...(errors['firstName']
-                                ? {
-                                    borderLeftWidth: '10px',
-                                  }
-                                : null),
-                            }}
-                            _focus={{
-                              ...(errors['firstName']
-                                ? {
-                                    borderColor: 'red.500',
-                                  }
-                                : {
-                                    border: '2px solid',
-                                    borderColor: 'purple.200',
-                                    bg: 'purple.50',
-                                  }),
-                            }}
-                            {...register('firstName', {
-                              required: {
-                                value: true,
-                                message: 'Required',
-                              },
-                            })}
-                          />
-                        </Tooltip>
-                      </FormControl>
-                      <FormControl isInvalid={!!errors.lastName}>
-                        <FormLabel htmlFor="lastName" fontSize="sm">
-                          Last name
-                        </FormLabel>
-                        <Input
-                          id="lastName"
-                          sx={{
-                            ...(errors.lastName
-                              ? {
-                                  borderLeftWidth: '10px',
-                                }
-                              : null),
-                          }}
-                          _focus={{
-                            ...(errors['lastName']
-                              ? {
-                                  borderColor: 'red.500',
-                                }
-                              : {
-                                  border: '2px solid',
-                                  borderColor: 'purple.200',
-                                  bg: 'purple.50',
-                                }),
-                          }}
-                          {...register('lastName', {
-                            required: {
-                              value: true,
-                              message: 'Last name is required',
-                            },
-                          })}
-                        />
-                      </FormControl>
-                    </HStack>
-                    <HStack spacing={4} w="100%">
-                      <FormControl>
-                        <FormLabel fontSize="sm">Email</FormLabel>
-                        <Input id="email" {...register('email')} />
-                      </FormControl>
-                      <FormControl>
-                        <FormLabel fontSize="sm">Phone</FormLabel>
-                        <Input
-                          id="phone"
-                          type="tel"
-                          placeholder="xxx-xxx-xxxx"
-                          {...register('phone')}
-                        />
-                      </FormControl>
-                    </HStack>
-
-                    <DestinationAddress {...form} />
-                  </VStack>
-                </Box>
-              </VStack>
-              <VStack w="100%" align="flex-start" spacing={4}>
-                <Heading size="md">Product Information</Heading>
-                <Box
-                  p={4}
-                  w="100%"
-                  bg="white"
-                  borderRadius="md"
-                  boxShadow="base"
-                >
-                  <Text w="100%" color="gray.500" fontSize="sm">
-                    TBD
-                  </Text>
-                </Box>
-              </VStack>
-
-              <VStack w="100%" align="flex-start" spacing={4}>
-                <Heading size="md">Schedule Information</Heading>
-                <ScheduleAt {...form} />
-              </VStack>
-            </VStack>
-            <Button
-              mt={4}
-              colorScheme="teal"
-              isLoading={isSubmitting}
-              type="submit"
-              isDisabled={isSubmitting}
+          <VStack spacing={8}>
+            <Tabs
+              w="100%"
+              index={tabIndex}
+              onChange={handleTabsChange}
+              variant="unstyled"
             >
-              Create Ticket
-            </Button>
-          </form>
+              <TabList
+                py="4"
+                d="flex"
+                justifyContent="center"
+                bg="white"
+                borderRadius="xl"
+                borderWidth="1px"
+                borderColor="gray.200"
+              >
+                <TabHeader
+                  tabId={0}
+                  tabCount={4}
+                  tabSelected={tabIndex}
+                  label="Type of Ticket"
+                >
+                  <Icon as={FaTicketAlt} boxSize={4} />
+                </TabHeader>
+                <TabHeader
+                  tabId={1}
+                  tabCount={4}
+                  tabSelected={tabIndex}
+                  label="Contact Details"
+                >
+                  <Icon as={FaUser} boxSize={4} />
+                </TabHeader>
+                <TabHeader
+                  tabId={2}
+                  tabCount={4}
+                  tabSelected={tabIndex}
+                  label="Product List"
+                >
+                  <Icon as={FaLeaf} boxSize={4} />
+                </TabHeader>
+                <TabHeader
+                  tabId={3}
+                  tabCount={4}
+                  tabSelected={tabIndex}
+                  label="Schedule Appt."
+                >
+                  <Icon as={FaRegCalendarCheck} boxSize={4} />
+                </TabHeader>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <p>1</p>
+                  <Button
+                    colorScheme="purple"
+                    onClick={() => setTabIndex(tabIndex + 1)}
+                  >
+                    Next
+                  </Button>
+                </TabPanel>
+                <TabPanel>
+                  <p>2</p>
+                  <Button
+                    colorScheme="gray"
+                    variant="ghost"
+                    leftIcon={<FaArrowLeft />}
+                    onClick={() => setTabIndex(tabIndex - 1)}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    colorScheme="purple"
+                    onClick={() => setTabIndex(tabIndex + 1)}
+                  >
+                    Next
+                  </Button>
+                </TabPanel>
+                <TabPanel>
+                  <p>3</p>
+                  <Button
+                    colorScheme="gray"
+                    variant="ghost"
+                    leftIcon={<FaArrowLeft />}
+                    onClick={() => setTabIndex(tabIndex - 1)}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    colorScheme="purple"
+                    onClick={() => setTabIndex(tabIndex + 1)}
+                  >
+                    Next
+                  </Button>
+                </TabPanel>
+
+                <TabPanel>
+                  <p>4</p>
+                  <Button
+                    colorScheme="gray"
+                    variant="ghost"
+                    leftIcon={<FaArrowLeft />}
+                    onClick={() => setTabIndex(tabIndex - 1)}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    colorScheme="purple"
+                    onClick={() => console.log('create ticket')}
+                  >
+                    Create Ticket
+                  </Button>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </VStack>
         </ModalBody>
       </ModalContent>
     </Modal>
