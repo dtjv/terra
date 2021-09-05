@@ -30,7 +30,7 @@ const useDuration = () => {
   return { getDurationAPI }
 }
 
-export const DestinationAddress = ({
+export const FieldDestinationAddress = ({
   control,
   register,
   setValue,

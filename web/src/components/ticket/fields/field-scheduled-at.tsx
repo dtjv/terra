@@ -70,7 +70,7 @@ interface Hash {
   [key: string]: { [key: string]: AvailableSlot[] }
 }
 
-export const ScheduleAt = ({
+export const FieldScheduledAt = ({
   control,
   register,
   setValue,
