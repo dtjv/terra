@@ -4,7 +4,7 @@ import { DragHandleIcon } from '@chakra-ui/icons'
 import { DragItem } from '@/types/enums'
 import type { Ticket } from '@/types/types'
 
-export interface TicketViewProps {
+export interface TicketProps {
   ticket: Ticket | undefined
   isPastSchedule: boolean
   timeBlockInMinutes: number
@@ -14,7 +14,7 @@ export const TicketView = ({
   ticket,
   isPastSchedule,
   timeBlockInMinutes,
-}: TicketViewProps) => {
+}: TicketProps) => {
   const [{ canDrag, isDragging }, dragRef, dragPreviewRef] = useDrag(
     () => ({
       type: DragItem.TICKET,

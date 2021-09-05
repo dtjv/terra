@@ -12,9 +12,9 @@ import {
 } from '@chakra-ui/react'
 import { AddIcon, SearchIcon } from '@chakra-ui/icons'
 
-const TicketCreateModal = dynamic(async () => {
-  const m = await import('../../components/ticket/ticket-create-modal')
-  return m.TicketCreateModal
+const TicketModal = dynamic(async () => {
+  const m = await import('../../components/ticket/ticket-modal')
+  return m.TicketModal
 })
 
 export interface ScheduleToolbarProps {
@@ -43,7 +43,7 @@ export const ScheduleToolbar = ({
             onClick={onOpen}
             isDisabled={isPastSchedule}
           >
-            Create
+            Create Ticket
           </Button>
         </Skeleton>
         <Skeleton isLoaded={!isLoading}>
@@ -63,7 +63,7 @@ export const ScheduleToolbar = ({
           </InputGroup>
         </Skeleton>
       </HStack>
-      <TicketCreateModal isOpen={isOpen} onClose={onClose} />
+      <TicketModal isOpen={isOpen} onClose={onClose} />
     </Box>
   )
 }
