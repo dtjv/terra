@@ -9,8 +9,10 @@ export enum DragItem {
 }
 
 export enum TicketKind {
-  PICKUP = 'PICKUP',
-  DELIVERY = 'DELIVERY',
+  PICKUP = 'Pickup',
+  DELIVERY = 'Delivery',
+  STOP = 'Stop',
+  FUEL = 'Fuel',
 }
 
 export enum TicketStatus {
