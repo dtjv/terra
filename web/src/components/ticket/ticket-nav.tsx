@@ -15,7 +15,7 @@ export const TicketNav = ({
   children,
 }: TicketNavProps) => {
   return (
-    <HStack w="100%" mb={2} spacing={3} justifyContent="flex-end">
+    <HStack w="100%" spacing={3} justify="flex-end">
       {tabIndex > 0 && (
         <Button
           colorScheme="gray"
