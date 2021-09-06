@@ -1,22 +1,27 @@
+import * as React from 'react'
 import axios from 'axios'
 import { set, format } from 'date-fns'
 import { groupBy } from 'lodash'
 import { useEffect, useState, useContext } from 'react'
 import { useWatch } from 'react-hook-form'
 import {
+  Icon,
   Box,
   Flex,
   Text,
-  VStack,
-  HStack,
+  Tabs,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Stack,
   FormControl,
   Input,
-  Tooltip,
-  StackDivider,
   SimpleGrid,
   useRadio,
   useRadioGroup,
 } from '@chakra-ui/react'
+import { GiMineTruck } from 'react-icons/gi'
 import type { UseRadioProps } from '@chakra-ui/react'
 import type { UseFormReturn } from 'react-hook-form'
 import { ScheduleContext } from '@/hooks/use-schedule'
@@ -30,7 +35,7 @@ interface AvailableSlot {
   scheduledAtFull: Date
 }
 
-const TimeSlot = (props: UseRadioProps & { children?: React.ReactNode }) => {
+const TimeCard = (props: UseRadioProps & { children?: React.ReactNode }) => {
   const { getInputProps, getCheckboxProps } = useRadio(props)
   const input = getInputProps()
   const checkbox = getCheckboxProps()
@@ -47,27 +52,23 @@ const TimeSlot = (props: UseRadioProps & { children?: React.ReactNode }) => {
         borderRadius="md"
         borderWidth="1px"
         _checked={{
-          bg: 'purple.100',
-          color: 'gray.700',
-          borderColor: 'purple.100',
+          bg: 'purple.500',
+          color: 'white',
+          borderColor: 'purple.500',
         }}
         _hover={{
-          bg: 'purple.100',
-          color: 'gray.700',
-          borderColor: 'purple.100',
+          bg: 'purple.500',
+          color: 'white',
+          borderColor: 'purple.500',
         }}
         _focus={{
-          borderColor: 'purple.200',
+          borderColor: 'purple.500',
         }}
       >
         {props.children}
       </Flex>
     </Box>
   )
-}
-
-interface Hash {
-  [key: string]: { [key: string]: AvailableSlot[] }
 }
 
 export const FieldScheduledAt = ({
@@ -90,15 +91,8 @@ export const FieldScheduledAt = ({
       clearErrors(['scheduledAt', 'vehicleKey', 'scheduledTime'])
     },
   })
-  const slotsByVehicle = groupBy(availableSlots, (item) => item['scheduledAt'])
-  const slotsByDateByVehicle = Object.entries(slotsByVehicle).reduce(
-    (hash, [k, v]) => {
-      hash[k] = groupBy(v, (item) => item['vehicleKey'])
-      return hash
-    },
-    {} as Hash
-  )
   const group = getRootProps()
+  const slotsByVehicle = groupBy(availableSlots, (item) => item['vehicleKey'])
 
   useEffect(() => {
     const axiosSource = axios.CancelToken.source()
@@ -146,82 +140,147 @@ export const FieldScheduledAt = ({
       </Text>
     )
   }
+  console.log(availableSlots)
 
+  // TODO: listing ALL vehicles, whether we have slots for each or not. wrong!!
   return (
-    <Tooltip
-      isDisabled={!errors.scheduledAt}
-      label={errors.scheduledAt?.message}
-      bg="red.500"
-    >
-      <Box
-        p={4}
-        w="100%"
-        bg="white"
-        borderRadius="md"
-        boxShadow={
-          errors.scheduledAt ? '0 0 0 3px rgba(229, 62, 62, 1)' : 'base'
-        }
-      >
-        <VStack align="flex-start" spacing={8} {...group}>
-          <FormControl>
-            <Input
-              id="scheduledAt"
-              display="none"
-              {...register('scheduledAt', {
-                required: { value: true, message: 'Choose a Time' },
-              })}
-            />
-          </FormControl>
-          {Object.entries(slotsByDateByVehicle).map(
-            ([date, slotsByVehicle], i) => {
-              return (
-                <Box key={i} w="100%">
-                  <Text fontSize="sm" fontWeight="semibold" mb={4}>
-                    {format(new Date(date), 'EEEE, MMMM d, yyyy')}
-                  </Text>
-                  <VStack
-                    align="flex-start"
-                    spacing={4}
-                    w="100%"
-                    divider={<StackDivider borderColor="gray.200" />}
-                  >
-                    {Object.entries(slotsByVehicle).map(
-                      ([vehicleKey, timeSlots], j) => {
-                        const vehicle = vehicles.find(
-                          (vehicle) => vehicle.vehicleKey === vehicleKey
-                        )
-                        return (
-                          <HStack key={`${i}-${j}`} spacing={4} w="100%">
-                            <Flex w="25%" fontSize="sm" color="gray.500">
-                              {vehicle?.vehicleName ??
-                                `Unknown key: ${vehicleKey}`}
-                            </Flex>
-                            <SimpleGrid columns={4} spacing={2}>
-                              {timeSlots.map((time: AvailableSlot) => {
-                                const radio = getRadioProps({
-                                  value: JSON.stringify({ ...time }),
-                                })
+    <Box {...group}>
+      <FormControl>
+        <Input
+          id="scheduledAt"
+          display="none"
+          {...register('scheduledAt', {
+            required: { value: true, message: 'Choose a Time' },
+          })}
+        />
+      </FormControl>
+      <Tabs variant="unstyled" w="100%">
+        <TabList d="flex" justifyContent="center">
+          {vehicles.map((vehicle, idx) => (
+            <Tab
+              key={idx}
+              flex="1"
+              p={4}
+              color="gray.500"
+              borderWidth="1px"
+              borderRadius="2xl"
+              display="flex"
+              flexDirection="column"
+              ml={idx === 0 ? 0 : 4}
+              _focus={{}}
+              _hover={{ borderColor: 'purple.600' }}
+              _selected={{
+                color: 'gray.700',
+                borderColor: 'purple.600',
+              }}
+            >
+              <Icon as={GiMineTruck} boxSize={16} color="teal.500" />
+              <Text fontSize="sm" fontWeight="semibold">
+                {vehicle.vehicleName}
+              </Text>
+            </Tab>
+          ))}
+        </TabList>
+        <TabPanels mt={8}>
+          {Object.values(slotsByVehicle).map((vehicleSlots, i) => {
+            const slotsByMonth = groupBy(vehicleSlots, (slot) =>
+              format(new Date(slot['scheduledAt']), 'MMMM')
+            )
+            return (
+              <TabPanel key={i} p={0}>
+                <Stack direction="column" spacing={8}>
+                  {Object.entries(slotsByMonth).map(
+                    ([month, availableSlots], j) => {
+                      const slotsByDate = groupBy(
+                        availableSlots,
+                        (slot) => slot['scheduledAt']
+                      )
+
+                      return (
+                        <Box key={j}>
+                          <Flex fontWeight="semibold">{month}</Flex>
+                          <Stack mt={4} direction="column" spacing={4}>
+                            {Object.entries(slotsByDate).map(
+                              ([date, slotsForDate], k) => {
                                 return (
-                                  <TimeSlot key={time.key} {...radio}>
-                                    {format(
-                                      new Date(time.scheduledAtFull),
-                                      'hh:mm aa'
-                                    )}
-                                  </TimeSlot>
+                                  <Flex
+                                    key={k}
+                                    w="100%"
+                                    py={4}
+                                    borderWidth="1px"
+                                    borderRadius="2xl"
+                                  >
+                                    <Flex
+                                      direction="column"
+                                      align="center"
+                                      justify="center"
+                                      px={6}
+                                    >
+                                      <Text
+                                        fontSize="xs"
+                                        color="gray.500"
+                                        fontWeight="semibold"
+                                      >
+                                        {format(
+                                          new Date(date),
+                                          'eee'
+                                        ).toUpperCase()}
+                                      </Text>
+                                      <Flex
+                                        w="40px"
+                                        h="40px"
+                                        align="center"
+                                        justify="center"
+                                        bg="purple.50"
+                                        color="purple.600"
+                                        fontSize="xl"
+                                        fontWeight="semibold"
+                                        borderRadius="full"
+                                      >
+                                        {format(new Date(date), 'd')}
+                                      </Flex>
+                                    </Flex>
+                                    <Flex flex="1" px={6} align="center">
+                                      <SimpleGrid columns={5} spacing={3}>
+                                        {slotsForDate.map(
+                                          (timeSlot: AvailableSlot) => {
+                                            const radio = getRadioProps({
+                                              value: JSON.stringify({
+                                                ...timeSlot,
+                                              }),
+                                            })
+                                            return (
+                                              <TimeCard
+                                                key={timeSlot.key}
+                                                {...radio}
+                                              >
+                                                {format(
+                                                  new Date(
+                                                    timeSlot.scheduledAtFull
+                                                  ),
+                                                  'hh:mm aa'
+                                                )}
+                                              </TimeCard>
+                                            )
+                                          }
+                                        )}
+                                      </SimpleGrid>
+                                    </Flex>
+                                  </Flex>
                                 )
-                              })}
-                            </SimpleGrid>
-                          </HStack>
-                        )
-                      }
-                    )}
-                  </VStack>
-                </Box>
-              )
-            }
-          )}
-        </VStack>
-      </Box>
-    </Tooltip>
+                              }
+                            )}
+                          </Stack>
+                        </Box>
+                      )
+                    }
+                  )}
+                </Stack>
+              </TabPanel>
+            )
+          })}
+        </TabPanels>
+      </Tabs>
+    </Box>
   )
 }
