@@ -24,7 +24,7 @@ export const TicketTab = React.forwardRef<HTMLButtonElement, TicketTabProps>(
     const tabProps = useTab({ ...rest, ref })
     const styles = useStyles()
     const isSelected = !!tabProps['aria-selected']
-    const ticketTabs = isSelected ? (
+    const ticketTab = isSelected ? (
       <HStack spacing={4}>
         <Flex
           p={3}
@@ -61,7 +61,11 @@ export const TicketTab = React.forwardRef<HTMLButtonElement, TicketTabProps>(
               : { color: 'gray.500' }),
           }}
           borderRadius="full"
-          _hover={{ bg: 'gray.200' }}
+          _hover={{
+            ...(tabId < tabSelected
+              ? { bg: 'purple.100' }
+              : { bg: 'gray.200' }),
+          }}
         >
           {tabProps.children}
         </Flex>
@@ -87,7 +91,7 @@ export const TicketTab = React.forwardRef<HTMLButtonElement, TicketTabProps>(
             align="center"
             justify="center"
           >
-            {ticketTabs}
+            {ticketTab}
           </Flex>
         </HStack>
       </chakra.button>
