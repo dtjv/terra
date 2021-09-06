@@ -54,8 +54,10 @@ export const TicketModal = ({ isOpen, onClose }: TicketModalProps) => {
   const handleFormSubmit: SubmitHandler<TicketInput> = (fields) => {
     console.log(`call api w/ fields: `, fields)
     onClose()
-    reset()
     setTabIndex(0)
+    //TODO: if fields are not reset by onClose
+    //  add a useEffect to test if form was successfully submitted. if so, clear
+    //  fields.
   }
 
   return (
@@ -66,6 +68,7 @@ export const TicketModal = ({ isOpen, onClose }: TicketModalProps) => {
       onClose={() => {
         onClose()
         reset()
+        //TODO: manually clear out controlled components.
         setTabIndex(0)
       }}
     >
@@ -110,17 +113,17 @@ export const TicketModal = ({ isOpen, onClose }: TicketModalProps) => {
                     <PanelContact {...form} />
                   </TabPanel>
                   <TabPanel p="0">
-                    <PanelProducts />
+                    <PanelProducts {...form} />
                   </TabPanel>
                   <TabPanel p="0">
-                    <PanelSchedule />
+                    <PanelSchedule {...form} />
                   </TabPanel>
                 </TabPanels>
               </Tabs>
             </VStack>
           </form>
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter pb={0}>
           <TicketNav
             tabIndex={tabIndex}
             tabCount={tabs.length}
