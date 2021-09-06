@@ -4,7 +4,7 @@ import {
   VStack,
   Box,
   SimpleGrid,
-  FormLabel,
+  Heading,
   FormControl,
   useRadio,
   useRadioGroup,
@@ -17,7 +17,9 @@ import type { UseFormReturn } from 'react-hook-form'
 import { TicketKind } from '@/types/enums'
 import type { TicketInput } from '@/types/types'
 
-function RadioCard(props: UseRadioProps & { children?: React.ReactNode }) {
+const TicketKindCard = (
+  props: UseRadioProps & { children?: React.ReactNode }
+) => {
   const { getInputProps, getCheckboxProps } = useRadio(props)
   const input = getInputProps()
   const checkbox = getCheckboxProps()
@@ -33,7 +35,6 @@ function RadioCard(props: UseRadioProps & { children?: React.ReactNode }) {
         {...checkbox}
         cursor="pointer"
         color="gray.500"
-        fontWeight="semibold"
         borderWidth="1px"
         borderRadius="2xl"
         borderColor="gray.300"
@@ -47,7 +48,7 @@ function RadioCard(props: UseRadioProps & { children?: React.ReactNode }) {
   )
 }
 
-const radioOptions = [
+const choices = [
   {
     value: TicketKind.DELIVERY,
     icon: GiMineTruck,
@@ -82,21 +83,21 @@ export const PanelTicket = ({ control }: UseFormReturn<TicketInput>) => {
   return (
     <Box pt={10}>
       <FormControl isInvalid={!!errors[name]}>
-        <FormLabel fontSize="2xl" fontWeight="black" letterSpacing="tight">
-          What ticket do you want to create?
-        </FormLabel>
-        <SimpleGrid columns={radioOptions.length} spacing={4} {...group} mt={8}>
-          {radioOptions.map(({ value, icon, color }) => {
+        <Heading fontSize="2xl" fontWeight="black" letterSpacing="tight">
+          What service do you need?
+        </Heading>
+        <SimpleGrid columns={choices.length} spacing={8} {...group} mt={8}>
+          {choices.map(({ value, icon, color }) => {
             const radio = getRadioProps({ value })
             return (
-              <RadioCard key={value} {...radio}>
+              <TicketKindCard key={value} {...radio}>
                 <Flex py={8} align="center" direction="column">
-                  <Icon as={icon} boxSize={12} color={color} />
-                  <Flex mt={6} fontSize="sm">
+                  <Icon as={icon} boxSize={16} color={color} />
+                  <Flex mt={6} fontSize="sm" fontWeight="semibold">
                     {value}
                   </Flex>
                 </Flex>
-              </RadioCard>
+              </TicketKindCard>
             )
           })}
         </SimpleGrid>

@@ -24,8 +24,8 @@ export const PanelContact = (form: UseFormReturn<TicketInput>) => {
   return (
     <Box pt={10}>
       <VStack w="100%" align="flex-start" spacing={4}>
-        <Heading fontSize="2xl" fontWeight="black" letterSpacing="tight">
-          Contact Information
+        <Heading fontSize="2xl" fontWeight="black" letterSpacing="tight" mb={4}>
+          Please complete contact details.
         </Heading>
         <VStack align="flex-start" spacing={4}>
           <HStack spacing={4} w="100%">
