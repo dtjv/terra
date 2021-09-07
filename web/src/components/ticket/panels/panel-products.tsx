@@ -16,11 +16,11 @@ export const PanelProducts = ({ getValues }: UseFormReturn<TicketInput>) => {
       : 'Please list products'
 
   return (
-    <Box pt={10}>
+    <>
       <Heading fontSize="2xl" fontWeight="black" letterSpacing="tight">
         {heading}
       </Heading>
       <Box mt={8}>TBD</Box>
-    </Box>
+    </>
   )
 }

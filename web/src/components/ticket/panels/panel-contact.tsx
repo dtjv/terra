@@ -22,66 +22,32 @@ export const PanelContact = (form: UseFormReturn<TicketInput>) => {
   } = form
 
   return (
-    <Box pt={10}>
-      <VStack w="100%" align="flex-start" spacing={4}>
-        <Heading fontSize="2xl" fontWeight="black" letterSpacing="tight" mb={4}>
-          Please complete contact details.
-        </Heading>
-        <VStack align="flex-start" spacing={4}>
-          <HStack spacing={4} w="100%">
-            <FormControl isInvalid={!!errors.firstName}>
-              <FormLabel htmlFor="firstName" fontSize="sm">
-                First name
-              </FormLabel>
-              <Tooltip
-                isDisabled={!errors.firstName}
-                label={errors.firstName?.message}
-                bg="red.500"
-              >
-                <Input
-                  id="firstName"
-                  sx={{
-                    ...(errors['firstName']
-                      ? {
-                          borderLeftWidth: '10px',
-                        }
-                      : null),
-                  }}
-                  _focus={{
-                    ...(errors['firstName']
-                      ? {
-                          borderColor: 'red.500',
-                        }
-                      : {
-                          border: '2px solid',
-                          borderColor: 'purple.200',
-                          bg: 'purple.50',
-                        }),
-                  }}
-                  {...register('firstName', {
-                    required: {
-                      value: true,
-                      message: 'Required',
-                    },
-                  })}
-                />
-              </Tooltip>
-            </FormControl>
-            <FormControl isInvalid={!!errors.lastName}>
-              <FormLabel htmlFor="lastName" fontSize="sm">
-                Last name
-              </FormLabel>
+    <VStack w="100%" align="flex-start" spacing={4}>
+      <Heading fontSize="2xl" fontWeight="black" letterSpacing="tight" mb={4}>
+        Please complete contact details.
+      </Heading>
+      <VStack align="flex-start" spacing={4}>
+        <HStack spacing={4} w="100%">
+          <FormControl isInvalid={!!errors.firstName}>
+            <FormLabel htmlFor="firstName" fontSize="sm">
+              First name
+            </FormLabel>
+            <Tooltip
+              isDisabled={!errors.firstName}
+              label={errors.firstName?.message}
+              bg="red.500"
+            >
               <Input
-                id="lastName"
+                id="firstName"
                 sx={{
-                  ...(errors.lastName
+                  ...(errors['firstName']
                     ? {
                         borderLeftWidth: '10px',
                       }
                     : null),
                 }}
                 _focus={{
-                  ...(errors['lastName']
+                  ...(errors['firstName']
                     ? {
                         borderColor: 'red.500',
                       }
@@ -91,33 +57,65 @@ export const PanelContact = (form: UseFormReturn<TicketInput>) => {
                         bg: 'purple.50',
                       }),
                 }}
-                {...register('lastName', {
+                {...register('firstName', {
                   required: {
                     value: true,
-                    message: 'Last name is required',
+                    message: 'Required',
                   },
                 })}
               />
-            </FormControl>
-          </HStack>
-          <HStack spacing={4} w="100%">
-            <FormControl>
-              <FormLabel fontSize="sm">Email</FormLabel>
-              <Input id="email" {...register('email')} />
-            </FormControl>
-            <FormControl>
-              <FormLabel fontSize="sm">Phone</FormLabel>
-              <Input
-                id="phone"
-                type="tel"
-                placeholder="xxx-xxx-xxxx"
-                {...register('phone')}
-              />
-            </FormControl>
-          </HStack>
-          <FieldDestinationAddress {...form} />
-        </VStack>
+            </Tooltip>
+          </FormControl>
+          <FormControl isInvalid={!!errors.lastName}>
+            <FormLabel htmlFor="lastName" fontSize="sm">
+              Last name
+            </FormLabel>
+            <Input
+              id="lastName"
+              sx={{
+                ...(errors.lastName
+                  ? {
+                      borderLeftWidth: '10px',
+                    }
+                  : null),
+              }}
+              _focus={{
+                ...(errors['lastName']
+                  ? {
+                      borderColor: 'red.500',
+                    }
+                  : {
+                      border: '2px solid',
+                      borderColor: 'purple.200',
+                      bg: 'purple.50',
+                    }),
+              }}
+              {...register('lastName', {
+                required: {
+                  value: true,
+                  message: 'Last name is required',
+                },
+              })}
+            />
+          </FormControl>
+        </HStack>
+        <HStack spacing={4} w="100%">
+          <FormControl>
+            <FormLabel fontSize="sm">Email</FormLabel>
+            <Input id="email" {...register('email')} />
+          </FormControl>
+          <FormControl>
+            <FormLabel fontSize="sm">Phone</FormLabel>
+            <Input
+              id="phone"
+              type="tel"
+              placeholder="xxx-xxx-xxxx"
+              {...register('phone')}
+            />
+          </FormControl>
+        </HStack>
+        <FieldDestinationAddress {...form} />
       </VStack>
-    </Box>
+    </VStack>
   )
 }

@@ -15,6 +15,7 @@ import {
   TabPanel,
   TabPanels,
   Stack,
+  StackDivider,
   FormControl,
   Input,
   SimpleGrid,
@@ -140,7 +141,6 @@ export const FieldScheduledAt = ({
       </Text>
     )
   }
-  console.log(availableSlots)
 
   // TODO: listing ALL vehicles, whether we have slots for each or not. wrong!!
   return (
@@ -160,7 +160,7 @@ export const FieldScheduledAt = ({
             <Tab
               key={idx}
               flex="1"
-              p={4}
+              p={2}
               color="gray.500"
               borderWidth="1px"
               borderRadius="2xl"
@@ -174,7 +174,7 @@ export const FieldScheduledAt = ({
                 borderColor: 'purple.600',
               }}
             >
-              <Icon as={GiMineTruck} boxSize={16} color="teal.500" />
+              <Icon as={GiMineTruck} boxSize={12} color="teal.500" />
               <Text fontSize="sm" fontWeight="semibold">
                 {vehicle.vehicleName}
               </Text>
@@ -199,17 +199,16 @@ export const FieldScheduledAt = ({
                       return (
                         <Box key={j}>
                           <Flex fontWeight="semibold">{month}</Flex>
-                          <Stack mt={4} direction="column" spacing={4}>
+                          <Stack
+                            mt={4}
+                            direction="column"
+                            spacing={3}
+                            divider={<StackDivider borderColor="gray.200" />}
+                          >
                             {Object.entries(slotsByDate).map(
                               ([date, slotsForDate], k) => {
                                 return (
-                                  <Flex
-                                    key={k}
-                                    w="100%"
-                                    py={4}
-                                    borderWidth="1px"
-                                    borderRadius="2xl"
-                                  >
+                                  <Flex key={k} w="100%">
                                     <Flex
                                       direction="column"
                                       align="center"

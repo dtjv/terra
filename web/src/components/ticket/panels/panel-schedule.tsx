@@ -16,13 +16,13 @@ export const PanelSchedule = (form: UseFormReturn<TicketInput>) => {
       : 'service'
 
   return (
-    <Box pt={10}>
-      <Heading fontSize="2xl" fontWeight="black" letterSpacing="tight">
+    <>
+      <Heading fontSize="xl" fontWeight="black" letterSpacing="tight">
         Please select a day and time for {service}.
       </Heading>
-      <Box mt={8}>
+      <Box mt={4}>
         <FieldScheduledAt {...form} />
       </Box>
-    </Box>
+    </>
   )
 }

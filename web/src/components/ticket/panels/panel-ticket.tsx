@@ -81,27 +81,25 @@ export const PanelTicket = ({ control }: UseFormReturn<TicketInput>) => {
   const group = getRootProps()
 
   return (
-    <Box pt={10}>
-      <FormControl isInvalid={!!errors[name]}>
-        <Heading fontSize="2xl" fontWeight="black" letterSpacing="tight">
-          What service do you need?
-        </Heading>
-        <SimpleGrid columns={choices.length} spacing={8} {...group} mt={8}>
-          {choices.map(({ value, icon, color }) => {
-            const radio = getRadioProps({ value })
-            return (
-              <TicketKindCard key={value} {...radio}>
-                <Flex py={8} align="center" direction="column">
-                  <Icon as={icon} boxSize={16} color={color} />
-                  <Flex mt={6} fontSize="sm" fontWeight="semibold">
-                    {value}
-                  </Flex>
+    <FormControl isInvalid={!!errors[name]}>
+      <Heading fontSize="2xl" fontWeight="black" letterSpacing="tight">
+        What service do you need?
+      </Heading>
+      <SimpleGrid columns={choices.length} spacing={8} {...group} mt={8}>
+        {choices.map(({ value, icon, color }) => {
+          const radio = getRadioProps({ value })
+          return (
+            <TicketKindCard key={value} {...radio}>
+              <Flex py={8} align="center" direction="column">
+                <Icon as={icon} boxSize={16} color={color} />
+                <Flex mt={6} fontSize="md" fontWeight="semibold">
+                  {value}
                 </Flex>
-              </TicketKindCard>
-            )
-          })}
-        </SimpleGrid>
-      </FormControl>
-    </Box>
+              </Flex>
+            </TicketKindCard>
+          )
+        })}
+      </SimpleGrid>
+    </FormControl>
   )
 }
