@@ -25,7 +25,7 @@ import {
 import { GiMineTruck } from 'react-icons/gi'
 import type { UseRadioProps } from '@chakra-ui/react'
 import type { UseFormReturn } from 'react-hook-form'
-import { ScheduleContext } from '@/hooks/use-schedule'
+import { VehicleContext } from '@/contexts/vehicle-context'
 import type { TicketInput } from '@/types/types'
 
 interface AvailableSlot {
@@ -79,7 +79,7 @@ export const ScheduledAt = ({
   clearErrors,
   formState: { errors },
 }: UseFormReturn<TicketInput>) => {
-  const { vehicles } = useContext(ScheduleContext)
+  const { vehicles } = useContext(VehicleContext)
   const durationInMinutes = useWatch({ control, name: 'durationInMinutes' })
   const [availableSlots, setAvailableSlots] = useState<AvailableSlot[]>([])
   const { getRootProps, getRadioProps } = useRadioGroup({
