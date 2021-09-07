@@ -1,5 +1,5 @@
-import { Box, Heading } from '@chakra-ui/react'
 import { FaLeaf } from 'react-icons/fa'
+import { Box, Heading } from '@chakra-ui/react'
 import { TicketKind } from '@/types/enums'
 import type { UseFormReturn } from 'react-hook-form'
 import type { TicketInput } from '@/types/types'

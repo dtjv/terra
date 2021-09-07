@@ -9,12 +9,12 @@ import {
   useRadio,
   useRadioGroup,
 } from '@chakra-ui/react'
-import { useController } from 'react-hook-form'
 import { FaTicketAlt } from 'react-icons/fa'
+import { useController } from 'react-hook-form'
 import { GiMineTruck, GiDigDug } from 'react-icons/gi'
-import type { UseRadioProps } from '@chakra-ui/react'
-import type { UseFormReturn } from 'react-hook-form'
 import { TicketKind } from '@/types/enums'
+import type { UseFormReturn } from 'react-hook-form'
+import type { UseRadioProps } from '@chakra-ui/react'
 import type { TicketInput } from '@/types/types'
 
 const TicketKindCard = (
@@ -68,11 +68,7 @@ export const PanelTicket = ({ control }: UseFormReturn<TicketInput>) => {
   const {
     field,
     formState: { errors },
-  } = useController({
-    control,
-    name,
-    rules: { required: { value: true, message: 'Required field' } },
-  })
+  } = useController({ control, name })
   const { getRootProps, getRadioProps } = useRadioGroup({
     name,
     value: field.value,
