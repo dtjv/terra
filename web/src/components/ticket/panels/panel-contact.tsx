@@ -1,14 +1,15 @@
+import phone from 'phone'
 import {
   Input,
   VStack,
   HStack,
   Heading,
-  Box,
   Tooltip,
   FormLabel,
   FormControl,
 } from '@chakra-ui/react'
 import { FaUser } from 'react-icons/fa'
+import { parseOneAddress } from 'email-addresses'
 import { FieldDestinationAddress } from '@/components/ticket/fields'
 import type { UseFormReturn } from 'react-hook-form'
 import type { TicketInput } from '@/types/types'
@@ -70,48 +71,105 @@ export const PanelContact = (form: UseFormReturn<TicketInput>) => {
             <FormLabel htmlFor="lastName" fontSize="sm">
               Last name
             </FormLabel>
-            <Input
-              id="lastName"
-              sx={{
-                ...(errors.lastName
-                  ? {
-                      borderLeftWidth: '10px',
-                    }
-                  : null),
-              }}
-              _focus={{
-                ...(errors['lastName']
-                  ? {
-                      borderColor: 'red.500',
-                    }
-                  : {
-                      border: '2px solid',
-                      borderColor: 'purple.200',
-                      bg: 'purple.50',
-                    }),
-              }}
-              {...register('lastName', {
-                required: {
-                  value: true,
-                  message: 'Last name is required',
-                },
-              })}
-            />
+            <Tooltip
+              isDisabled={!errors.lastName}
+              label={errors.lastName?.message}
+              bg="red.500"
+            >
+              <Input
+                id="lastName"
+                sx={{
+                  ...(errors.lastName
+                    ? {
+                        borderLeftWidth: '10px',
+                      }
+                    : null),
+                }}
+                _focus={{
+                  ...(errors['lastName']
+                    ? {
+                        borderColor: 'red.500',
+                      }
+                    : {
+                        border: '2px solid',
+                        borderColor: 'purple.200',
+                        bg: 'purple.50',
+                      }),
+                }}
+                {...register('lastName', {
+                  required: {
+                    value: true,
+                    message: 'Required',
+                  },
+                })}
+              />
+            </Tooltip>
           </FormControl>
         </HStack>
         <HStack spacing={4} w="100%">
           <FormControl>
             <FormLabel fontSize="sm">Email</FormLabel>
-            <Input id="email" {...register('email')} />
+            <Tooltip
+              isDisabled={!errors.email}
+              label={errors.email?.message}
+              bg="red.500"
+            >
+              <Input
+                id="email"
+                type="email"
+                placeholder="joe@example.com"
+                sx={{
+                  ...(errors.email
+                    ? {
+                        borderLeftWidth: '10px',
+                      }
+                    : null),
+                }}
+                _focus={{
+                  ...(errors['email']
+                    ? {
+                        borderColor: 'red.500',
+                      }
+                    : {
+                        border: '2px solid',
+                        borderColor: 'purple.200',
+                        bg: 'purple.50',
+                      }),
+                }}
+                {...register('email', {
+                  validate: {
+                    emailFormat: (value: string) =>
+                      value
+                        ? !!parseOneAddress(value) || 'Invalid format'
+                        : true,
+                  },
+                })}
+              />
+            </Tooltip>
           </FormControl>
           <FormControl>
             <FormLabel fontSize="sm">Phone</FormLabel>
-            <Input
-              id="phone"
-              type="tel"
-              placeholder="xxx-xxx-xxxx"
-              {...register('phone')}
-            />
+            <Tooltip
+              isDisabled={!errors.phone}
+              label={errors.phone?.message}
+              bg="red.500"
+            >
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="xxx-xxx-xxxx"
+                {...register('phone', {
+                  required: {
+                    value: true,
+                    message: 'Required',
+                  },
+                  validate: {
+                    phoneFormat: (value: string) =>
+                      phone(value).isValid || 'Invalid format',
+                  },
+                })}
+              />
+            </Tooltip>
           </FormControl>
         </HStack>
         <FieldDestinationAddress {...form} />
