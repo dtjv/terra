@@ -1,4 +1,4 @@
-import { useMemo, createContext } from 'react'
+import { useMemo } from 'react'
 import { set, isBefore } from 'date-fns'
 import { useTickets } from '@/hooks/use-tickets'
 import {
@@ -19,12 +19,6 @@ const scheduleConfig = {
   endHour: SCHEDULE_END_HOUR_IN_24HR,
   timeBlockInMinutes: SCHEDULE_TIME_BLOCK_IN_MINUTES,
 }
-
-interface Context {
-  vehicles: Vehicle[]
-}
-
-export const ScheduleContext = createContext<Context>({ vehicles: [] })
 
 export interface UseScheduleProps {
   vehicles: Vehicle[]

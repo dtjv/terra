@@ -21,7 +21,7 @@ import {
   TabSchedule,
 } from '@/components/ticket/panels'
 import { TicketKind } from '@/types/enums'
-import { ScheduleContext } from '@/hooks/use-schedule'
+import { VehicleContext } from '@/contexts/vehicle-context'
 import { TicketTab, TicketNav } from '@/components/ticket'
 import type { UseFormReturn } from 'react-hook-form'
 import type { Vehicle } from '@/types/types'
@@ -51,7 +51,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
   }
 
   return (
-    <ScheduleContext.Provider value={{ vehicles }}>
+    <VehicleContext.Provider value={{ vehicles }}>
       <Flex direction="column" mx="auto" px={8}>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <VStack spacing={8}>
@@ -134,7 +134,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
           </TicketNav>
         </Flex>
       </Flex>
-    </ScheduleContext.Provider>
+    </VehicleContext.Provider>
   )
 }
 

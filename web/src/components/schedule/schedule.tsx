@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import { set } from 'date-fns'
 import {
   Grid,
   GridItem,
@@ -10,7 +8,8 @@ import {
   useColorModeValue,
   Skeleton,
 } from '@chakra-ui/react'
-import { useSchedule, ScheduleContext } from '@/hooks/use-schedule'
+import { set } from 'date-fns'
+import { useState } from 'react'
 import {
   ScheduleNav,
   ScheduleToolbar,
@@ -19,6 +18,8 @@ import {
   ScheduleDataCell,
 } from '@/components/schedule'
 import { CellKind } from '@/types/enums'
+import { useSchedule } from '@/hooks/use-schedule'
+import { VehicleContext } from '@/contexts/vehicle-context'
 import type { Vehicle } from '@/types/types'
 
 export interface ScheduleProps {
@@ -49,7 +50,7 @@ export const Schedule = ({ vehicles }: ScheduleProps) => {
   }
 
   return (
-    <ScheduleContext.Provider value={{ vehicles }}>
+    <VehicleContext.Provider value={{ vehicles }}>
       <Box h="100%" bg={backgroundColor}>
         <ScheduleNav
           isLoading={isLoading}
@@ -192,6 +193,6 @@ export const Schedule = ({ vehicles }: ScheduleProps) => {
           </Skeleton>
         </Box>
       </Box>
-    </ScheduleContext.Provider>
+    </VehicleContext.Provider>
   )
 }
