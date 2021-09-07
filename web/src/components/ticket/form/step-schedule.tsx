@@ -5,9 +5,9 @@ import { TicketKind } from '@/types/enums'
 import type { UseFormReturn } from 'react-hook-form'
 import type { TicketInput } from '@/types/types'
 
-export const TabSchedule = { label: 'Schedule Appt.', icon: FaRegCalendarAlt }
+export const scheduleTab = { label: 'Schedule Appt.', icon: FaRegCalendarAlt }
 
-export const PanelSchedule = (form: UseFormReturn<TicketInput>) => {
+export const StepSchedule = (form: UseFormReturn<TicketInput>) => {
   let service = form.getValues('ticketKind') as string
 
   service =

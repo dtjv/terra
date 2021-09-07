@@ -1,19 +1,19 @@
 import { HStack, Button } from '@chakra-ui/react'
 import { FaArrowLeft } from 'react-icons/fa'
 
-export interface TicketNavProps {
+export interface FooterNavProps {
   tabIndex: number
   tabCount: number
   onClick: (tabIndex: number) => void
   children?: React.ReactNode
 }
 
-export const TicketNav = ({
+export const FooterNav = ({
   tabIndex,
   tabCount,
   onClick,
   children,
-}: TicketNavProps) => {
+}: FooterNavProps) => {
   return (
     <HStack w="100%" spacing={3} justify="flex-end">
       {tabIndex > 0 && (

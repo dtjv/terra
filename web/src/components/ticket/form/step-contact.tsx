@@ -10,13 +10,13 @@ import {
 } from '@chakra-ui/react'
 import { FaUser } from 'react-icons/fa'
 import { parseOneAddress } from 'email-addresses'
-import { FieldDestinationAddress } from '@/components/ticket/fields'
+import { DestinationAddress } from '@/components/ticket/form'
 import type { UseFormReturn } from 'react-hook-form'
 import type { TicketInput } from '@/types/types'
 
-export const TabContact = { label: 'Contact Details', icon: FaUser }
+export const contactTab = { label: 'Contact Details', icon: FaUser }
 
-export const PanelContact = (form: UseFormReturn<TicketInput>) => {
+export const StepContact = (form: UseFormReturn<TicketInput>) => {
   const {
     register,
     formState: { errors },
@@ -172,7 +172,7 @@ export const PanelContact = (form: UseFormReturn<TicketInput>) => {
             </Tooltip>
           </FormControl>
         </HStack>
-        <FieldDestinationAddress {...form} />
+        <DestinationAddress {...form} />
       </VStack>
     </VStack>
   )

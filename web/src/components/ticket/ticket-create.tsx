@@ -11,18 +11,19 @@ import {
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import {
-  PanelTicket,
-  TabTicket,
-  PanelContact,
-  TabContact,
-  PanelProducts,
-  TabProducts,
-  PanelSchedule,
-  TabSchedule,
-} from '@/components/ticket/panels'
+  HeaderTab,
+  FooterNav,
+  StepTicket,
+  ticketTab,
+  StepContact,
+  contactTab,
+  StepProduct,
+  productTab,
+  StepSchedule,
+  scheduleTab,
+} from '@/components/ticket/form'
 import { TicketKind } from '@/types/enums'
 import { VehicleContext } from '@/contexts/vehicle-context'
-import { TicketTab, TicketNav } from '@/components/ticket'
 import type { UseFormReturn } from 'react-hook-form'
 import type { Vehicle } from '@/types/types'
 import type { TicketInput } from '@/types/types'
@@ -41,8 +42,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
     handleSubmit,
     formState: { isSubmitting },
   } = form
-  const tabs = [TabTicket, TabContact, TabProducts, TabSchedule]
-
+  const tabs = [ticketTab, contactTab, productTab, scheduleTab]
   const handleFormSubmit: SubmitHandler<TicketInput> = (fields) => {
     console.log(`call api w/ fields: `, fields)
   }
@@ -76,7 +76,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
                 borderColor="gray.200"
               >
                 {tabs.map(({ label, icon }, idx) => (
-                  <TicketTab
+                  <HeaderTab
                     key={idx}
                     tabId={idx}
                     tabLabel={label}
@@ -84,7 +84,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
                     tabSelected={tabIndex}
                   >
                     <Icon as={icon} boxSize={4} />
-                  </TicketTab>
+                  </HeaderTab>
                 ))}
               </TabList>
               {/* body - scrollable */}
@@ -94,16 +94,16 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
                 h="calc(100vh - 232px)"
               >
                 <TabPanel px={0} py={4}>
-                  <PanelTicket {...form} />
+                  <StepTicket {...form} />
                 </TabPanel>
                 <TabPanel px={0} py={4}>
-                  <PanelContact {...form} />
+                  <StepContact {...form} />
                 </TabPanel>
                 <TabPanel px={0} py={4}>
-                  <PanelProducts {...form} />
+                  <StepProduct {...form} />
                 </TabPanel>
                 <TabPanel px={0} py={4}>
-                  <PanelSchedule {...form} />
+                  <StepSchedule {...form} />
                 </TabPanel>
               </TabPanels>
             </Tabs>
@@ -119,7 +119,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
           py={4}
           px={8}
         >
-          <TicketNav
+          <FooterNav
             tabIndex={tabIndex}
             tabCount={tabs.length}
             onClick={setTabIndex}
@@ -131,7 +131,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
             >
               Create Ticket
             </Button>
-          </TicketNav>
+          </FooterNav>
         </Flex>
       </Flex>
     </VehicleContext.Provider>

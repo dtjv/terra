@@ -61,9 +61,9 @@ const choices = [
   },
 ]
 
-export const TabTicket = { label: 'Type of Ticket', icon: FaTicketAlt }
+export const ticketTab = { label: 'Type of Ticket', icon: FaTicketAlt }
 
-export const PanelTicket = ({ control }: UseFormReturn<TicketInput>) => {
+export const StepTicket = ({ control }: UseFormReturn<TicketInput>) => {
   const name = 'ticketKind'
   const {
     field,

@@ -72,7 +72,7 @@ const TimeCard = (props: UseRadioProps & { children?: React.ReactNode }) => {
   )
 }
 
-export const FieldScheduledAt = ({
+export const ScheduledAt = ({
   control,
   register,
   setValue,

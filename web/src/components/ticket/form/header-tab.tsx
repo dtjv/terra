@@ -10,7 +10,7 @@ import {
   useStyles,
 } from '@chakra-ui/react'
 
-export interface TicketTabProps {
+export interface HeaderTabProps {
   tabId: number
   tabCount: number
   tabLabel: string
@@ -18,7 +18,7 @@ export interface TicketTabProps {
   children?: React.ReactNode
 }
 
-export const TicketTab = React.forwardRef<HTMLButtonElement, TicketTabProps>(
+export const HeaderTab = React.forwardRef<HTMLButtonElement, HeaderTabProps>(
   (props, ref) => {
     const { tabId, tabCount, tabLabel, tabSelected, ...rest } = props
     const tabProps = useTab({ ...rest, ref })

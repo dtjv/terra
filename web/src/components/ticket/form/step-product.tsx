@@ -4,9 +4,9 @@ import { TicketKind } from '@/types/enums'
 import type { UseFormReturn } from 'react-hook-form'
 import type { TicketInput } from '@/types/types'
 
-export const TabProducts = { label: 'Product List', icon: FaLeaf }
+export const productTab = { label: 'Product List', icon: FaLeaf }
 
-export const PanelProducts = ({ getValues }: UseFormReturn<TicketInput>) => {
+export const StepProduct = ({ getValues }: UseFormReturn<TicketInput>) => {
   const service = getValues('ticketKind')
   const heading =
     service === TicketKind.DELIVERY
