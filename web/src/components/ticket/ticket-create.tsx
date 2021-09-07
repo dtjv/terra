@@ -10,10 +10,6 @@ import {
   TabPanels,
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import type { GetServerSideProps } from 'next'
-import type { ReactElement } from 'react'
-import type { UseFormReturn } from 'react-hook-form'
-import { TicketTab, TicketNav } from '@/components/ticket'
 import {
   PanelTicket,
   TabTicket,
@@ -24,41 +20,36 @@ import {
   PanelSchedule,
   TabSchedule,
 } from '@/components/ticket/panels'
-import { AdminLayout } from '@/components/layouts/admin-layout'
-import { ScheduleContext } from '@/hooks/use-schedule'
-import { getVehicles } from '@/lib/db'
-import { toVehicle } from '@/types/utils'
 import { TicketKind } from '@/types/enums'
+import { ScheduleContext } from '@/hooks/use-schedule'
+import { TicketTab, TicketNav } from '@/components/ticket'
+import type { UseFormReturn } from 'react-hook-form'
+import type { Vehicle } from '@/types/types'
 import type { TicketInput } from '@/types/types'
-import type { Vehicle, VehicleDocument } from '@/types/types'
 
-const tabs = [TabTicket, TabContact, TabProducts, TabSchedule]
-
-interface CreateTicketProps {
+interface TicketCreateProps {
   vehicles: Vehicle[]
 }
 
-export const CreateTicket = ({ vehicles }: CreateTicketProps) => {
+export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
   const [tabIndex, setTabIndex] = React.useState(0)
-  const handleTabsChange = (index: number) => {
-    setTabIndex(index)
-  }
   const form: UseFormReturn<TicketInput> = useForm<TicketInput>({
     mode: 'onTouched',
     defaultValues: { ticketKind: TicketKind.DELIVERY, scheduledTime: '' },
   })
   const {
     handleSubmit,
-    reset,
     formState: { isSubmitting },
   } = form
+  const tabs = [TabTicket, TabContact, TabProducts, TabSchedule]
+
   const handleFormSubmit: SubmitHandler<TicketInput> = (fields) => {
     console.log(`call api w/ fields: `, fields)
-    setTabIndex(0)
-    //TODO: if fields are not reset by onClose
-    //  add a useEffect to test if form was successfully submitted. if so, clear
-    //  fields.
   }
+  const handleTabChange = (index: number) => {
+    setTabIndex(index)
+  }
+
   return (
     <ScheduleContext.Provider value={{ vehicles }}>
       <Flex direction="column" mx="auto" px={8}>
@@ -67,9 +58,10 @@ export const CreateTicket = ({ vehicles }: CreateTicketProps) => {
             <Tabs
               w="100%"
               index={tabIndex}
-              onChange={handleTabsChange}
+              onChange={handleTabChange}
               variant="unstyled"
             >
+              {/* header */}
               <TabList
                 position="sticky"
                 top={0}
@@ -95,6 +87,7 @@ export const CreateTicket = ({ vehicles }: CreateTicketProps) => {
                   </TicketTab>
                 ))}
               </TabList>
+              {/* body - scrollable */}
               <TabPanels
                 overflowY="auto"
                 overscrollBehaviorY="contain"
@@ -116,7 +109,7 @@ export const CreateTicket = ({ vehicles }: CreateTicketProps) => {
             </Tabs>
           </VStack>
         </form>
-
+        {/* footer */}
         <Flex
           position="fixed"
           bottom={0}
@@ -145,21 +138,4 @@ export const CreateTicket = ({ vehicles }: CreateTicketProps) => {
   )
 }
 
-export default CreateTicket
-
-CreateTicket.getLayout = function getLayout(page: ReactElement) {
-  return <AdminLayout>{page}</AdminLayout>
-}
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const vehicleDocs: VehicleDocument[] = await getVehicles()
-  const vehicles: Vehicle[] = vehicleDocs.map((vehicleDoc) =>
-    toVehicle(vehicleDoc)
-  )
-
-  return {
-    props: {
-      vehicles,
-    },
-  }
-}
+export default TicketCreate
