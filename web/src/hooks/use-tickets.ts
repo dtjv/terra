@@ -4,7 +4,7 @@ import {
   TICKETS_QUERY_KEY,
   TICKETS_API,
   //TICKETS_REFRESH_INTERVAL_IN_MS,
-} from '@/config'
+} from '@/config/constants'
 import type { Ticket, UpdatedTicket, TicketContext } from '@/types/types'
 
 export interface useTicketsProps {

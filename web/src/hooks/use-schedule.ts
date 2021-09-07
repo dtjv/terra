@@ -11,7 +11,7 @@ import {
   SCHEDULE_START_HOUR_IN_24HR,
   SCHEDULE_END_HOUR_IN_24HR,
   SCHEDULE_TIME_BLOCK_IN_MINUTES,
-} from '@/config'
+} from '@/config/constants'
 import type { Vehicle } from '@/types/types'
 
 const scheduleConfig = {
