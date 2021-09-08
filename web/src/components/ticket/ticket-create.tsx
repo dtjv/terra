@@ -24,7 +24,6 @@ import {
 } from '@/components/ticket/form'
 import { TicketKind } from '@/types/enums'
 import { VehicleContext } from '@/contexts/vehicle-context'
-import type { UseFormReturn } from 'react-hook-form'
 import type { Vehicle } from '@/types/types'
 import type { TicketInput } from '@/types/types'
 
@@ -34,7 +33,7 @@ interface TicketCreateProps {
 
 export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
   const [tabIndex, setTabIndex] = React.useState(0)
-  const form: UseFormReturn<TicketInput> = useForm<TicketInput>({
+  const form = useForm<TicketInput>({
     mode: 'onTouched',
     defaultValues: { ticketKind: TicketKind.DELIVERY, scheduledTime: '' },
   })
