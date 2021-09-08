@@ -1,21 +1,15 @@
-import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 import {
   Box,
   HStack,
   Button,
+  Skeleton,
   Input,
   InputGroup,
   InputLeftElement,
   useColorModeValue,
-  useDisclosure,
-  Skeleton,
 } from '@chakra-ui/react'
 import { AddIcon, SearchIcon } from '@chakra-ui/icons'
-
-const TicketModal = dynamic(async () => {
-  const m = await import('../../components/ticket/ticket-modal')
-  return m.TicketModal
-})
 
 export interface ScheduleToolbarProps {
   isLoading: boolean
@@ -26,9 +20,12 @@ export const ScheduleToolbar = ({
   isLoading,
   isPastSchedule,
 }: ScheduleToolbarProps) => {
-  const { onOpen, isOpen, onClose } = useDisclosure()
+  const router = useRouter()
   const backgroundColor = useColorModeValue('whiteAlpha.900', 'gray.600')
   const placeholderColor = useColorModeValue('gray.400', 'whiteAlpha.700')
+  const handleOnClick = (href: string) => {
+    router.push(href)
+  }
 
   return (
     <Box py={8}>
@@ -39,8 +36,8 @@ export const ScheduleToolbar = ({
             fontWeight="normal"
             leftIcon={<AddIcon />}
             colorScheme="teal"
-            variant="solid"
-            onClick={onOpen}
+            variant="outline"
+            onClick={() => handleOnClick('/admin/delivery/create-ticket')}
             isDisabled={isPastSchedule}
           >
             Create Ticket
@@ -63,7 +60,6 @@ export const ScheduleToolbar = ({
           </InputGroup>
         </Skeleton>
       </HStack>
-      <TicketModal isOpen={isOpen} onClose={onClose} />
     </Box>
   )
 }
