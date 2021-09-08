@@ -1,6 +1,6 @@
 import { Box, Heading } from '@chakra-ui/react'
 import { FaRegCalendarAlt } from 'react-icons/fa'
-import { FieldScheduledAt } from '@/components/ticket/fields'
+import { ScheduledAt } from '@/components/ticket/form'
 import { TicketKind } from '@/types/enums'
 import type { UseFormReturn } from 'react-hook-form'
 import type { TicketInput } from '@/types/types'
@@ -21,7 +21,7 @@ export const StepSchedule = (form: UseFormReturn<TicketInput>) => {
         Please select a day and time for {service}.
       </Heading>
       <Box mt={4}>
-        <FieldScheduledAt {...form} />
+        <ScheduledAt {...form} />
       </Box>
     </>
   )
