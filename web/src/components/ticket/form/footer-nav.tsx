@@ -4,24 +4,29 @@ import { FaArrowLeft } from 'react-icons/fa'
 export interface FooterNavProps {
   tabIndex: number
   tabCount: number
-  onClick: (tabIndex: number) => void
+  onPrev: () => void
+  onNext: () => void
   children?: React.ReactNode
 }
 
 export const FooterNav = ({
   tabIndex,
   tabCount,
-  onClick,
+  onPrev,
+  onNext,
   children,
 }: FooterNavProps) => {
   return (
-    <HStack w="100%" spacing={3} justify="flex-end">
+    <HStack w="full" px="2px" spacing={3} justify="flex-end">
       {tabIndex > 0 && (
         <Button
           colorScheme="gray"
           variant="ghost"
           leftIcon={<FaArrowLeft />}
-          onClick={() => onClick(tabIndex - 1)}
+          onClick={() => onPrev()}
+          _focus={{
+            bg: 'gray.200',
+          }}
         >
           Back
         </Button>
@@ -29,7 +34,13 @@ export const FooterNav = ({
       {tabIndex === tabCount - 1 ? (
         children
       ) : (
-        <Button colorScheme="purple" onClick={() => onClick(tabIndex + 1)}>
+        <Button
+          colorScheme="purple"
+          _focus={{
+            boxShadow: '0 0 0 3px rgba(107, 70, 193, 0.5)',
+          }}
+          onClick={() => onNext()}
+        >
           Next Step
         </Button>
       )}

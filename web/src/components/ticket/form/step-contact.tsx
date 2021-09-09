@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { FaUser } from 'react-icons/fa'
 import { parseOneAddress } from 'email-addresses'
-import { DestinationAddress } from '@/components/ticket/form'
+import { styles, DestinationAddress } from '@/components/ticket/form'
 import type { UseFormReturn } from 'react-hook-form'
 import type { TicketInput } from '@/types/types'
 
@@ -23,13 +23,13 @@ export const StepContact = (form: UseFormReturn<TicketInput>) => {
   } = form
 
   return (
-    <VStack w="100%" align="flex-start" spacing={4}>
+    <VStack w="full" align="flex-start" spacing={4}>
       <Heading fontSize="2xl" fontWeight="black" letterSpacing="tight" mb={4}>
         Please complete contact details.
       </Heading>
-      <VStack align="flex-start" spacing={4}>
-        <HStack spacing={4} w="100%">
-          <FormControl isInvalid={!!errors.firstName}>
+      <VStack w="full" align="flex-start" spacing={4}>
+        <HStack w="full" spacing={4}>
+          <FormControl isInvalid={!!errors.firstName} px="2px">
             <FormLabel htmlFor="firstName" fontSize="sm">
               First name
             </FormLabel>
@@ -41,33 +41,27 @@ export const StepContact = (form: UseFormReturn<TicketInput>) => {
               <Input
                 id="firstName"
                 sx={{
-                  ...(errors['firstName']
-                    ? {
-                        borderLeftWidth: '10px',
-                      }
-                    : null),
+                  ...(errors.firstName ? styles.error : styles.base),
                 }}
                 _focus={{
-                  ...(errors['firstName']
-                    ? {
-                        borderColor: 'red.500',
-                      }
-                    : {
-                        border: '2px solid',
-                        borderColor: 'purple.200',
-                        bg: 'purple.50',
-                      }),
+                  ...(errors.firstName
+                    ? styles.focus.error
+                    : styles.focus.base),
                 }}
                 {...register('firstName', {
                   required: {
                     value: true,
                     message: 'Required',
                   },
+                  maxLength: {
+                    value: 80,
+                    message: 'Maximum length is 80',
+                  },
                 })}
               />
             </Tooltip>
           </FormControl>
-          <FormControl isInvalid={!!errors.lastName}>
+          <FormControl isInvalid={!!errors.lastName} px="2px">
             <FormLabel htmlFor="lastName" fontSize="sm">
               Last name
             </FormLabel>
@@ -79,27 +73,19 @@ export const StepContact = (form: UseFormReturn<TicketInput>) => {
               <Input
                 id="lastName"
                 sx={{
-                  ...(errors.lastName
-                    ? {
-                        borderLeftWidth: '10px',
-                      }
-                    : null),
+                  ...(errors.lastName ? styles.error : styles.base),
                 }}
                 _focus={{
-                  ...(errors['lastName']
-                    ? {
-                        borderColor: 'red.500',
-                      }
-                    : {
-                        border: '2px solid',
-                        borderColor: 'purple.200',
-                        bg: 'purple.50',
-                      }),
+                  ...(errors.lastName ? styles.focus.error : styles.focus.base),
                 }}
                 {...register('lastName', {
                   required: {
                     value: true,
                     message: 'Required',
+                  },
+                  maxLength: {
+                    value: 80,
+                    message: 'Maximum length is 80',
                   },
                 })}
               />
@@ -107,7 +93,7 @@ export const StepContact = (form: UseFormReturn<TicketInput>) => {
           </FormControl>
         </HStack>
         <HStack spacing={4} w="100%">
-          <FormControl>
+          <FormControl isInvalid={!!errors.email} px="2px">
             <FormLabel fontSize="sm">Email</FormLabel>
             <Tooltip
               isDisabled={!errors.email}
@@ -119,22 +105,10 @@ export const StepContact = (form: UseFormReturn<TicketInput>) => {
                 type="email"
                 placeholder="joe@example.com"
                 sx={{
-                  ...(errors.email
-                    ? {
-                        borderLeftWidth: '10px',
-                      }
-                    : null),
+                  ...(errors.email ? styles.error : styles.base),
                 }}
                 _focus={{
-                  ...(errors['email']
-                    ? {
-                        borderColor: 'red.500',
-                      }
-                    : {
-                        border: '2px solid',
-                        borderColor: 'purple.200',
-                        bg: 'purple.50',
-                      }),
+                  ...(errors.email ? styles.focus.error : styles.focus.base),
                 }}
                 {...register('email', {
                   validate: {
@@ -143,11 +117,15 @@ export const StepContact = (form: UseFormReturn<TicketInput>) => {
                         ? !!parseOneAddress(value) || 'Invalid format'
                         : true,
                   },
+                  maxLength: {
+                    value: 100,
+                    message: 'Maximum length is 100',
+                  },
                 })}
               />
             </Tooltip>
           </FormControl>
-          <FormControl>
+          <FormControl isInvalid={!!errors.phone} px="2px">
             <FormLabel fontSize="sm">Phone</FormLabel>
             <Tooltip
               isDisabled={!errors.phone}
@@ -158,6 +136,12 @@ export const StepContact = (form: UseFormReturn<TicketInput>) => {
                 id="phone"
                 type="tel"
                 placeholder="xxx-xxx-xxxx"
+                sx={{
+                  ...(errors.phone ? styles.error : styles.base),
+                }}
+                _focus={{
+                  ...(errors.phone ? styles.focus.error : styles.focus.base),
+                }}
                 {...register('phone', {
                   required: {
                     value: true,
@@ -166,6 +150,10 @@ export const StepContact = (form: UseFormReturn<TicketInput>) => {
                   validate: {
                     phoneFormat: (value: string) =>
                       phone(value).isValid || 'Invalid format',
+                  },
+                  maxLength: {
+                    value: 12,
+                    message: 'Maximum length is 12',
                   },
                 })}
               />

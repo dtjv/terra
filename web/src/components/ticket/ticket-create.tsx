@@ -34,10 +34,15 @@ interface TicketCreateProps {
 export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
   const [tabIndex, setTabIndex] = React.useState(0)
   const form = useForm<TicketInput>({
-    mode: 'onTouched',
-    defaultValues: { ticketKind: TicketKind.DELIVERY, scheduledTime: '' },
+    mode: 'onChange',
+    defaultValues: {
+      ticketKind: TicketKind.DELIVERY,
+      scheduledTime: '',
+      destinationAddress: { state: 'OR' },
+    },
   })
   const {
+    trigger,
     handleSubmit,
     formState: { isSubmitting },
   } = form
@@ -67,6 +72,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
                 h="55px"
                 mt={8}
                 mb={4}
+                px="2px"
                 d="flex"
                 justifyContent="center"
                 bg="white"
@@ -115,16 +121,41 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
           left={280}
           h="100px"
           w="calc(100% - 280px)"
+          minW="680px"
           py={4}
           px={8}
         >
           <FooterNav
             tabIndex={tabIndex}
             tabCount={tabs.length}
-            onClick={setTabIndex}
+            onPrev={() => setTabIndex(tabIndex - 1)}
+            onNext={async () => {
+              let isValid = true
+
+              if (tabIndex === 1) {
+                isValid = await trigger(
+                  [
+                    'firstName',
+                    'lastName',
+                    'phone',
+                    'destinationAddress.street',
+                    'destinationAddress.city',
+                    'destinationAddress.zip',
+                  ],
+                  { shouldFocus: true }
+                )
+              }
+
+              if (isValid) {
+                setTabIndex(tabIndex + 1)
+              }
+            }}
           >
             <Button
               colorScheme="purple"
+              _focus={{
+                boxShadow: '0 0 0 3px rgba(107, 70, 193, 0.5)',
+              }}
               isLoading={isSubmitting}
               onClick={handleSubmit(handleFormSubmit)}
             >

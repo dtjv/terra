@@ -2,13 +2,16 @@ import axios from 'axios'
 import { useEffect } from 'react'
 import { useWatch } from 'react-hook-form'
 import {
+  Tooltip,
   HStack,
   Input,
+  Select,
   FormLabel,
   FormControl,
-  FormErrorMessage,
 } from '@chakra-ui/react'
 import oregon from '@/data/oregon.json'
+import states from '@/data/states.json'
+import { styles } from '@/components/ticket/form'
 import type { UseFormReturn } from 'react-hook-form'
 import type { TicketInput } from '@/types/types'
 
@@ -78,53 +81,141 @@ export const DestinationAddress = ({
   return (
     <>
       <HStack spacing={4} w="100%">
-        <FormControl isInvalid={!!errors.destinationAddress?.street} isRequired>
+        <FormControl isInvalid={!!errors.destinationAddress?.street} px="2px">
           <FormLabel htmlFor="destinationAddress.street" fontSize="sm">
             Street address
           </FormLabel>
-          <Input
-            id="destinationAddress.street"
-            {...register('destinationAddress.street')}
-          />
-          <FormErrorMessage>
-            {errors?.destinationAddress?.street?.message ?? ''}
-          </FormErrorMessage>
+          <Tooltip
+            isDisabled={!errors.destinationAddress?.street}
+            label={errors.destinationAddress?.street?.message}
+            bg="red.500"
+          >
+            <Input
+              id="destinationAddress.street"
+              sx={{
+                ...(errors.destinationAddress?.street
+                  ? styles.error
+                  : styles.base),
+              }}
+              _focus={{
+                ...(errors.destinationAddress?.street
+                  ? styles.focus.error
+                  : styles.focus.base),
+              }}
+              {...register('destinationAddress.street', {
+                required: {
+                  value: true,
+                  message: 'Required',
+                },
+                maxLength: {
+                  value: 80,
+                  message: 'Maximum length is 80',
+                },
+              })}
+            />
+          </Tooltip>
         </FormControl>
-        <FormControl w="25%">
+        <FormControl w="25%" px="2px">
           <FormLabel fontSize="sm">Unit No.</FormLabel>
           <Input
             id="destinationAddress.unit"
+            _focus={{
+              ...styles.focus.base,
+            }}
             {...register('destinationAddress.unit')}
           />
         </FormControl>
       </HStack>
-      <HStack spacing={4} w="100%">
-        <FormControl>
+      <HStack spacing={4} w="full">
+        <FormControl isInvalid={!!errors.destinationAddress?.city} px="2px">
           <FormLabel fontSize="sm">City</FormLabel>
-          <Input
-            id="destinationAddress.city"
-            {...register('destinationAddress.city')}
-          />
+          <Tooltip
+            isDisabled={!errors.destinationAddress?.city}
+            label={errors.destinationAddress?.city?.message}
+            bg="red.500"
+          >
+            <Input
+              id="destinationAddress.city"
+              sx={{
+                ...(errors.destinationAddress?.city
+                  ? styles.error
+                  : styles.base),
+              }}
+              _focus={{
+                ...(errors.destinationAddress?.city
+                  ? styles.focus.error
+                  : styles.focus.base),
+              }}
+              {...register('destinationAddress.city', {
+                required: {
+                  value: true,
+                  message: 'Required',
+                },
+                maxLength: {
+                  value: 80,
+                  message: 'Maximum length is 80',
+                },
+              })}
+            />
+          </Tooltip>
         </FormControl>
-        <FormControl>
+        <FormControl isInvalid={!!errors.destinationAddress?.state} px="2px">
           <FormLabel fontSize="sm">State / Province</FormLabel>
-          <Input
-            id="destinationAddress.state"
-            {...register('destinationAddress.state')}
-            value="OR"
-          />
+          <Tooltip
+            isDisabled={!errors.destinationAddress?.state}
+            label={errors.destinationAddress?.state?.message}
+            bg="red.500"
+          >
+            <Select
+              id="destinationAddress.state"
+              _focus={{
+                ...styles.focus.base,
+              }}
+              {...register('destinationAddress.state')}
+            >
+              {Object.keys(states).map((state) => {
+                return (
+                  <option key={state} value={state}>
+                    {state}
+                  </option>
+                )
+              })}
+            </Select>
+          </Tooltip>
         </FormControl>
-        <FormControl isInvalid={!!errors.destinationAddress?.zip} isRequired>
+        <FormControl isInvalid={!!errors.destinationAddress?.zip} px="2px">
           <FormLabel htmlFor="destinationAddress.zip" fontSize="sm">
             ZIP / Postal
           </FormLabel>
-          <Input
-            id="destinationAddress.zip"
-            {...register('destinationAddress.zip')}
-          />
-          <FormErrorMessage>
-            {errors?.destinationAddress?.zip?.message ?? ''}
-          </FormErrorMessage>
+          <Tooltip
+            isDisabled={!errors.destinationAddress?.zip}
+            label={errors.destinationAddress?.zip?.message}
+            bg="red.500"
+          >
+            <Input
+              id="destinationAddress.zip"
+              sx={{
+                ...(errors.destinationAddress?.zip
+                  ? styles.error
+                  : styles.base),
+              }}
+              _focus={{
+                ...(errors.destinationAddress?.zip
+                  ? styles.focus.error
+                  : styles.focus.base),
+              }}
+              {...register('destinationAddress.zip', {
+                required: {
+                  value: true,
+                  message: 'Required',
+                },
+                maxLength: {
+                  value: 15,
+                  message: 'Maximum length is 15',
+                },
+              })}
+            />
+          </Tooltip>
         </FormControl>
       </HStack>
     </>
