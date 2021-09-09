@@ -37,7 +37,7 @@ export const ScheduleToolbar = ({
             leftIcon={<AddIcon />}
             colorScheme="teal"
             variant="outline"
-            onClick={() => handleOnClick('/admin/delivery/create-ticket')}
+            onClick={() => handleOnClick('/admin/delivery/new-ticket')}
             isDisabled={isPastSchedule}
           >
             Create Ticket
