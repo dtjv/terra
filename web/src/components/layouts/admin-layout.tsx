@@ -9,6 +9,8 @@ interface LayoutProps {
 export const AdminLayout = ({ children }: LayoutProps) => (
   <Flex h="100vh" position="relative">
     <Sidebar />
-    <Box flex="1 1 0">{children}</Box>
+    <Box flex="1 1 0" minW="680px">
+      {children}
+    </Box>
   </Flex>
 )
