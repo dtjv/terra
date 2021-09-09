@@ -1,3 +1,4 @@
+export * from './styles'
 export * from './header-tab'
 export * from './footer-nav'
 export * from './step-ticket'
