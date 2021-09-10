@@ -106,7 +106,7 @@ export const Schedule = ({ vehicles }: ScheduleProps) => {
                 overscrollBehavior: 'contain',
               }}
               overflowY="auto"
-              h="calc(100vh - 15rem)"
+              h="calc(100vh - 13.5rem)"
             >
               <Grid templateRows={templateRows} templateColumns={templateCols}>
                 {/* row spacer 0 */}
