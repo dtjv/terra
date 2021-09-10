@@ -46,7 +46,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
     getValues,
     trigger,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isValid },
   } = form
   const tabs = [ticketTab, contactTab, productTab, scheduleTab]
   const scheduleFields = getValues([
@@ -55,7 +55,10 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
     'scheduledTime',
   ])
   const handleFormSubmit: SubmitHandler<TicketInput> = (fields) => {
-    console.log(`call api w/ fields: `, fields)
+    // a double check. submit button is disabled when form state is invalid.
+    if (isValid) {
+      console.log(`FIELDS: `, fields)
+    }
   }
   const handleTabChange = (index: number) => {
     setTabIndex(index)
@@ -89,7 +92,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
   return (
     <VehicleContext.Provider value={{ vehicles }}>
       <Flex direction="column" mx="auto" px={8}>
-        <form onSubmit={handleSubmit(handleFormSubmit)}>
+        <form>
           <VStack spacing={8}>
             <Tabs
               w="100%"
@@ -180,7 +183,9 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
               _focus={{
                 boxShadow: '0 0 0 3px rgba(107, 70, 193, 0.5)',
               }}
+              isDisabled={!isValid}
               isLoading={isSubmitting}
+              loadingText="Submitting"
               onClick={handleSubmit(handleFormSubmit)}
             >
               Create Ticket
