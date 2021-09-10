@@ -1,4 +1,5 @@
-import { Flex, Text } from '@chakra-ui/react'
+import { VStack, Flex, Text, Icon } from '@chakra-ui/react'
+import { GiMineTruck } from 'react-icons/gi'
 import { CellKind } from '@/types/enums'
 import type { Cell } from '@/types/types'
 
@@ -16,10 +17,11 @@ export const ScheduleColHeader = ({ cell }: ScheduleColHeaderProps) => {
   }
 
   return (
-    <Flex height="40px" align="center" justify="center">
+    <VStack height="full" spacing={0}>
+      <Icon as={GiMineTruck} boxSize={16} color="gray.500" />
       <Text fontSize="md" fontWeight="semibold">
         {cell.display}
       </Text>
-    </Flex>
+    </VStack>
   )
 }
