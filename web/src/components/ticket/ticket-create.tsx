@@ -87,7 +87,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
     if (isValid) {
       setTabIndex(tabIndex + 1)
     }
-  }, [tabIndex])
+  }, [tabIndex, trigger])
 
   return (
     <VehicleContext.Provider value={{ vehicles }}>

@@ -12,9 +12,8 @@ export const createTickets = async (): Promise<void> => {
 
   try {
     await mongoose.connection.db.dropCollection('tickets')
-  } catch (error) {
-    // ignore 'NamespaceNotFound' error
-    if (error.code !== 26) {
+  } catch (error: any) {
+    if (error?.code !== 26) {
       throw error
     }
   }
