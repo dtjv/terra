@@ -5,6 +5,7 @@ import { groupBy } from 'lodash'
 import { useEffect, useState, useContext } from 'react'
 import { useWatch } from 'react-hook-form'
 import {
+  Heading,
   Icon,
   Box,
   Flex,
@@ -15,7 +16,7 @@ import {
   TabPanel,
   TabPanels,
   Stack,
-  StackDivider,
+  Tooltip,
   FormControl,
   Input,
   SimpleGrid,
@@ -23,10 +24,26 @@ import {
   useRadioGroup,
 } from '@chakra-ui/react'
 import { GiMineTruck } from 'react-icons/gi'
+import { InfoIcon } from '@chakra-ui/icons'
+import { VehicleContext } from '@/contexts/vehicle-context'
 import type { UseRadioProps } from '@chakra-ui/react'
 import type { UseFormReturn } from 'react-hook-form'
-import { VehicleContext } from '@/contexts/vehicle-context'
 import type { TicketInput } from '@/types/types'
+
+const colorArray: { [key: string]: string } = {
+  jan: 'blue.100',
+  feb: 'green.100',
+  mar: 'orange.100',
+  apr: 'blue.100',
+  may: 'green.100',
+  jun: 'orange.100',
+  jul: 'blue.100',
+  aug: 'green.100',
+  sep: 'orange.100',
+  oct: 'blue.100',
+  nov: 'green.100',
+  dev: 'orange.100',
+}
 
 interface AvailableSlot {
   key: number
@@ -47,6 +64,7 @@ const TimeCard = (props: UseRadioProps & { children?: React.ReactNode }) => {
       <Flex
         {...checkbox}
         p={2}
+        bg="white"
         cursor="pointer"
         fontSize="sm"
         justify="center"
@@ -150,11 +168,14 @@ export const ScheduledAt = ({
           id="scheduledAt"
           display="none"
           {...register('scheduledAt', {
-            required: { value: true, message: 'Choose a Time' },
+            required: { value: true, message: 'Please select a time.' },
           })}
         />
       </FormControl>
-      <Tabs variant="unstyled" w="100%">
+      <Heading fontSize="md" fontWeight="semibold">
+        Vehicle Selection
+      </Heading>
+      <Tabs variant="unstyled" w="full" mt={4}>
         <TabList d="flex" justifyContent="center">
           {vehicles.map((vehicle, idx) => (
             <Tab
@@ -163,7 +184,7 @@ export const ScheduledAt = ({
               p={2}
               color="gray.500"
               borderWidth="1px"
-              borderRadius="2xl"
+              borderRadius="xl"
               display="flex"
               flexDirection="column"
               ml={idx === 0 ? 0 : 4}
@@ -181,96 +202,103 @@ export const ScheduledAt = ({
             </Tab>
           ))}
         </TabList>
-        <TabPanels mt={8}>
+        <Stack direction="row" spacing={2} align="center" mt={8}>
+          <Heading fontSize="md" fontWeight="semibold">
+            Time Selection
+          </Heading>
+          {errors.scheduledAt ? (
+            <Tooltip
+              isDisabled={!errors.scheduledAt}
+              label={errors.scheduledAt?.message}
+              bg="red.500"
+            >
+              <InfoIcon w={4} h={4} color="red.500" />
+            </Tooltip>
+          ) : null}
+        </Stack>
+        <TabPanels mt={4}>
           {Object.values(slotsByVehicle).map((vehicleSlots, i) => {
-            const slotsByMonth = groupBy(vehicleSlots, (slot) =>
-              format(new Date(slot['scheduledAt']), 'MMMM')
+            const slotsByDate = groupBy(
+              vehicleSlots,
+              (slot) => slot['scheduledAt']
             )
             return (
               <TabPanel key={i} p={0}>
-                <Stack direction="column" spacing={8}>
-                  {Object.entries(slotsByMonth).map(
-                    ([month, availableSlots], j) => {
-                      const slotsByDate = groupBy(
-                        availableSlots,
-                        (slot) => slot['scheduledAt']
-                      )
-
+                <Stack mt={4} direction="column" spacing={3}>
+                  {Object.entries(slotsByDate).map(
+                    ([date, slotsForDate], k) => {
+                      const month = format(new Date(date), 'MMM')
                       return (
-                        <Box key={j}>
-                          <Flex fontWeight="semibold">{month}</Flex>
-                          <Stack
-                            mt={4}
-                            direction="column"
-                            spacing={3}
-                            divider={<StackDivider borderColor="gray.200" />}
+                        <Flex key={k} w="full">
+                          <Flex
+                            align="center"
+                            minW="90px"
+                            bg={colorArray[month.toLowerCase()]}
+                            justify="center"
+                            fontSize="xl"
+                            fontWeight="normal"
+                            borderLeftRadius="xl"
                           >
-                            {Object.entries(slotsByDate).map(
-                              ([date, slotsForDate], k) => {
-                                return (
-                                  <Flex key={k} w="100%">
-                                    <Flex
-                                      direction="column"
-                                      align="center"
-                                      justify="center"
-                                      px={6}
-                                    >
-                                      <Text
-                                        fontSize="xs"
-                                        color="gray.500"
-                                        fontWeight="semibold"
-                                      >
-                                        {format(
-                                          new Date(date),
-                                          'eee'
-                                        ).toUpperCase()}
-                                      </Text>
-                                      <Flex
-                                        w="40px"
-                                        h="40px"
-                                        align="center"
-                                        justify="center"
-                                        bg="purple.50"
-                                        color="purple.600"
-                                        fontSize="xl"
-                                        fontWeight="semibold"
-                                        borderRadius="full"
-                                      >
-                                        {format(new Date(date), 'd')}
-                                      </Flex>
-                                    </Flex>
-                                    <Flex flex="1" px={6} align="center">
-                                      <SimpleGrid columns={5} spacing={3}>
-                                        {slotsForDate.map(
-                                          (timeSlot: AvailableSlot) => {
-                                            const radio = getRadioProps({
-                                              value: JSON.stringify({
-                                                ...timeSlot,
-                                              }),
-                                            })
-                                            return (
-                                              <TimeCard
-                                                key={timeSlot.key}
-                                                {...radio}
-                                              >
-                                                {format(
-                                                  new Date(
-                                                    timeSlot.scheduledAtFull
-                                                  ),
-                                                  'hh:mm aa'
-                                                )}
-                                              </TimeCard>
-                                            )
-                                          }
-                                        )}
-                                      </SimpleGrid>
-                                    </Flex>
-                                  </Flex>
-                                )
-                              }
-                            )}
-                          </Stack>
-                        </Box>
+                            {month}
+                          </Flex>
+                          <Flex w="full" py={4} pr={4} bg="gray.50">
+                            <Flex
+                              direction="column"
+                              align="center"
+                              justify="center"
+                              px={6}
+                            >
+                              <Text
+                                fontSize="xs"
+                                color="gray.500"
+                                fontWeight="semibold"
+                              >
+                                {format(new Date(date), 'eee').toUpperCase()}
+                              </Text>
+                              <Flex
+                                w="40px"
+                                h="40px"
+                                align="center"
+                                justify="center"
+                                bg="purple.100"
+                                color="gray.700"
+                                fontSize="xl"
+                                fontWeight="medium"
+                                borderRadius="full"
+                              >
+                                {format(new Date(date), 'd')}
+                              </Flex>
+                            </Flex>
+                            <Flex flex="1" align="center">
+                              <SimpleGrid
+                                columns={{
+                                  sm: 2,
+                                  md: 3,
+                                  lg: 4,
+                                  xl: 5,
+                                }}
+                                spacing={3}
+                                w="full"
+                              >
+                                {slotsForDate.map((timeSlot: AvailableSlot) => {
+                                  const radio = getRadioProps({
+                                    value: JSON.stringify({
+                                      ...timeSlot,
+                                    }),
+                                  })
+                                  return (
+                                    <TimeCard key={timeSlot.key} {...radio}>
+                                      {format(
+                                        new Date(timeSlot.scheduledAtFull),
+                                        'hh:mm aa'
+                                      )}
+                                    </TimeCard>
+                                  )
+                                })}
+                              </SimpleGrid>
+                            </Flex>
+                          </Flex>
+                        </Flex>
                       )
                     }
                   )}
