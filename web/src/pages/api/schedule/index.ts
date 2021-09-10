@@ -7,7 +7,6 @@ import {
 import { getTickets } from '@/lib/db'
 import { combineDateTime, makeScheduleTimes } from '@/lib/utils'
 import type { TicketInput } from '@/types/types'
-import { data } from './data'
 
 interface Hash {
   [key: string]: number
@@ -154,8 +153,7 @@ const handler: NextApiHandler = async (
         })
       })
 
-    // TODO: remove fake data
-    return res.status(200).json(/*availableTimes*/ data)
+    return res.status(200).json(availableTimes)
   }
 
   return res.status(404).send(`Unsupported request method: ${req.method}`)
