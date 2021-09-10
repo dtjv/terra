@@ -21,6 +21,7 @@ import {
   productTab,
   StepSchedule,
   scheduleTab,
+  ScheduledAppt,
 } from '@/components/ticket/form'
 import { TicketKind } from '@/types/enums'
 import { VehicleContext } from '@/contexts/vehicle-context'
@@ -42,17 +43,48 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
     },
   })
   const {
+    getValues,
     trigger,
     handleSubmit,
     formState: { isSubmitting },
   } = form
   const tabs = [ticketTab, contactTab, productTab, scheduleTab]
+  const scheduleFields = getValues([
+    'vehicleKey',
+    'scheduledAt',
+    'scheduledTime',
+  ])
   const handleFormSubmit: SubmitHandler<TicketInput> = (fields) => {
     console.log(`call api w/ fields: `, fields)
   }
   const handleTabChange = (index: number) => {
     setTabIndex(index)
   }
+  const handlePrevClick = React.useCallback(
+    () => setTabIndex(tabIndex - 1),
+    [tabIndex]
+  )
+  const handleNextClick = React.useCallback(async () => {
+    let isValid = true
+
+    if (tabIndex === 1) {
+      isValid = await trigger(
+        [
+          'firstName',
+          'lastName',
+          'phone',
+          'destinationAddress.street',
+          'destinationAddress.city',
+          'destinationAddress.zip',
+        ],
+        { shouldFocus: true }
+      )
+    }
+
+    if (isValid) {
+      setTabIndex(tabIndex + 1)
+    }
+  }, [tabIndex])
 
   return (
     <VehicleContext.Provider value={{ vehicles }}>
@@ -69,16 +101,16 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
               <TabList
                 position="sticky"
                 top={0}
-                h="55px"
-                mt={8}
-                mb={4}
+                mt={6}
                 px="2px"
+                py={3}
                 d="flex"
                 justifyContent="center"
                 bg="white"
                 borderRadius="xl"
                 borderWidth="1px"
                 borderColor="gray.200"
+                boxShadow="md"
               >
                 {tabs.map(({ label, icon }, idx) => (
                   <HeaderTab
@@ -94,9 +126,10 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
               </TabList>
               {/* body - scrollable */}
               <TabPanels
+                pt={2}
                 overflowY="auto"
                 overscrollBehaviorY="contain"
-                h="calc(100vh - 232px)"
+                h="calc(100vh - 208px)"
               >
                 <TabPanel px={0} py={4}>
                   <StepTicket {...form} />
@@ -119,37 +152,28 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
           position="fixed"
           bottom={0}
           left={280}
-          h="100px"
+          h="125px"
           w="calc(100% - 280px)"
           minW="680px"
           py={4}
           px={8}
+          bg="gray.50"
+          borderTopWidth="1px"
+          justifyContent="space-between"
         >
+          <Flex align="center">
+            <ScheduledAppt
+              vehicles={vehicles}
+              vehicleKey={scheduleFields[0]}
+              scheduledAt={scheduleFields[1]}
+              scheduledTime={scheduleFields[2]}
+            />
+          </Flex>
           <FooterNav
             tabIndex={tabIndex}
             tabCount={tabs.length}
-            onPrev={() => setTabIndex(tabIndex - 1)}
-            onNext={async () => {
-              let isValid = true
-
-              if (tabIndex === 1) {
-                isValid = await trigger(
-                  [
-                    'firstName',
-                    'lastName',
-                    'phone',
-                    'destinationAddress.street',
-                    'destinationAddress.city',
-                    'destinationAddress.zip',
-                  ],
-                  { shouldFocus: true }
-                )
-              }
-
-              if (isValid) {
-                setTabIndex(tabIndex + 1)
-              }
-            }}
+            onPrev={handlePrevClick}
+            onNext={handleNextClick}
           >
             <Button
               colorScheme="purple"
