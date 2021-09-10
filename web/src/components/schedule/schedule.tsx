@@ -12,7 +12,6 @@ import { set } from 'date-fns'
 import { useState } from 'react'
 import {
   ScheduleNav,
-  ScheduleToolbar,
   ScheduleColHeader,
   ScheduleRowHeader,
   ScheduleDataCell,
@@ -55,13 +54,10 @@ export const Schedule = ({ vehicles }: ScheduleProps) => {
         <ScheduleNav
           isLoading={isLoading}
           scheduledAt={scheduledAt}
+          isPastSchedule={data.isPastSchedule}
           setScheduledAt={(date: Date) => setScheduledAt(date)}
         />
-        <Box px={16} mx="auto" maxW="6xl">
-          <ScheduleToolbar
-            isLoading={isLoading}
-            isPastSchedule={data.isPastSchedule}
-          />
+        <Box p={8} mx="auto" maxW="6xl">
           {/* schedule header container */}
           <Skeleton isLoaded={!isLoading}>
             <Box>
