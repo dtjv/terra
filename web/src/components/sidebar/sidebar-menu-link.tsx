@@ -26,7 +26,7 @@ const SidebarMenuItem = ({ icon, children }: SidebarMenuItemProps) => (
   <Box px={3} py={2}>
     <HStack spacing={4}>
       <Icon as={icon} fontSize="xl" opacity={useColorModeValue('0.75', '1')} />
-      <Text letterSpacing=".5px" fontWeight="medium">
+      <Text letterSpacing="wide" fontWeight="medium">
         {children}
       </Text>
     </HStack>

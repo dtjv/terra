@@ -36,7 +36,7 @@ export const Sidebar = () => (
             color={useColorModeValue('teal.500', 'teal.200')}
             as={FaLeaf}
           />
-          <Text fontSize="3xl" fontWeight="extrabold">
+          <Text fontSize="3xl" fontWeight="black">
             Terra
           </Text>
         </HStack>
@@ -70,18 +70,12 @@ export const Sidebar = () => (
           </Stack>
         </Stack>
       </Box>
-      <Box
-        px={8}
-        py={4}
-        borderTopWidth="1px"
-        borderTopColor="purple.200"
-        textAlign="center"
-      >
+      <Box px={8} py={4} textAlign="center">
         <HStack spacing={4}>
           <Avatar size="sm" />
           <Stack alignItems="baseline" spacing={0}>
             <Text>Joe User</Text>
-            <Text fontSize="xs" fontWeight="semibold" letterSpacing="0.5px">
+            <Text fontSize="xs" fontWeight="semibold" letterSpacing="wide">
               joe@acme.com
             </Text>
           </Stack>
