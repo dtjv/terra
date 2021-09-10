@@ -17,7 +17,7 @@ export const FooterNav = ({
   children,
 }: FooterNavProps) => {
   return (
-    <HStack w="full" px="2px" spacing={3} justify="flex-end">
+    <HStack px="2px" spacing={3} justify="flex-end">
       {tabIndex > 0 && (
         <Button
           colorScheme="gray"

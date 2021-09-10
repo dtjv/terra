@@ -17,10 +17,10 @@ export const StepSchedule = (form: UseFormReturn<TicketInput>) => {
 
   return (
     <>
-      <Heading fontSize="xl" fontWeight="black" letterSpacing="tight">
-        Please select a day and time for {service}.
+      <Heading fontSize="2xl" fontWeight="black" letterSpacing="tight">
+        Schedule your {service}.
       </Heading>
-      <Box mt={4}>
+      <Box mt={8}>
         <ScheduledAt {...form} />
       </Box>
     </>

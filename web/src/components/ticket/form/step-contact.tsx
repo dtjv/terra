@@ -1,5 +1,6 @@
 import phone from 'phone'
 import {
+  Box,
   Input,
   VStack,
   HStack,
@@ -23,11 +24,11 @@ export const StepContact = (form: UseFormReturn<TicketInput>) => {
   } = form
 
   return (
-    <VStack w="full" align="flex-start" spacing={4}>
-      <Heading fontSize="2xl" fontWeight="black" letterSpacing="tight" mb={4}>
+    <Box w="full" align="flex-start">
+      <Heading fontSize="2xl" fontWeight="black" letterSpacing="tight">
         Please complete contact details.
       </Heading>
-      <VStack w="full" align="flex-start" spacing={4}>
+      <VStack w="full" align="flex-start" spacing={4} mt={8}>
         <HStack w="full" spacing={4}>
           <FormControl isInvalid={!!errors.firstName} px="2px">
             <FormLabel htmlFor="firstName" fontSize="sm">
@@ -162,6 +163,6 @@ export const StepContact = (form: UseFormReturn<TicketInput>) => {
         </HStack>
         <DestinationAddress {...form} />
       </VStack>
-    </VStack>
+    </Box>
   )
 }
