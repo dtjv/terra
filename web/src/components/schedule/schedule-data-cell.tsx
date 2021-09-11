@@ -128,7 +128,7 @@ export const ScheduleDataCell = ({
     >
       <TicketView
         ticket={cell.ticket}
-        isPastSchedule
+        isPastSchedule={isPastSchedule}
         timeBlockInMinutes={timeBlockInMinutes}
       />
     </GridItem>
