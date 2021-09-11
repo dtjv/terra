@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { useRouter } from 'next/router'
+import axios from 'axios'
 import hexAlpha from 'hex-alpha'
 import {
   Flex,
@@ -10,6 +12,7 @@ import {
   TabPanel,
   TabPanels,
   useToken,
+  useToast,
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import {
@@ -27,6 +30,7 @@ import {
 } from '@/components/ticket/form'
 import { TicketKind } from '@/types/enums'
 import { VehicleContext } from '@/contexts/vehicle-context'
+import { TICKETS_API } from '@/config/constants'
 import type { Vehicle } from '@/types/types'
 import type { TicketInput } from '@/types/types'
 
@@ -35,6 +39,8 @@ interface TicketCreateProps {
 }
 
 export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
+  const router = useRouter()
+  const toast = useToast()
   const [tabIndex, setTabIndex] = React.useState(0)
   const form = useForm<TicketInput>({
     mode: 'onChange',
@@ -49,7 +55,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
     getValues,
     trigger,
     handleSubmit,
-    formState: { isSubmitting, isValid },
+    formState: { isSubmitting, isSubmitSuccessful, isValid },
   } = form
   const tabs = [ticketTab, contactTab, productTab, scheduleTab]
   const scheduleFields = getValues([
@@ -57,10 +63,17 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
     'scheduledAt',
     'scheduledTime',
   ])
-  const handleFormSubmit: SubmitHandler<TicketInput> = (fields) => {
+  const handleFormSubmit: SubmitHandler<TicketInput> = async (newTicket) => {
     // a double check. submit button is disabled when form state is invalid.
     if (isValid) {
-      console.log(`FIELDS: `, fields)
+      try {
+        await axios.post(`${TICKETS_API}`, { newTicket })
+      } catch (error) {
+        // TODO: handle error
+        console.error(error)
+      }
+    } else {
+      console.error(`somebody is trying to submit an invalid form!`)
     }
   }
   const handleTabChange = (index: number) => {
@@ -91,6 +104,20 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
       setTabIndex(tabIndex + 1)
     }
   }, [tabIndex, trigger])
+
+  React.useEffect(() => {
+    if (isSubmitSuccessful) {
+      toast({
+        title: 'Success!',
+        description: 'Your ticket has been created.',
+        variant: 'subtle',
+        duration: 3000,
+        position: 'top-right',
+        isClosable: true,
+        onCloseComplete: async () => router.push('/admin/delivery'),
+      })
+    }
+  }, [isSubmitSuccessful, toast, router])
 
   return (
     <VehicleContext.Provider value={{ vehicles }}>
@@ -186,7 +213,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
               _focus={{
                 boxShadow: `0 0 0 3px ${purple600a5}`,
               }}
-              isDisabled={!isValid}
+              isDisabled={!isValid || isSubmitSuccessful}
               isLoading={isSubmitting}
               loadingText="Submitting"
               onClick={handleSubmit(handleFormSubmit)}
