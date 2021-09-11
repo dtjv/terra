@@ -82,14 +82,14 @@ const makeAppointments = ({
   const appts: Appointments = []
   const eDate = combineDateTime(
     new Date(),
-    scheduleTimes[scheduleTimes.length - 1]!
+    scheduleTimes[scheduleTimes.length - 1] ?? '17:30:00.000'
   )
 
-  for (let vehicleKey of vehicleKeys) {
+  for (const vehicleKey of vehicleKeys) {
     const maxTickets = makeRandomMaxTicket()
 
     let tDate
-    let sDate = combineDateTime(new Date(), scheduleTimes[0]!)
+    let sDate = combineDateTime(new Date(), scheduleTimes[0] ?? '08:00:00.000')
     let numTickets = 0
 
     while (isBefore(sDate, eDate) && numTickets < maxTickets) {
