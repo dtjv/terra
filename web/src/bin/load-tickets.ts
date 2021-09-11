@@ -126,26 +126,38 @@ const makeTickets = (scheduledDate: string, appts: Appointments) => {
   })
 }
 
-// Usage: load-tickets --date=2021-9-10 --drop
-//
-// Options
-//   --date=<date>   yyyy-M-d. (default=today)
-//   --drop          drop tickets collection  (default=false)
+const usage = `
+  Usage: load-tickets [options]
+
+  Options:
+    --date=<date>   ticket date in format: yyyy-M-d. (default=today)
+    --drop          drop tickets collection (default=false)
+`
 const main = async (): Promise<void> => {
   const args = minimist(process.argv.slice(2))
+  const help = Boolean(args?.['h']) || Boolean(args?.['help'])
+
+  if (help) {
+    console.log(usage)
+    process.exit(0)
+  }
+
   const drop = Boolean(args?.['drop']) ?? false
   const scheduledDate = args?.['date'] ?? format(new Date(), 'yyyy-M-d')
 
   if (!(await connectToDB())) {
-    console.error(`Failed to connect to db.`)
+    console.error(`An error occurred connecting to database.`)
     process.exit(1)
   }
 
   if (drop) {
     try {
       await mongoose.connection.db.dropCollection('tickets')
+      console.log('Collection dropped successfully.')
     } catch (error: any) {
+      // MongoDB code for 'NamespaceNotFound'
       if (error?.code !== 26) {
+        console.error('An error occurred dropping collections')
         throw error
       }
     }
@@ -160,14 +172,22 @@ const main = async (): Promise<void> => {
     }),
   })
 
-  const tickets = makeTickets(scheduledDate, appointments).map(
-    ({ scheduledDate, ...ticket }) => ({
-      ...ticket,
-      scheduledAt: new Date(scheduledDate),
-    })
-  )
+  if (appointments.length > 0) {
+    const tickets = makeTickets(scheduledDate, appointments).map(
+      ({ scheduledDate, ...ticket }) => ({
+        ...ticket,
+        scheduledAt: new Date(scheduledDate),
+      })
+    )
 
-  await TicketModel.create(tickets as TicketInput[])
+    try {
+      await TicketModel.create(tickets as TicketInput[])
+      console.log('Tickets created successfully.')
+    } catch (error) {
+      console.error('An error occurred creating ticket records')
+      throw error
+    }
+  }
 
   process.exit(0)
 }
