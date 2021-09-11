@@ -37,7 +37,7 @@ export interface MakeScheduleTimesProps {
 /**
  * @returns {Array} An array of times, every `timeBlockInMinutes`.
  * @example
- *   makeScheduleTimes({ startHour: 8, endHour: 11 })
+ *   makeScheduleTimes({ startHour: 8, endHour: 11, timeBlockInMinutes: 30 })
  *   // [ '08:00:00.000', '08:30:00.000',
  *   //   '09:00:00.000', '09:30:00.000',
  *   //   '10:00:00.000', '10:30:00.000' ]
