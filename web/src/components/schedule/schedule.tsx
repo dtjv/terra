@@ -57,7 +57,7 @@ export const Schedule = ({ vehicles }: ScheduleProps) => {
           isPastSchedule={data.isPastSchedule}
           setScheduledAt={(date: Date) => setScheduledAt(date)}
         />
-        <Box p={8} mx="auto" maxW="6xl">
+        <Box px={8} pt={8} mx="auto" maxW="6xl">
           {/* schedule header container */}
           <Skeleton isLoaded={!isLoading}>
             <Box>
