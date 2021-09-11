@@ -78,6 +78,9 @@ export const HeaderTab = React.forwardRef<HTMLButtonElement, HeaderTabProps>(
         p={0}
         {...tabProps}
         _focus={{}}
+        _focusVisible={{
+          outline: 'unset',
+        }}
         flex={isSelected ? 1 : 0}
       >
         <HStack h="100%">
