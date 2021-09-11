@@ -1,4 +1,5 @@
-import { HStack, Button } from '@chakra-ui/react'
+import hexAlpha from 'hex-alpha'
+import { HStack, Button, useToken } from '@chakra-ui/react'
 import { FaArrowLeft } from 'react-icons/fa'
 
 export interface FooterNavProps {
@@ -16,6 +17,9 @@ export const FooterNav = ({
   onNext,
   children,
 }: FooterNavProps) => {
+  const purple600 = useToken('colors', 'purple.600')
+  const purple600a5 = hexAlpha(purple600, 0.5)
+
   return (
     <HStack px="2px" spacing={3} justify="flex-end">
       {tabIndex > 0 && (
@@ -37,7 +41,7 @@ export const FooterNav = ({
         <Button
           colorScheme="purple"
           _focus={{
-            boxShadow: '0 0 0 3px rgba(107, 70, 193, 0.5)',
+            boxShadow: `0 0 0 3px ${purple600a5}`,
           }}
           onClick={() => onNext()}
         >

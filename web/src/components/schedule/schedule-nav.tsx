@@ -1,3 +1,4 @@
+import hexAlpha from 'hex-alpha'
 import { useRouter } from 'next/router'
 import { add, sub, format } from 'date-fns'
 import {
@@ -10,6 +11,7 @@ import {
   Heading,
   useColorModeValue,
   Skeleton,
+  useToken,
 } from '@chakra-ui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 
@@ -27,6 +29,8 @@ export const ScheduleNav = ({
   setScheduledAt,
 }: ScheduleNavProps) => {
   const router = useRouter()
+  const teal600 = useToken('colors', 'teal.600')
+  const teal600a5 = hexAlpha(teal600, 0.5)
   const borderColor = useColorModeValue('gray.200', 'whiteAlpha.400')
   const backgroundColor = useColorModeValue('whiteAlpha.700', 'gray.800')
   const handleOnClick = (href: string) => {
@@ -52,6 +56,9 @@ export const ScheduleNav = ({
                 fontSize="1.5rem"
                 aria-label="Previous Day"
                 icon={<ChevronLeftIcon />}
+                _focus={{
+                  bg: 'gray.100',
+                }}
                 onClick={() => setScheduledAt(sub(scheduledAt, { days: 1 }))}
               />
             </Skeleton>
@@ -61,6 +68,9 @@ export const ScheduleNav = ({
                 fontSize="1.5rem"
                 aria-label="Next Day"
                 icon={<ChevronRightIcon />}
+                _focus={{
+                  bg: 'gray.100',
+                }}
                 onClick={() => setScheduledAt(add(scheduledAt, { days: 1 }))}
               />
             </Skeleton>
@@ -78,6 +88,9 @@ export const ScheduleNav = ({
             colorScheme="teal"
             onClick={() => handleOnClick('/admin/delivery/new-ticket')}
             isDisabled={isPastSchedule}
+            _focus={{
+              boxShadow: `0 0 0 3px ${teal600a5}`,
+            }}
           >
             Create Ticket
           </Button>
