@@ -1,4 +1,5 @@
 import * as React from 'react'
+import hexAlpha from 'hex-alpha'
 import {
   Flex,
   VStack,
@@ -8,6 +9,7 @@ import {
   TabList,
   TabPanel,
   TabPanels,
+  useToken,
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import {
@@ -42,6 +44,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
       destinationAddress: { state: 'OR' },
     },
   })
+  const purple600a5 = hexAlpha(useToken('colors', 'purple.600'), 0.5)
   const {
     getValues,
     trigger,
@@ -68,10 +71,10 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
     [tabIndex]
   )
   const handleNextClick = React.useCallback(async () => {
-    let isValid = true
+    let isFormValid = true
 
     if (tabIndex === 1) {
-      isValid = await trigger(
+      isFormValid = await trigger(
         [
           'firstName',
           'lastName',
@@ -84,7 +87,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
       )
     }
 
-    if (isValid) {
+    if (isFormValid) {
       setTabIndex(tabIndex + 1)
     }
   }, [tabIndex, trigger])
@@ -181,7 +184,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
             <Button
               colorScheme="purple"
               _focus={{
-                boxShadow: '0 0 0 3px rgba(107, 70, 193, 0.5)',
+                boxShadow: `0 0 0 3px ${purple600a5}`,
               }}
               isDisabled={!isValid}
               isLoading={isSubmitting}
