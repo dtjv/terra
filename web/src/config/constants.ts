@@ -3,7 +3,8 @@ export const TICKETS_API =
   process.env['NEXT_PUBLIC_TICKETS_API'] ?? '/api/tickets'
 export const TICKETS_REFRESH_INTERVAL_IN_MS = 1000 * 60
 
-// TODO: add /api/schedule
+export const SCHEDULE_API =
+  process.env['NEXT_PUBLIC_SCHEDULE_API'] ?? '/api/schedule'
 
 export const SCHEDULE_START_HOUR_IN_24HR = parseInt(
   process.env['NEXT_PUBLIC_SCHEDULE_START_HOUR_IN_24HR'] ?? '8',

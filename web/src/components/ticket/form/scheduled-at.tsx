@@ -25,6 +25,7 @@ import {
 } from '@chakra-ui/react'
 import { GiMineTruck } from 'react-icons/gi'
 import { InfoIcon } from '@chakra-ui/icons'
+import { SCHEDULE_API } from '@/config/constants'
 import { VehicleContext } from '@/contexts/vehicle-context'
 import type { UseRadioProps } from '@chakra-ui/react'
 import type { UseFormReturn } from 'react-hook-form'
@@ -131,7 +132,7 @@ export const ScheduledAt = ({
 
         try {
           const { data } = await axios.post(
-            '/api/schedule',
+            SCHEDULE_API,
             {
               vehicleKeys: vehicles.map((v) => v.vehicleKey),
               currentDate,
