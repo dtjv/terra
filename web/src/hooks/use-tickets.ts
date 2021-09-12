@@ -18,7 +18,6 @@ export const useTickets = ({ scheduledAt }: useTicketsProps) => {
     QUERY_KEYS,
     async () => {
       const scheduledAtEncoded = encodeURIComponent(scheduledAt.toISOString())
-      // TODO: handle axios errors
       const { data } = await axios.get(
         `${TICKETS_API}?scheduledAt=${scheduledAtEncoded}`
       )
@@ -37,11 +36,9 @@ export const useTickets = ({ scheduledAt }: useTicketsProps) => {
     TicketContext
   >(
     async (updatedTicket: UpdatedTicket) => {
-      // TODO: handle axios errors
       const { data } = await axios.patch(`${TICKETS_API}/${updatedTicket.id}`, {
         updatedTicket,
       })
-
       return data
     },
     {
@@ -52,9 +49,9 @@ export const useTickets = ({ scheduledAt }: useTicketsProps) => {
           queryClient.getQueryData<Ticket[]>(QUERY_KEYS) ?? []
 
         // Optimistically updates the cache, allowing UI to render ticket
-        // in new position. NOTE: the updated ticket is in an inconsistent
-        // state (i.e., vehicleKey doesn't match vehicle, scheduledTimeRange
-        // might not match scheduledTime.
+        // in new position. NOTE: the ticket's computed properties won't match
+        // properties they're derived from. (i.e., vehicleKey might not match
+        // vehicle, scheduledTimeRange might not match scheduledTime, etc.).
         queryClient.setQueryData<Ticket[]>(
           QUERY_KEYS,
           (previousTickets = []) => {
