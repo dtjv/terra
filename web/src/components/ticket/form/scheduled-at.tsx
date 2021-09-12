@@ -1,7 +1,7 @@
 import * as React from 'react'
 import axios from 'axios'
 import { set, format } from 'date-fns'
-import { groupBy } from 'lodash'
+import { groupBy, intersectionBy } from 'lodash'
 import { useEffect, useState, useContext } from 'react'
 import { useWatch } from 'react-hook-form'
 import {
@@ -155,7 +155,12 @@ export const ScheduledAt = ({
     return () => axiosSource.cancel()
   }, [vehicles, durationInMinutes, errors.durationInMinutes])
 
-  // TODO: listing ALL vehicles, whether we have slots for each or not. wrong!!
+  const vehiclesByKey = groupBy(availableSlots, (slot) => slot.vehicleKey)
+  const vehicleKeys = Object.keys(vehiclesByKey).map((vehicleKey) => ({
+    vehicleKey,
+  }))
+  const availableVehicles = intersectionBy(vehicles, vehicleKeys, 'vehicleKey')
+
   return (
     <Box {...group}>
       <FormControl>
@@ -178,7 +183,7 @@ export const ScheduledAt = ({
           </Heading>
           <Tabs variant="unstyled" w="full" mt={4}>
             <TabList d="flex" justifyContent="center">
-              {vehicles.map((vehicle, idx) => (
+              {availableVehicles.map((vehicle, idx) => (
                 <Tab
                   key={idx}
                   flex="1"
