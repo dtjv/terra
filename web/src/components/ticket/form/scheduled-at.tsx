@@ -131,14 +131,14 @@ export const ScheduledAt = ({
         const currentTime = format(today, 'HH:mm:ss.SSS')
 
         try {
+          // TODO: grab response. check status. then grab data!
           const { data } = await axios.post(
             SCHEDULE_API,
             {
               vehicleKeys: vehicles.map((v) => v.vehicleKey),
-              currentDate,
-              currentTime,
-              requestDate: undefined, // not used now. future feature.
-              durationInMinutes: 30,
+              requestDate: currentDate,
+              requestTime: currentTime,
+              durationInMinutes,
             },
             {
               cancelToken: axiosSource.token,
@@ -146,6 +146,7 @@ export const ScheduledAt = ({
           )
           setAvailableSlots(data as AvailableSlot[])
         } catch (error) {
+          // TODO: cannot be correct?!! handle this better
           if (axios.isCancel(error)) {
             throw error
           }
