@@ -12,6 +12,17 @@ import type {
 
 export const isMultiple = (num: number, factor: number) => num % factor === 0
 
+export const makeTime = (hour: number) => {
+  const date = set(new Date(), {
+    hours: hour,
+    minutes: 0,
+    seconds: 0,
+    milliseconds: 0,
+  })
+
+  return format(date, 'HH:mm:ss.SSS')
+}
+
 /**
  * @param {string} time - Format: 'HH.mm.ss.SSS' (see date-fns/format).
  * @returns {Date} Sets 'time' to 'date' and returns a new Date object.
