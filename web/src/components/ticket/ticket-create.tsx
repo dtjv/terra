@@ -71,8 +71,9 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
         const res = await axios.post(`${TICKETS_API}`, { newTicket })
         if (res.status === 200) {
           setIsSubmitSuccessful(true)
+        } else {
+          throw new Error(`API call failed with status: ${res.status}`)
         }
-        throw new Error(`API call failed with status: ${res.status}`)
       } catch (error) {
         console.error(`Failed form submit`, error)
         toast({
