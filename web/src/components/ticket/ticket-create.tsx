@@ -42,6 +42,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
   const router = useRouter()
   const toast = useToast()
   const [tabIndex, setTabIndex] = React.useState(0)
+  const [isSubmitSuccessful, setIsSubmitSuccessful] = React.useState(false)
   const form = useForm<TicketInput>({
     mode: 'onChange',
     defaultValues: {
@@ -55,7 +56,7 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
     getValues,
     trigger,
     handleSubmit,
-    formState: { isSubmitting, isSubmitSuccessful, isValid },
+    formState: { isSubmitting, isValid },
   } = form
   const tabs = [ticketTab, contactTab, productTab, scheduleTab]
   const scheduleFields = getValues([
@@ -67,13 +68,22 @@ export const TicketCreate = ({ vehicles }: TicketCreateProps) => {
     // a double check. submit button is disabled when form state is invalid.
     if (isValid) {
       try {
-        await axios.post(`${TICKETS_API}`, { newTicket })
+        const res = await axios.post(`${TICKETS_API}`, { newTicket })
+        if (res.status === 200) {
+          setIsSubmitSuccessful(true)
+        }
+        throw new Error(`API call failed with status: ${res.status}`)
       } catch (error) {
-        // TODO: handle error
-        console.error(error)
+        console.error(`Failed form submit`, error)
+        toast({
+          title: 'Error',
+          description: 'An error occurred. Please contact Developer.',
+          status: 'error',
+          duration: 3000,
+          position: 'top-right',
+          isClosable: true,
+        })
       }
-    } else {
-      console.error(`somebody is trying to submit an invalid form!`)
     }
   }
   const handleTabChange = (index: number) => {
