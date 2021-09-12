@@ -24,8 +24,11 @@ export const ScheduleRowHeader = ({
   const borderColor = useColorModeValue('gray.300', 'whiteAlpha.400')
   const showLineInGrid = isMultiple(cell.rowIdx, 60 / timeBlockInMinutes)
 
-  if (cell.kind !== CellKind.ROW_HEADER) return null
+  if (cell.kind !== CellKind.ROW_HEADER) {
+    return null
+  }
 
+  // TODO: numRows-2 is a bug in hiding. see use-schedule for more detail.
   return (
     <GridItem
       position="relative"

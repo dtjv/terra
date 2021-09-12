@@ -43,16 +43,29 @@ export const useSchedule = ({ vehicles, scheduledAt }: UseScheduleProps) => {
     []
   )
   const rows = useMemo(() => {
-    return ticketsQuery.isLoading || ticketsQuery.isError
-      ? []
-      : makeRows({
-          tickets: ticketsQuery.data ?? [],
+    return ticketsQuery.data
+      ? makeRows({
+          tickets: ticketsQuery.data,
           rowHeaders,
           colHeaders,
           timeBlockInMinutes: scheduleConfig.timeBlockInMinutes,
         })
-  }, [ticketsQuery, rowHeaders, colHeaders])
-  const numRows = rows.length + 1 // TODO: why +1?
+      : []
+  }, [ticketsQuery.data, rowHeaders, colHeaders])
+
+  // why +1?
+  //
+  // assume schedule runs 8am-6pm in 30min blocks. then...
+  //
+  //   rows.length = 21 (1 header, 20 data)
+  //   numRows = 21 + 1 (2 empty grid rows + 20 data grid rows)
+  //
+  // the two empty grid rows allow 8am not be cut off by header in ui.
+  //
+  // Note:
+  // 1. bad design
+  // 2. this breaks if time block is not 30!
+  const numRows = rows.length + 1
   const numCols = rows[0]?.cells.length ?? 0
 
   return {
@@ -65,8 +78,6 @@ export const useSchedule = ({ vehicles, scheduledAt }: UseScheduleProps) => {
     updateTicketMutation,
     data: {
       scheduleConfig,
-      vehicles,
-      tickets: ticketsQuery.data ?? [],
       isPastSchedule,
     },
   }
