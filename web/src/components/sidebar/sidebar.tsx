@@ -44,7 +44,7 @@ export const Sidebar = () => (
       <Box flex="1 1 0" pt={4} px={4}>
         <Stack divider={<StackDivider borderColor="purple.200" />} spacing={6}>
           <Stack spacing={2}>
-            <SidebarMenuLink icon={FaHome} href="/admin">
+            <SidebarMenuLink icon={FaHome} href="/admin/dashboard">
               Dashboard
             </SidebarMenuLink>
             <SidebarMenuLink icon={FaDatabase} href="/admin/inventory">

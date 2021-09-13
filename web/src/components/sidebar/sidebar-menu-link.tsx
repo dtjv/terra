@@ -40,7 +40,7 @@ export const SidebarMenuLink = ({
   ...rest
 }: SidebarMenuLinkProps) => {
   const { pathname } = useRouter()
-  const isActive = pathname === href
+  const isActive = pathname.startsWith(href as string)
 
   if (isActive) {
     return (
