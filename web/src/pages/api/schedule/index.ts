@@ -51,9 +51,9 @@ const handler: NextApiHandler = async (
       requestTime: makeTime(SCHEDULE_START_HOUR_IN_24HR),
     })
 
-    let availableTimes = []
+    const availableTimes = []
 
-    for (let date of requestDates) {
+    for (const date of requestDates) {
       availableTimes.push(
         ...(await getAvailableTimes({
           vehicleKeys,
