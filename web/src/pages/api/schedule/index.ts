@@ -1,44 +1,33 @@
 import { add } from 'date-fns'
 import { getTickets } from '@/lib/db'
-import { makeTime, combineDateTime, makeScheduleTimes } from '@/lib/utils'
-import {
-  SCHEDULE_START_HOUR_IN_24HR,
-  SCHEDULE_END_HOUR_IN_24HR,
-  SCHEDULE_TIME_BLOCK_IN_MINUTES,
-} from '@/config/constants'
-import type { TicketInput } from '@/types/types'
+import { makeTime } from '@/lib/utils'
+import { SCHEDULE_START_HOUR_IN_24HR } from '@/config/constants'
+import { toTicket } from '@/types/utils'
+import type { Ticket, TicketDocument } from '@/types/types'
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-
-interface Hash {
-  [key: string]: number
-}
 
 interface RequestData {
   vehicleKeys: string[]
   requestDate: Date
   requestTime: string
-  durationInMinutes: number
 }
 
 type RequestDates = Pick<RequestData, 'requestDate' | 'requestTime'>
 
+//------------------------------------------------------------------------------
+// Handler for api calls to `/api/schedule`
+//------------------------------------------------------------------------------
 const handler: NextApiHandler = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
   if (req.method === 'POST') {
-    const {
-      vehicleKeys,
-      requestDate,
-      requestTime,
-      durationInMinutes,
-    }: RequestData = req.body
+    const { vehicleKeys, requestDate, requestTime }: RequestData = req.body
 
     if (!vehicleKeys.length || !requestDate || !requestTime) {
       return res.status(400).send(`Request is missing expected values`)
     }
 
-    // tack on a couple more days to the requested date
     const requestDates: RequestDates[] = [
       { requestDate: new Date(requestDate), requestTime },
     ]
@@ -51,139 +40,36 @@ const handler: NextApiHandler = async (
       requestTime: makeTime(SCHEDULE_START_HOUR_IN_24HR),
     })
 
-    const availableTimes = []
+    interface TicketsByRequest {
+      tickets: Ticket[]
+      requestDate: Date
+      requestTime: string
+    }
+    const ticketsByScheduledAt: { [key: string]: TicketsByRequest } = {}
 
-    for (const date of requestDates) {
-      availableTimes.push(
-        ...(await getAvailableTimes({
-          vehicleKeys,
-          durationInMinutes,
-          ...date,
-        }))
-      )
+    for (const requestItem of requestDates) {
+      try {
+        const ticketDocs: TicketDocument[] = await getTickets({
+          vehicleKey: { $in: vehicleKeys },
+          scheduledAt: requestItem.requestDate,
+          scheduledTime: { $gt: requestTime },
+        })
+
+        ticketsByScheduledAt[requestItem.requestDate.toISOString()] = {
+          tickets: ticketDocs.map((ticketDoc) => toTicket(ticketDoc)),
+          ...requestItem,
+        }
+      } catch (error) {
+        console.error(error)
+      }
     }
 
-    return res.status(200).json(availableTimes)
+    console.log('ticketsByScheduledAt', ticketsByScheduledAt)
+
+    return res.status(200).json(ticketsByScheduledAt)
   }
 
   return res.status(404).send(`Unsupported request method: ${req.method}`)
-}
-
-const getAvailableTimes = async ({
-  vehicleKeys,
-  requestDate,
-  requestTime,
-  durationInMinutes,
-}: RequestData) => {
-  const scheduleTimes = makeScheduleTimes({
-    startHour: SCHEDULE_START_HOUR_IN_24HR,
-    endHour: SCHEDULE_END_HOUR_IN_24HR,
-    timeBlockInMinutes: SCHEDULE_TIME_BLOCK_IN_MINUTES,
-  })
-  const scheduleTimeBlockCount = scheduleTimes.length
-
-  // Create an array of [1|0] to represent a time block as available or not.
-  // Mark time blocks before 'requestTime' as not available.
-  let bitstr = ''
-
-  for (const scheduleTime of scheduleTimes) {
-    if (scheduleTime < requestTime) {
-      bitstr += '0'
-    }
-  }
-  bitstr = bitstr.padEnd(scheduleTimeBlockCount, '1')
-
-  const scheduleTimesMask = parseInt(bitstr, 2)
-
-  // Create a hash to associate each 'vehicleKey' to a 'scheduleTimesMask'.
-  let vehicleHash: Hash = vehicleKeys.reduce(
-    (hash, v) => ({ ...hash, [v]: scheduleTimesMask }),
-    {} as Hash
-  )
-
-  // Note: 'scheduleTime' & 'currentTime' are 24hr, local strings - not UTC.
-  const tickets: TicketInput[] = await getTickets({
-    vehicleKey: { $in: vehicleKeys },
-    scheduledAt: requestDate,
-    scheduledTime: { $gt: requestTime },
-  })
-
-  // Mark each ticket's time blocks as 'not available'.
-  for (const ticket of tickets) {
-    const ticketTimeBlockCount =
-      ticket.durationInMinutes / SCHEDULE_TIME_BLOCK_IN_MINUTES
-    const ticketScheduledTimeIndex = scheduleTimes.indexOf(ticket.scheduledTime)
-
-    if (ticketScheduledTimeIndex !== -1) {
-      let mask = parseInt(
-        (2 ** ticketTimeBlockCount - 1)
-          .toString(2)
-          .padEnd(scheduleTimeBlockCount, '0'),
-        2
-      )
-      mask >>= ticketScheduledTimeIndex
-      vehicleHash[ticket.vehicleKey] ^= mask
-    } else {
-      console.error(`No time list entry for '${ticket.scheduledTime}'`)
-    }
-  }
-
-  // After processing above, 'scheduleTimesMask' might be left with leading
-  // zeros (i.e. '00011101001') - except leading zero's don't exist in a
-  // numeric mask. To preserve the leading zero's and enable further bitwise
-  // operation, I prepend a 1.
-  vehicleHash = Object.entries(vehicleHash).reduce((hash, [k, v]) => {
-    return {
-      ...hash,
-      [k]: parseInt(
-        `1${v.toString(2).padStart(scheduleTimeBlockCount, '0')}`,
-        2
-      ),
-    }
-  }, {})
-
-  // Find available time blocks for ticket we're trying to create.
-  const ticketTimeBlockCount =
-    durationInMinutes / SCHEDULE_TIME_BLOCK_IN_MINUTES
-  const shiftCount = scheduleTimeBlockCount - ticketTimeBlockCount
-
-  return Object.entries(vehicleHash)
-    .map(([vehicleKey, scheduleTimesMask]) => {
-      const times: string[] = []
-
-      // +1 to accommodate first bit
-      let mask = parseInt(
-        (2 ** ticketTimeBlockCount - 1)
-          .toString(2)
-          .padEnd(scheduleTimeBlockCount + 1, '0'),
-        2
-      )
-      // adjust to ignore the first bit
-      mask >>= 1
-
-      for (let i = 0; i <= shiftCount; i += 1) {
-        if ((mask & scheduleTimesMask) === mask) {
-          times.push(scheduleTimes[i] ?? 'ERROR')
-        }
-        mask >>= 1
-      }
-
-      return {
-        vehicleKey,
-        availableTimes: times,
-      }
-    })
-    .flatMap(({ vehicleKey, availableTimes }, i) => {
-      return availableTimes.map((time, j) => {
-        return {
-          key: `${i}-${j}`,
-          vehicleKey,
-          scheduledAt: requestDate,
-          scheduledTime: time,
-          scheduledAtFull: combineDateTime(requestDate, time),
-        }
-      })
-    })
 }
 
 export default handler

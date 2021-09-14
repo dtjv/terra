@@ -25,11 +25,12 @@ import {
 } from '@chakra-ui/react'
 import { GiMineTruck } from 'react-icons/gi'
 import { InfoIcon } from '@chakra-ui/icons'
+import { getAvailableTimes } from '@/lib/utils'
 import { SCHEDULE_API } from '@/config/constants'
 import { VehicleContext } from '@/contexts/vehicle-context'
 import type { UseRadioProps } from '@chakra-ui/react'
 import type { UseFormReturn } from 'react-hook-form'
-import type { TicketInput } from '@/types/types'
+import type { Ticket, TicketInput } from '@/types/types'
 
 const colorArray: { [key: string]: string } = {
   jan: 'blue.100',
@@ -47,7 +48,7 @@ const colorArray: { [key: string]: string } = {
 }
 
 interface AvailableSlot {
-  key: number
+  key: string
   vehicleKey: string
   scheduledAt: Date
   scheduledTime: string
@@ -138,13 +139,53 @@ export const ScheduledAt = ({
               vehicleKeys: vehicles.map((v) => v.vehicleKey),
               requestDate: currentDate,
               requestTime: currentTime,
-              durationInMinutes,
             },
             {
               cancelToken: axiosSource.token,
             }
           )
-          setAvailableSlots(data as AvailableSlot[])
+          const slots: AvailableSlot[] = []
+
+          interface TicketByRequest {
+            tickets: Ticket[]
+            requestDate: Date
+            requestTime: string
+          }
+
+          // example `data`:
+          //
+          // {
+          //   '2021-09-14T07:00:00.000Z': {
+          //     tickets: [...],
+          //     requestDate: '2021-09-14T07:00:00.000Z',
+          //     requestTime: '05:28:41.505',
+          //   },
+          //   '2021-09-15T07:00:00.000Z': {
+          //     tickets: [...],
+          //     requestDate: '2021-09-15T07:00:00.000Z',
+          //     requestTime: '08:00:00.000',
+          //   },
+          //   '2021-09-16T07:00:00.000Z': {
+          //     tickets: [...],
+          //     requestDate: '2021-09-16T07:00:00.000Z',
+          //     requestTime: '08:00:00.000',
+          //   },
+          // }
+          Object.values(data as { [key: string]: TicketByRequest }).forEach(
+            ({ tickets, requestDate, requestTime }) => {
+              slots.push(
+                ...getAvailableTimes({
+                  vehicleKeys: vehicles.map((v) => v.vehicleKey),
+                  tickets,
+                  requestDate,
+                  requestTime,
+                  durationInMinutes,
+                })
+              )
+            }
+          )
+
+          setAvailableSlots(slots)
         } catch (error) {
           // TODO: cannot be correct?!! handle this better
           if (axios.isCancel(error)) {
