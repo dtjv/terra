@@ -42,14 +42,8 @@ export const ScheduleRowHeader = ({
         </Flex>
       )}
       {cell.display && (
-        <Box
-          position="absolute"
-          bg="inherit"
-          top="-.6rem"
-          right="1rem"
-          w="100%"
-        >
-          <Flex height="auto" direction="column" align="flex-end" mr="10px">
+        <Box position="absolute" bg="inherit" top="-.7rem" pr={8} w="100%">
+          <Flex height="auto" direction="column" align="flex-end">
             <Text fontSize="sm" fontWeight="medium">
               {cell.display}
             </Text>
