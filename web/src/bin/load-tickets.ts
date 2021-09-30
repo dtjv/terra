@@ -7,7 +7,7 @@ import { connectToDB } from '@/lib/db'
 import { TicketKind } from '@/types/enums'
 import { TicketModel } from '@/models/ticket'
 import { combineDateTime, makeScheduleTimes } from '@/lib/utils'
-import type { TicketInput } from '@/types/types'
+import type { RC, TicketInput } from '@/types/types'
 
 type Appointments = Array<[string, string, number]>
 
@@ -126,28 +126,12 @@ const makeTickets = (scheduledDate: string, appts: Appointments) => {
   })
 }
 
-const usage = `
-  Usage: load-tickets [options]
-
-  Options:
-    --date=<date>   ticket date in format: yyyy-M-d. (default=today)
-    --drop          drop tickets collection (default=false)
-`
-const main = async (): Promise<void> => {
-  const args = minimist(process.argv.slice(2))
-  const help = Boolean(args?.['h']) || Boolean(args?.['help'])
-
-  if (help) {
-    console.log(usage)
-    process.exit(0)
-  }
-
+export const loadTickets = async (args: minimist.ParsedArgs): Promise<RC> => {
   const drop = Boolean(args?.['drop']) ?? false
   const scheduledDate = args?.['date'] ?? format(new Date(), 'yyyy-M-d')
 
   if (!(await connectToDB())) {
-    console.error(`An error occurred connecting to database.`)
-    process.exit(1)
+    return { message: `Failed to connect to database`, success: false }
   }
 
   if (drop) {
@@ -157,8 +141,11 @@ const main = async (): Promise<void> => {
     } catch (error: any) {
       // MongoDB code for 'NamespaceNotFound'
       if (error?.code !== 26) {
-        console.error('An error occurred dropping collections')
-        throw error
+        return {
+          error,
+          message: 'Failed to drop collections',
+          success: false,
+        }
       }
     }
   }
@@ -182,14 +169,14 @@ const main = async (): Promise<void> => {
 
     try {
       await TicketModel.create(tickets as TicketInput[])
-      console.log('Tickets created successfully.')
-    } catch (error) {
-      console.error('An error occurred creating ticket records')
-      throw error
+    } catch (error: any) {
+      return { error, message: 'Failed to create collection', success: false }
     }
   }
 
-  process.exit(0)
+  return {
+    error: undefined,
+    message: 'Tickets created successfully',
+    success: true,
+  }
 }
-
-main()

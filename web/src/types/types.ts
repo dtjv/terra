@@ -2,6 +2,15 @@ import type { Document, PopulatedDoc } from 'mongoose'
 import { CellKind, TicketKind } from '@/types/enums'
 
 //-----------------------------------------------------------------------------
+// General
+//-----------------------------------------------------------------------------
+export interface RC {
+  error?: any
+  message: string
+  success: boolean
+}
+
+//-----------------------------------------------------------------------------
 // Vehicle types
 //-----------------------------------------------------------------------------
 export interface VehicleInput {
