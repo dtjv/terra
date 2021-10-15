@@ -110,7 +110,7 @@ const makeAppointments = ({
   return appts
 }
 
-const makeTickets = (scheduledDate: string, appts: Appointments) => {
+const makeTickets = (appts: Appointments) => {
   return appts.map(([vehicleKey, scheduledTime, durationInMinutes]) => {
     return {
       ticketKind: TicketKind.DELIVERY,
@@ -120,7 +120,6 @@ const makeTickets = (scheduledDate: string, appts: Appointments) => {
       },
       vehicleKey,
       scheduledTime,
-      scheduledDate,
       durationInMinutes,
     }
   })
@@ -128,7 +127,7 @@ const makeTickets = (scheduledDate: string, appts: Appointments) => {
 
 export const loadTickets = async (args: minimist.ParsedArgs): Promise<RC> => {
   const drop = Boolean(args?.['drop']) ?? false
-  const scheduledDate = args?.['date'] ?? format(new Date(), 'yyyy-M-d')
+  const scheduledAt = args?.['date'] ?? format(new Date(), 'yyyy-M-d')
 
   if (!(await connectToDB())) {
     return { message: `Failed to connect to database`, success: false }
@@ -160,12 +159,10 @@ export const loadTickets = async (args: minimist.ParsedArgs): Promise<RC> => {
   })
 
   if (appointments.length > 0) {
-    const tickets = makeTickets(scheduledDate, appointments).map(
-      ({ scheduledDate, ...ticket }) => ({
-        ...ticket,
-        scheduledAt: new Date(scheduledDate),
-      })
-    )
+    const tickets = makeTickets(appointments).map((ticket) => ({
+      ...ticket,
+      scheduledAt,
+    }))
 
     try {
       await TicketModel.create(tickets as TicketInput[])
