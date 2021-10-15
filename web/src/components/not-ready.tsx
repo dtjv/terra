@@ -22,9 +22,9 @@ export const NotReadyYet = () => (
       </Text>
     </VStack>
     <Flex mt={8}>
-      <NextLink href="/admin" passHref>
+      <NextLink href="/admin/delivery" passHref>
         <Button as="a" variant="outline" colorScheme="teal">
-          Go back to Dashboard
+          Go back to Delivery
         </Button>
       </NextLink>
     </Flex>
