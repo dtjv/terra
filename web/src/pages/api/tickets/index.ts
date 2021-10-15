@@ -1,4 +1,5 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
+import { add, format } from 'date-fns'
 import { getTickets, createTicket } from '@/lib/db'
 import { toTicket } from '@/types/utils'
 import type { Ticket, TicketDocument } from '@/types/types'
@@ -21,8 +22,14 @@ const handler: NextApiHandler = async (
 
     try {
       const ticketDocs: TicketDocument[] = await getTickets({
-        scheduledAt: new Date(scheduledAt),
+        scheduledAt: {
+          $gte: new Date(format(new Date(scheduledAt), 'yyyy-M-d')),
+          $lt: new Date(
+            format(add(new Date(scheduledAt), { days: 1 }), 'yyyy-M-d')
+          ),
+        },
       })
+
       const tickets: Ticket[] = ticketDocs.map((ticketDoc) =>
         toTicket(ticketDoc)
       )
