@@ -58,7 +58,7 @@ First, fork the project to your GitHub account.
 
 ```sh
 $ git clone https://github.com/[your_github_username]/terra.git
-$ cd terra
+$ cd terra/web
 $ yarn # or npm i
 ```
 
@@ -122,6 +122,8 @@ Terra includes a simple cli to load default data.
 ```
 
 ### Run the app
+
+> Make sure you're in the `terra/web` folder.
 
 ```sh
 # development
