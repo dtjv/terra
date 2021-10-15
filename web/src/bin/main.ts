@@ -47,7 +47,7 @@ const main = async () => {
   }
 
   if (!process.env['DOTENV_CONFIG_PATH']) {
-    showHelp('Error: DOTENV_CONFIG_PATH is not set.')
+    showHelp('❌ ERROR: DOTENV_CONFIG_PATH is not set. (See Notes below)')
   }
 
   let rc: RC = { message: 'Completed', success: true }
