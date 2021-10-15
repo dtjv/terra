@@ -23,14 +23,6 @@ export const getTickets = async (
   await connectToDB()
   return await TicketModel.find(filters).populate('vehicleDoc')
 }
-/*
-export const getTickets = async (
-  scheduledAt: Date
-): Promise<TicketDocument[]> => {
-  await connectToDB()
-  return await TicketModel.find({ scheduledAt }).populate('vehicleDoc')
-}
-*/
 
 export const createTicket = async (
   newTicket: TicketInput
