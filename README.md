@@ -16,7 +16,7 @@ This project is my web-based concept to create and manage delivery orders. The
 software solution is primarily intended to eliminate paper-based scheduling
 errors.
 
-![screenshot of delivery website](./media/terra-delivery-01.png)
+![screenshot of delivery website](./img/terra-delivery-01.png)
 
 ### Features
 

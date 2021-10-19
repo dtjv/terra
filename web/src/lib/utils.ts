@@ -189,9 +189,6 @@ export interface MakeRowsProps {
   timeBlockInMinutes: number
 }
 
-/**
- * TODO: document makeRows()
- */
 export const makeRows = ({
   tickets,
   rowHeaders,
@@ -254,6 +251,10 @@ export const makeRows = ({
   })
 }
 
+/*
+ * @returns {Cell | undefined} A previous cell found in `cell`'s column that has
+ *                             a ticket or, if none found then `undefined`.
+ */
 export const getPreviousCellWithTicket = (
   cell: Cell,
   rows: Row[]
@@ -279,6 +280,18 @@ export interface IsCellCoveredByTicketProps {
   timeBlockInMinutes: number
 }
 
+/*
+ * Each cell in the grid represents 1 `timeBlockInMinutes` - let's say 30min. If
+ * a cell holds a ticket that's 60min, that ticket's ui height will be 2 x the
+ * height of 1 cell (for two 30min blocks). Note the ticket exists on the first
+ * cell, but it is covering the next cell in the ui. The next cell cannot and
+ * does not hold a cell because it is being covered.
+ *
+ * However, when we're dragging a ticket around the ui to reschedule it, we may
+ * drag over cells that are covered by a previous cell with a ticket. This
+ * utility calculates if `cell` is covered or not so the app can determine if
+ * a ticket can drop on `cell`
+ */
 export const isCellCoveredByTicket = ({
   cell,
   prevCell,
@@ -313,6 +326,12 @@ export interface IsSpaceForTicketAtCellProps {
   timeBlockInMinutes: number
 }
 
+/*
+ * We might find a cell we can drop on (i.e. it's not covered and doesn't have a
+ * ticket already), however, we cannot drop a 60min ticket in a 30min slot (or
+ * anthing where ticket duration > available space. This utility calculates if
+ * there's space for `ticket` at `targetCell`.
+ */
 export const isSpaceForTicketAtCell = ({
   ticket,
   targetCell,
@@ -325,6 +344,7 @@ export const isSpaceForTicketAtCell = ({
 
   const numCellsNeeded = ticket.durationInMinutes / timeBlockInMinutes
 
+  // the ticket can't extend out of bounds of schedule
   if (targetCell.rowIdx + numCellsNeeded - 1 >= rows.length) {
     return false
   }
@@ -334,6 +354,7 @@ export const isSpaceForTicketAtCell = ({
     const cellTicket =
       cell?.kind === CellKind.DATA_CELL ? cell.ticket : undefined
 
+    // no space if we find a ticket that's not the one we're trying to move.
     if (cellTicket && !(cellTicket.id === ticket.id)) {
       return false
     }
