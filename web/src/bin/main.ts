@@ -8,8 +8,9 @@ const usage = `
   Usage: yarn db --load=<collection> [options]
 
   Options:
-    --date=<date>   Date on tickets. Use format 'yyyy-M-d'. (default=today)
+    --date=<date>   Date on tickets. Use format 'yyyy-M-dd'. (default=today)
     --key=<key>     New vehicle key to add.
+    --bulk=<count>  Number of days from '--date' to add tickets. (default=0)
     --drop          Drop collection. (default=false)
     -h, --help      Show this help message.
 
@@ -24,6 +25,9 @@ const usage = `
 
     // adds tickets for today
     $ yarn db --load=tickets
+
+    // adds tickets for the next 20 days (from today)
+    $ yarn db --load=tickets --bulk=20
 
     // reload default vehicles + vehicle 103
     $ yarn db --load=vehicles --key=103 --drop

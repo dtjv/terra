@@ -1,13 +1,13 @@
 import Chance from 'chance'
 import minimist from 'minimist'
 import mongoose from 'mongoose'
-import { format, add, isAfter, isBefore } from 'date-fns'
+import { format, add, sub, isAfter, isBefore } from 'date-fns'
 import oregon from '@/data/oregon.json'
 import { connectToDB } from '@/lib/db'
 import { TicketKind } from '@/types/enums'
 import { TicketModel } from '@/models/ticket'
 import { combineDateTime, makeScheduleTimes } from '@/lib/utils'
-import type { RC, TicketInput } from '@/types/types'
+import type { RC } from '@/types/types'
 
 type Appointments = Array<[string, string, number]>
 
@@ -127,7 +127,8 @@ const makeTickets = (appts: Appointments) => {
 
 export const loadTickets = async (args: minimist.ParsedArgs): Promise<RC> => {
   const drop = Boolean(args?.['drop']) ?? false
-  const scheduledAt = args?.['date'] ?? format(new Date(), 'yyyy-M-d')
+  const bulk = args?.['bulk'] ?? 0
+  const date = args?.['date']
 
   if (!(await connectToDB())) {
     return { message: `Failed to connect to database`, success: false }
@@ -149,26 +150,35 @@ export const loadTickets = async (args: minimist.ParsedArgs): Promise<RC> => {
     }
   }
 
-  const appointments = makeAppointments({
-    vehicleKeys: ['102', '202', '302'],
-    scheduleTimes: makeScheduleTimes({
-      startHour: 8,
-      endHour: 18,
-      timeBlockInMinutes: 30,
-    }),
-  })
+  let dayCount = bulk ? bulk : 1
+  let startDate = date ? new Date(date) : sub(new Date(), { days: 1 })
 
-  if (appointments.length > 0) {
-    const tickets = makeTickets(appointments).map((ticket) => ({
-      ...ticket,
-      scheduledAt,
-    }))
+  while (dayCount > 0) {
+    startDate = add(startDate, { days: 1 })
 
-    try {
-      await TicketModel.create(tickets as TicketInput[])
-    } catch (error: any) {
-      return { error, message: 'Failed to create collection', success: false }
+    const appointments = makeAppointments({
+      vehicleKeys: ['102', '202', '302'],
+      scheduleTimes: makeScheduleTimes({
+        startHour: 8,
+        endHour: 18,
+        timeBlockInMinutes: 30,
+      }),
+    })
+
+    if (appointments.length > 0) {
+      const tickets = makeTickets(appointments).map((ticket) => ({
+        ...ticket,
+        scheduledAt: format(startDate, 'yyyy-M-dd'),
+      }))
+
+      try {
+        await TicketModel.create(tickets)
+      } catch (error: any) {
+        return { error, message: 'Failed to create collection', success: false }
+      }
     }
+
+    dayCount -= 1
   }
 
   return {
